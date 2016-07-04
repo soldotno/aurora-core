@@ -57,11 +57,11 @@ var isVisibleMockSmall = function isVisibleMockSmall() {
   var size = 'small';
 
   if ((include || []).length) {
-    return !! ~include.indexOf(size);
+    return !!~include.indexOf(size);
   }
 
   if ((exclude || []).length) {
-    return ! ~exclude.indexOf(size);
+    return !~exclude.indexOf(size);
   }
 };
 
@@ -83,11 +83,11 @@ var isVisibleMockLarge = function isVisibleMockLarge() {
   var size = 'large';
 
   if ((include || []).length) {
-    return !! ~include.indexOf(size);
+    return !!~include.indexOf(size);
   }
 
   if ((exclude || []).length) {
-    return ! ~exclude.indexOf(size);
+    return !~exclude.indexOf(size);
   }
 };
 

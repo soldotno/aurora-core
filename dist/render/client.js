@@ -209,6 +209,10 @@ module.exports = function () {
       var _ref2$app$options = _ref2$app.options;
       var options = _ref2$app$options === undefined ? {} : _ref2$app$options;
 
+      /**
+       * Create a new Promise of rendering
+       * the application
+       */
       return new Promise(function (resolve) {
         ReactDOM.render(React.createElement(
           ContextWrapper,
@@ -220,7 +224,12 @@ module.exports = function () {
             newVersionAvailable: latestVersion !== version,
             pagination: pagination
           }, options))
-        ), document.querySelector('#app'), function () {
+        ), document.querySelector('#app'),
+        /**
+         * NOTE: We're using the callback available for ReactDOM.render
+         * to be able to know when the rendering is done (async).
+         */
+        function () {
           return resolve();
         });
       });
@@ -256,6 +265,7 @@ module.exports = function () {
   Promise.resolve()
   /**
    * Perform the initial rendering
+   * (Will resolve when the actual rendering is done)
    */
   .then(function () {
     return renderApp();
@@ -306,7 +316,7 @@ module.exports = function () {
   })
   /**
    * Make sure we render the app fully at least once
-   * before we do the scrolling
+   * before we do the scrolling (restore position)
    */
   .then(function () {
     return renderApp();

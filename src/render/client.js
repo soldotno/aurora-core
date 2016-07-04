@@ -186,6 +186,10 @@ module.exports = function ({
       type: App,
       options = {}
     } }) => {
+      /**
+       * Create a new Promise of rendering
+       * the application
+       */
       return new Promise((resolve) => {
         ReactDOM.render(
           <ContextWrapper
@@ -199,6 +203,10 @@ module.exports = function ({
             />
           </ContextWrapper>,
           document.querySelector('#app'),
+          /**
+           * NOTE: We're using the callback available for ReactDOM.render
+           * to be able to know when the rendering is done (async).
+           */
           () => resolve()
         );
       });
@@ -232,6 +240,7 @@ module.exports = function ({
   Promise.resolve()
   /**
    * Perform the initial rendering
+   * (Will resolve when the actual rendering is done)
    */
   .then(() => renderApp())
   /**
@@ -279,7 +288,7 @@ module.exports = function ({
   })
   /**
    * Make sure we render the app fully at least once
-   * before we do the scrolling
+   * before we do the scrolling (restore position)
    */
   .then(() => renderApp())
   /**
