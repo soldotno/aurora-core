@@ -36,6 +36,7 @@ module.exports = function ({
   getUserSettings = () => console.warn('No getUserSettings() method supplied to constructor'),
   getPaginationSettings = () => console.warn('No getPaginationSettings() method supplied to constructor'),
   isVisible = () => console.warn('No isVisible() method supplied to constructor'),
+  enableServerRender = false,
 }) {
   /**
    * Utilities
@@ -60,20 +61,17 @@ module.exports = function ({
     });
 
     /**
-     * Extract the version from the query
-     *
-     * TODO: Add version handling, so you
-     * can inform the user that there is
-     * a new version available (via the app module)
-     *
-     * Maybe add two version flags (requestedVersion and latestVersion)
-     * so that you can calculate this on both the server and client
-     * deterministically
+     * Extract the version requested from the query
      */
     const requestedVersion = req.query.version || '';
 
     /**
      * Fetch the latest config version number for the requested route
+     *
+     * NOTE: We're going to use this to compare the latest
+     * version to the version requested, so that we can supply
+     * a flag that tells the client if there is a newer version
+     * of the config for the requested route available
      */
     const latestVersion = getRoute({
       path: (url.parse(req.originalUrl) || {}).pathname,
@@ -142,12 +140,19 @@ module.exports = function ({
 
     /**
      * Create a config with the data resolved.
+     *
+     * NOTE: We only do this if server rendering
+     * and data loading is enabled - if not we just
+     * short circuit this step
      */
-    const configWithDataResolved = configWithVisibilityResolved
-    .then((config) => Promise.race([
-      delay(2000).then(() => config),
-      resolveData(settings, config),
-    ]));
+    const configWithDataResolved = enableServerRender ? (
+      configWithVisibilityResolved.then((config) => Promise.race([
+        delay(2000).then(() => config),
+        resolveData(settings, config),
+      ]))
+    ) : (
+      configWithVisibilityResolved
+    );
 
     /**
      * Create a config with the modules / React components resolved
@@ -192,7 +197,7 @@ module.exports = function ({
       /**
        * Pull out all critical styles
        */
-      const criticalStyles = extractStyles(app);
+      const criticalStyles = enableServerRender ? extractStyles(app) : '';
 
       /**
        * Create the actual HTML
