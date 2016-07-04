@@ -431,6 +431,7 @@ module.exports = function () {
          * Handle features that are behind flags, such as
          * - Back position memory
          * - State caching
+         * - Versioning
          */
         featureFlags.enablePagination && updatePaginationQuery();
         featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
