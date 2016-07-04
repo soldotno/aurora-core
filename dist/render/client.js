@@ -104,9 +104,9 @@ module.exports = function () {
    * Pull out config feature flags from the server
    */
   var featureFlags = _extends({
-    enablePagination: true,
-    enableScrollPositionMemory: true,
-    enableVersioning: true
+    enablePagination: false,
+    enableScrollPositionMemory: false,
+    enableVersioning: false
   }, window.__flags);
 
   /**
