@@ -45,7 +45,6 @@ if (!isProduction) {
  */
 if (isProduction) {
   plugins.push(new webpack.optimize.DedupePlugin());
-  plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
   plugins.push(new OutputHashAsModulePlugin({ file: 'bundle-hash.js' }));
 }
 
