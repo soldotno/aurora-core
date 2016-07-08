@@ -65,6 +65,13 @@ Install dependencies:
  * `npm install`
  * If you get the yet to be explained "esprima error" ([see issue](https://github.com/soldotno/aurora-frontend/issues/45)) - do another `npm install`
 
+Publishing / committing:
+---------------------
+
+There is a build step (babel, so you'll have to do the following before committing/publishing
+
+ * `npm run build`
+
 Utilities:
 ----------
 
