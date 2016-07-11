@@ -1,10 +1,10 @@
 {
   "name": "aurora-core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Aurora Application Assembler Core",
   "main": "index.js",
   "engines": {
-    "node": "5.11.1"
+    "node": "5.12.0"
   },
   "scripts": {
     "test": "npm run test:server && npm run test:client",
@@ -31,6 +31,7 @@
   "homepage": "https://github.com/soldotno/aurora-core",
   "dependencies": {
     "async-each": "1.0.0",
+    "aurora-sass-loader": "soldotno/aurora-sass-loader.git#master",
     "aurora-deep-slice-merge": "soldotno/aurora-deep-slice-merge.git#master",
     "babel-polyfill": "6.9.1",
     "clean-css": "3.4.18",
