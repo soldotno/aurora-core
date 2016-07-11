@@ -1,3 +1,5 @@
+[![Dependency Status](https://david-dm.org/soldotno/aurora-core.svg)](https://david-dm.org/soldotno/aurora-core)
+
 Aurora Core (development)
 =========================
 
