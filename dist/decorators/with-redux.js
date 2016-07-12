@@ -1,31 +1,36 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /**
+                                                                                                                                                                                                                                                   * Dependencies
+                                                                                                                                                                                                                                                   */
 
-/**
- * Dependencies
- */
-var React = require('react');
-var hoistStatics = require('hoist-non-react-statics');
 
-var _require = require('redux');
+var _react = require('react');
 
-var createStore = _require.createStore;
-var applyMiddleware = _require.applyMiddleware;
-var compose = _require.compose;
+var _react2 = _interopRequireDefault(_react);
 
-var thunk = require('redux-thunk');
-var createLogger = require('redux-logger');
+var _hoistNonReactStatics = require('hoist-non-react-statics');
 
-var _require2 = require('react-redux');
+var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
-var Provider = _require2.Provider;
+var _redux = require('redux');
+
+var _reduxThunk = require('redux-thunk');
+
+var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+
+var _reduxLogger = require('redux-logger');
+
+var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+
+var _reactRedux = require('react-redux');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Higher order component factory
  * for adding Aurora data fetching
  */
-
 module.exports = function (_ref) {
   var _ref$reducer = _ref.reducer;
   var reducer = _ref$reducer === undefined ? function () {
@@ -37,7 +42,7 @@ module.exports = function (_ref) {
   /**
    * Create a logger (and default to pass-through if not browser)
    */
-  var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? createLogger() : function () {
+  var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? (0, _reduxLogger2.default)() : function () {
     return function (next) {
       return function (action) {
         return next(action);
@@ -55,7 +60,7 @@ module.exports = function (_ref) {
   /**
    * Compose a store creator function with middleware
    */
-  var finalCreateStore = compose(applyMiddleware(thunk, logger), devTools)(createStore);
+  var finalCreateStore = (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, logger), devTools)(_redux.createStore);
 
   /**
    * Create a Redux store
@@ -71,7 +76,7 @@ module.exports = function (_ref) {
      * Create a component that wraps
      * our input component in a Redux <Provider>
      */
-    var withRedux = React.createClass({
+    var withRedux = _react2.default.createClass({
       /**
        * Add a specific display name
        */
@@ -96,10 +101,10 @@ module.exports = function (_ref) {
        * ability to connect()
        */
       render: function render() {
-        return React.createElement(
-          Provider,
+        return _react2.default.createElement(
+          _reactRedux.Provider,
           { store: this.state.store },
-          React.createElement(Component, this.props)
+          _react2.default.createElement(Component, this.props)
         );
       }
     });
@@ -109,6 +114,6 @@ module.exports = function (_ref) {
      * with all the existing static
      * methods hoisted
      */
-    return hoistStatics(withRedux, Component);
+    return (0, _hoistNonReactStatics2.default)(withRedux, Component);
   };
 };
