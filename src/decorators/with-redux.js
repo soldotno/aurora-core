@@ -1,12 +1,12 @@
 /**
  * Dependencies
  */
-const React = require('react');
-const hoistStatics = require('hoist-non-react-statics');
-const { createStore, applyMiddleware, compose } = require('redux');
-const thunk = require('redux-thunk');
-const createLogger = require('redux-logger');
-const { Provider } = require('react-redux');
+import React from 'react';
+import hoistStatics from 'hoist-non-react-statics';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
+import { Provider } from 'react-redux';
 
 /**
  * Higher order component factory
