@@ -14,7 +14,7 @@ const DataMixin = require('../mixins/data-mixin');
  * for adding Aurora data fetching
  */
 module.exports = function({
-  fetchData = (() => Promise.resolve),
+  fetchData = (() => Promise.resolve()),
   dataProp = 'data',
   loadingProp = 'isLoading',
   disableServerLoading = false,
