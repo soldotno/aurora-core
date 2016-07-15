@@ -71,7 +71,9 @@ module.exports = function (_ref) {
 
         var data = (_data = {}, _defineProperty(_data, dataProp, this.state.__data), _defineProperty(_data, loadingProp, !this.state.__data), _defineProperty(_data, errorProp, this.state.__error), _data);
 
-        return React.createElement(Component, _extends({}, this.props, data));
+        return React.createElement(Component, _extends({}, this.props, data, {
+          reloadFunction: this._handleData
+        }));
       }
     });
 

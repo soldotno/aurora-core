@@ -66,6 +66,7 @@ module.exports = function({
           <Component
             {...this.props}
             {...data}
+            reloadFunction={this._handleData}
           />
         );
       }
