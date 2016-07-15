@@ -22,12 +22,14 @@ var DataMixin = require('../mixins/data-mixin');
 module.exports = function (_ref) {
   var _ref$fetchData = _ref.fetchData;
   var fetchData = _ref$fetchData === undefined ? function () {
-    return Promise.resolve;
+    return Promise.resolve();
   } : _ref$fetchData;
   var _ref$dataProp = _ref.dataProp;
   var dataProp = _ref$dataProp === undefined ? 'data' : _ref$dataProp;
   var _ref$loadingProp = _ref.loadingProp;
   var loadingProp = _ref$loadingProp === undefined ? 'isLoading' : _ref$loadingProp;
+  var _ref$errorProp = _ref.errorProp;
+  var errorProp = _ref$errorProp === undefined ? 'error' : _ref$errorProp;
   var _ref$disableServerLoa = _ref.disableServerLoading;
   var disableServerLoading = _ref$disableServerLoa === undefined ? false : _ref$disableServerLoa;
 
@@ -59,7 +61,7 @@ module.exports = function (_ref) {
       /**
        * Add applicable mixins
        */
-      mixins: [DataMixin('__data')],
+      mixins: [DataMixin('__data', '__error')],
 
       /**
        * Render the component
@@ -67,7 +69,7 @@ module.exports = function (_ref) {
       render: function render() {
         var _data;
 
-        var data = (_data = {}, _defineProperty(_data, dataProp, this.state.__data), _defineProperty(_data, loadingProp, !this.state.__data), _data);
+        var data = (_data = {}, _defineProperty(_data, dataProp, this.state.__data), _defineProperty(_data, loadingProp, !this.state.__data), _defineProperty(_data, errorProp, this.state.__error), _data);
 
         return React.createElement(Component, _extends({}, this.props, data));
       }
