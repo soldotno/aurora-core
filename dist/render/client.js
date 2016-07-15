@@ -214,7 +214,7 @@ module.exports = function () {
        * the application
        */
       return new Promise(function (resolve) {
-        ReactDOM.render(React.createElement(
+        var app = ReactDOM.render(React.createElement(
           ContextWrapper,
           {
             actions: {},
@@ -232,6 +232,11 @@ module.exports = function () {
         function () {
           return resolve();
         });
+        if (window.ReactApp) {
+          ReactDOM.unmountComponentAtNode(window.ReactApp);
+        }
+        window.ReactApp = app;
+        return app;
       });
     })
     /**

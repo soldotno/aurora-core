@@ -191,7 +191,7 @@ module.exports = function ({
        * the application
        */
       return new Promise((resolve) => {
-        ReactDOM.render(
+        const app = ReactDOM.render(
           <ContextWrapper
             actions={{}}
             settings={settings}
@@ -209,6 +209,11 @@ module.exports = function ({
            */
           () => resolve()
         );
+        if(window.ReactApp) {
+          ReactDOM.unmountComponentAtNode(window.ReactApp);
+        }
+        window.ReactApp = app;
+        return app;
       });
     })
     /**
