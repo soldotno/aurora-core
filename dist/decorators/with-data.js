@@ -22,7 +22,7 @@ var DataMixin = require('../mixins/data-mixin');
 module.exports = function (_ref) {
   var _ref$fetchData = _ref.fetchData;
   var fetchData = _ref$fetchData === undefined ? function () {
-    return Promise.resolve;
+    return Promise.resolve();
   } : _ref$fetchData;
   var _ref$dataProp = _ref.dataProp;
   var dataProp = _ref$dataProp === undefined ? 'data' : _ref$dataProp;

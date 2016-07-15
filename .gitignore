@@ -55,3 +55,4 @@ eslintrc.json-ci-runner
 #########
 .idea
 *.iml
+bundle-hash.js
