@@ -17,6 +17,7 @@ module.exports = function({
   fetchData = (() => Promise.resolve()),
   dataProp = 'data',
   loadingProp = 'isLoading',
+  errorProp = 'error',
   disableServerLoading = false,
 }) {
   return function(Component) {
@@ -48,7 +49,7 @@ module.exports = function({
        * Add applicable mixins
        */
       mixins: [
-        DataMixin('__data'),
+        DataMixin('__data', '__error'),
       ],
 
       /**
@@ -57,7 +58,8 @@ module.exports = function({
       render() {
         const data = {
           [dataProp]: this.state.__data,
-          [loadingProp]: !this.state.__data
+          [loadingProp]: !this.state.__data,
+          [errorProp]: this.state.__error
         };
 
         return (
