@@ -5,6 +5,8 @@
  */
 var React = require('react');
 var hoistStatics = require('hoist-non-react-statics');
+var sortedObject = require('sorted-object');
+var serialize = require('serialize-javascript');
 
 /**
  * Export a decorator that
@@ -54,6 +56,22 @@ module.exports = function (Component) {
       return {
         isVisible: !this.props._hideOnServer
       };
+    },
+    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+      var nextPropsAdjusted = serialize(sortedObject(nextProps));
+      var thisPropsAdjusted = serialize(sortedObject(this.props));
+
+      var nextStateAdjusted = serialize(sortedObject(nextState));
+      var thisStateAdjusted = serialize(sortedObject(this.state));
+
+      var shouldUpdate = !(nextPropsAdjusted === thisPropsAdjusted && nextStateAdjusted === thisStateAdjusted);
+      if (shouldUpdate) {
+        console.log('Component.shouldUpdate: (newprops, oldprops)', nextPropsAdjusted, thisPropsAdjusted);
+      } else {
+        console.log('Component should not update');
+        //console.log('Component.should not Update: (newprops, oldprops, nextState, thisState)', nextPropsAdjusted, thisPropsAdjusted, nextStateAdjusted, thisStateAdjusted);
+      }
+      return shouldUpdate;
     },
 
 
