@@ -1,6 +1,1 @@
-/**
- * This is just a placeholder
- * for the bundle hash module
- * (Will be overwritten during builds)
- */
-module.exports = "no-builds-performed-yet";
+module.exports = "2a080b0e7d7a153bc313";

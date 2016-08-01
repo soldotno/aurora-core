@@ -3,6 +3,8 @@
  */
 const React = require('react');
 const hoistStatics = require('hoist-non-react-statics');
+const sortedObject = require('sorted-object');
+const serialize = require('serialize-javascript');
 
 /**
  * Export a decorator that
@@ -51,6 +53,14 @@ module.exports = function(Component) {
       return {
         isVisible: !this.props._hideOnServer
       };
+    },
+
+    shouldComponentUpdate(nextProps, nextState) {
+      // const nextPropsAdjusted =  serialize(sortedObject(nextProps));
+      // const thisPropsAdjusted = serialize(sortedObject(this.props));
+      const nextStateAdjusted =  serialize(sortedObject(nextState));
+      const thisStateAdjusted = serialize(sortedObject(this.state));
+      return !(nextStateAdjusted === thisStateAdjusted && serialize(sortedObject(nextProps)) ===  serialize(sortedObject(this.props)));
     },
 
     /**

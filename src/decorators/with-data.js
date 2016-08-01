@@ -3,7 +3,6 @@
  */
 const React = require('react');
 const hoistStatics = require('hoist-non-react-statics');
-
 /**
  * Aurora mixins
  */
