@@ -58,20 +58,11 @@ module.exports = function (Component) {
       };
     },
     shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-      var nextPropsAdjusted = serialize(sortedObject(nextProps));
-      var thisPropsAdjusted = serialize(sortedObject(this.props));
-
+      // const nextPropsAdjusted =  serialize(sortedObject(nextProps));
+      // const thisPropsAdjusted = serialize(sortedObject(this.props));
       var nextStateAdjusted = serialize(sortedObject(nextState));
       var thisStateAdjusted = serialize(sortedObject(this.state));
-
-      var shouldUpdate = !(nextPropsAdjusted === thisPropsAdjusted && nextStateAdjusted === thisStateAdjusted);
-      if (shouldUpdate) {
-        console.log('Component.shouldUpdate: (newprops, oldprops)', nextPropsAdjusted, thisPropsAdjusted);
-      } else {
-        console.log('Component should not update');
-        //console.log('Component.should not Update: (newprops, oldprops, nextState, thisState)', nextPropsAdjusted, thisPropsAdjusted, nextStateAdjusted, thisStateAdjusted);
-      }
-      return shouldUpdate;
+      return !(nextStateAdjusted === thisStateAdjusted && serialize(sortedObject(nextProps)) === serialize(sortedObject(this.props)));
     },
 
 
