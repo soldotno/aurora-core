@@ -5,7 +5,7 @@ const React = require('react'); // eslint-disable-line no-unused-vars
 const ReactDOM = require('react-dom');
 const qs = require('qs');
 const pick = require('lodash.pick');
-
+const throttle = require('lodash.throttle');
 /**
  * Utilities
  */
@@ -15,7 +15,6 @@ const history = require('../utils/history-api');
 const handleScrollPosition = require('../utils/handle-scroll-position');
 const removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
 const updateQueryString = require('../utils/update-query-string');
-
 /**
  * Components
  */
@@ -152,6 +151,8 @@ module.exports = function ({
    * renders the application
    */
   const renderApp = () => {
+    const now = Date.now();
+    console.log('RenderApp, starts');
     /**
      * Pull the state we need
      * for rendering our app
@@ -162,16 +163,22 @@ module.exports = function ({
       settings = {},
       pagination = {},
     } = store.getState();
-
     /**
      * Resolve config
      */
     return Promise.resolve(config)
+    .then(config => {
+      console.log('resolveVisibility starts', Date.now() - now);
+      return config;
+    })
     .then(resolveVisibility.onClient.bind(null, settings, query))
     /**
      * Resolve modules (React components) in the config
      */
-    .then(resolveModules)
+    .then(fun => {
+      console.log('resolveModules starts', Date.now() - now);
+      return resolveModules(fun);
+    })
     /**
      * Render React app
      *
@@ -186,6 +193,8 @@ module.exports = function ({
       type: App,
       options = {}
     } }) => {
+
+      console.log('The actuall rendering starts', Date.now() - now);
       /**
        * Create a new Promise of rendering
        * the application
@@ -207,9 +216,13 @@ module.exports = function ({
            * NOTE: We're using the callback available for ReactDOM.render
            * to be able to know when the rendering is done (async).
            */
-          () => resolve()
+          () => {
+            console.log('Rendering finished', Date.now() - now);
+            resolve();
+          }
         );
       });
+
     })
     /**
      * Make sure errors are thrown
@@ -234,6 +247,61 @@ module.exports = function ({
     renderApp();
   });
 
+
+const loadMoreOnScroll =  throttle(() => {
+  /**
+   * Destructure what we need from the state
+   */
+  const {
+    pagination: {
+      isLoading,
+      hasMore,
+      originalPath,
+    } = {},
+  } = store.getState();
+
+  /**
+   * If we're already loading the next page
+   * or if we know that there is no more
+   * pages to fetch - then abort
+   */
+  if (isLoading || !hasMore) {
+    return;
+  }
+
+  /**
+   * Tell Redux to populate
+   * the next part of the config
+   */
+  store.dispatch(populateNextPage({
+    path: originalPath || location.pathname,
+    query: qs.parse(location.search.slice(1)),
+  }))
+  /**
+   * Handle application features on subsequent updates
+   * NOTE: Depends on the config meta flags (features toggles)
+   *
+   * Could be things like:
+   * - Dynamic pagination
+   * - Scroll position memory
+   */
+  .then(() => {
+    /**
+     * Get the entire redux state
+     */
+    const currentState = store.getState();
+
+      /**
+       * Handle features that are behind flags, such as
+       * - Back position memory
+       * - State caching
+       * - Versioning
+       */
+      featureFlags.enablePagination && updatePaginationQuery();
+      featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
+      featureFlags.enableVersioning && updateVersionQuery();
+  });
+}, 100);
   /**
    * Handle the rendering flow
    */
@@ -344,62 +412,6 @@ module.exports = function ({
    * Handle infinite scroll / pagination
    */
   .then(() => {
-    /**
-     * Infinite scroll handler
-     */
-    infiniteScroll(() => {
-      /**
-       * Destructure what we need from the state
-       */
-      const {
-        pagination: {
-          isLoading,
-          hasMore,
-          originalPath,
-        } = {},
-      } = store.getState();
-
-      /**
-       * If we're already loading the next page
-       * or if we know that there is no more
-       * pages to fetch - then abort
-       */
-      if (isLoading || !hasMore) {
-        return;
-      }
-
-      /**
-       * Tell Redux to populate
-       * the next part of the config
-       */
-      store.dispatch(populateNextPage({
-        path: originalPath || location.pathname,
-        query: qs.parse(location.search.slice(1)),
-      }))
-      /**
-       * Handle application features on subsequent updates
-       * NOTE: Depends on the config meta flags (features toggles)
-       *
-       * Could be things like:
-       * - Dynamic pagination
-       * - Scroll position memory
-       */
-      .then(() => {
-        /**
-         * Get the entire redux state
-         */
-        const currentState = store.getState();
-
-        /**
-         * Handle features that are behind flags, such as
-         * - Back position memory
-         * - State caching
-         * - Versioning
-         */
-        featureFlags.enablePagination && updatePaginationQuery();
-        featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
-        featureFlags.enableVersioning && updateVersionQuery();
-      });
-    });
+    infiniteScroll(loadMoreOnScroll);
   });
 };

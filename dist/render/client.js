@@ -9,7 +9,7 @@ var React = require('react'); // eslint-disable-line no-unused-vars
 var ReactDOM = require('react-dom');
 var qs = require('qs');
 var pick = require('lodash.pick');
-
+var throttle = require('lodash.throttle');
 /**
  * Utilities
  */
@@ -19,7 +19,6 @@ var history = require('../utils/history-api');
 var handleScrollPosition = require('../utils/handle-scroll-position');
 var removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
 var updateQueryString = require('../utils/update-query-string');
-
 /**
  * Components
  */
@@ -168,6 +167,8 @@ module.exports = function () {
    * renders the application
    */
   var renderApp = function renderApp() {
+    var now = Date.now();
+    console.log('RenderApp, starts');
     /**
      * Pull the state we need
      * for rendering our app
@@ -183,16 +184,24 @@ module.exports = function () {
     var settings = _store$getState3$sett === undefined ? {} : _store$getState3$sett;
     var _store$getState3$pagi = _store$getState3.pagination;
     var pagination = _store$getState3$pagi === undefined ? {} : _store$getState3$pagi;
-
     /**
      * Resolve config
      */
 
-    return Promise.resolve(config).then(resolveVisibility.onClient.bind(null, settings, query))
+    return Promise.resolve(config).then(function (config) {
+      console.log('resolveVisibility starts', Date.now() - now);
+      return config;
+    }).then(resolveVisibility.onClient.bind(null, settings, query)).then(function (a, b, c) {
+      console.log('a:', a);
+      return a;
+    })
     /**
      * Resolve modules (React components) in the config
      */
-    .then(resolveModules)
+    .then(function (fun) {
+      console.log('resolveModules starts', Date.now() - now);
+      return resolveModules(fun);
+    })
     /**
      * Render React app
      *
@@ -209,6 +218,8 @@ module.exports = function () {
       var _ref2$app$options = _ref2$app.options;
       var options = _ref2$app$options === undefined ? {} : _ref2$app$options;
 
+
+      console.log('The actuall rendering starts', Date.now() - now);
       /**
        * Create a new Promise of rendering
        * the application
@@ -230,7 +241,8 @@ module.exports = function () {
          * to be able to know when the rendering is done (async).
          */
         function () {
-          return resolve();
+          console.log('Rendering finished', Date.now() - now);
+          resolve();
         });
       });
     })
@@ -259,6 +271,62 @@ module.exports = function () {
     renderApp();
   });
 
+  var loadMoreOnScroll = throttle(function () {
+    /**
+     * Destructure what we need from the state
+     */
+
+    var _store$getState4 = store.getState();
+
+    var _store$getState4$pagi = _store$getState4.pagination;
+    _store$getState4$pagi = _store$getState4$pagi === undefined ? {} : _store$getState4$pagi;
+    var isLoading = _store$getState4$pagi.isLoading;
+    var hasMore = _store$getState4$pagi.hasMore;
+    var originalPath = _store$getState4$pagi.originalPath;
+
+    /**
+     * If we're already loading the next page
+     * or if we know that there is no more
+     * pages to fetch - then abort
+     */
+
+    if (isLoading || !hasMore) {
+      return;
+    }
+
+    /**
+     * Tell Redux to populate
+     * the next part of the config
+     */
+    store.dispatch(populateNextPage({
+      path: originalPath || location.pathname,
+      query: qs.parse(location.search.slice(1))
+    }))
+    /**
+     * Handle application features on subsequent updates
+     * NOTE: Depends on the config meta flags (features toggles)
+     *
+     * Could be things like:
+     * - Dynamic pagination
+     * - Scroll position memory
+     */
+    .then(function () {
+      /**
+       * Get the entire redux state
+       */
+      var currentState = store.getState();
+
+      /**
+       * Handle features that are behind flags, such as
+       * - Back position memory
+       * - State caching
+       * - Versioning
+       */
+      featureFlags.enablePagination && updatePaginationQuery();
+      featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
+      featureFlags.enableVersioning && updateVersionQuery();
+    });
+  }, 100);
   /**
    * Handle the rendering flow
    */
@@ -379,64 +447,6 @@ module.exports = function () {
    * Handle infinite scroll / pagination
    */
   .then(function () {
-    /**
-     * Infinite scroll handler
-     */
-    infiniteScroll(function () {
-      /**
-       * Destructure what we need from the state
-       */
-
-      var _store$getState4 = store.getState();
-
-      var _store$getState4$pagi = _store$getState4.pagination;
-      _store$getState4$pagi = _store$getState4$pagi === undefined ? {} : _store$getState4$pagi;
-      var isLoading = _store$getState4$pagi.isLoading;
-      var hasMore = _store$getState4$pagi.hasMore;
-      var originalPath = _store$getState4$pagi.originalPath;
-
-      /**
-       * If we're already loading the next page
-       * or if we know that there is no more
-       * pages to fetch - then abort
-       */
-
-      if (isLoading || !hasMore) {
-        return;
-      }
-
-      /**
-       * Tell Redux to populate
-       * the next part of the config
-       */
-      store.dispatch(populateNextPage({
-        path: originalPath || location.pathname,
-        query: qs.parse(location.search.slice(1))
-      }))
-      /**
-       * Handle application features on subsequent updates
-       * NOTE: Depends on the config meta flags (features toggles)
-       *
-       * Could be things like:
-       * - Dynamic pagination
-       * - Scroll position memory
-       */
-      .then(function () {
-        /**
-         * Get the entire redux state
-         */
-        var currentState = store.getState();
-
-        /**
-         * Handle features that are behind flags, such as
-         * - Back position memory
-         * - State caching
-         * - Versioning
-         */
-        featureFlags.enablePagination && updatePaginationQuery();
-        featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
-        featureFlags.enableVersioning && updateVersionQuery();
-      });
-    });
+    infiniteScroll(loadMoreOnScroll);
   });
 };

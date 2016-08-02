@@ -2,6 +2,7 @@
  * Import utilities
  */
 import onScroll from './on-scroll';
+import throttle from 'lodash.throttle';
 
 /**
  * Create a constant for the state
@@ -42,7 +43,7 @@ module.exports = function(currentLocation = '') {
    * Create a function that handles
    * updating the session storage
    */
-  const handleScroll = () => {
+  const handleScroll = throttle(() => {
     /**
      * Pull the current path
      */
@@ -53,7 +54,7 @@ module.exports = function(currentLocation = '') {
      */
     sessionStorage.setItem(AURORA_PREVIOUS_LOCATION, currentLocation);
     sessionStorage.setItem(AURORA_SCROLL_POSITION, window.scrollY);
-  };
+  }, 50);
 
   /**
    * Track the scroll position

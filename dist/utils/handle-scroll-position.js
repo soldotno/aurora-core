@@ -4,15 +4,19 @@ var _onScroll = require('./on-scroll');
 
 var _onScroll2 = _interopRequireDefault(_onScroll);
 
+var _lodash = require('lodash.throttle');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Create a constant for the state
  */
-var AURORA_SCROLL_POSITION = 'AURORA_SCROLL_POSITION'; /**
-                                                        * Import utilities
-                                                        */
-
+/**
+ * Import utilities
+ */
+var AURORA_SCROLL_POSITION = 'AURORA_SCROLL_POSITION';
 var AURORA_PREVIOUS_LOCATION = 'AURORA_PREVIOUS_LOCATION';
 
 /**
@@ -50,7 +54,7 @@ module.exports = function () {
    * Create a function that handles
    * updating the session storage
    */
-  var handleScroll = function handleScroll() {
+  var handleScroll = (0, _lodash2.default)(function () {
     /**
      * Pull the current path
      */
@@ -61,7 +65,7 @@ module.exports = function () {
      */
     sessionStorage.setItem(AURORA_PREVIOUS_LOCATION, currentLocation);
     sessionStorage.setItem(AURORA_SCROLL_POSITION, window.scrollY);
-  };
+  }, 50);
 
   /**
    * Track the scroll position
