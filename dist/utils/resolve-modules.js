@@ -4,7 +4,6 @@
  * Dependencies
  */
 var set = require('lodash.set');
-var asyncEach = require('async-each');
 var clone = require('stringify-clone');
 
 var resolvedModuleCache = [];

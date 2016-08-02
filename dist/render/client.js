@@ -19,6 +19,7 @@ var history = require('../utils/history-api');
 var handleScrollPosition = require('../utils/handle-scroll-position');
 var removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
 var updateQueryString = require('../utils/update-query-string');
+var sortedObject = require('sorted-object');
 /**
  * Components
  */
@@ -168,7 +169,7 @@ module.exports = function () {
    */
   var renderApp = function renderApp() {
     var now = Date.now();
-    console.log('RenderApp, starts');
+    console.log('RenderApp, starts', store.getState());
     /**
      * Pull the state we need
      * for rendering our app
@@ -191,10 +192,7 @@ module.exports = function () {
     return Promise.resolve(config).then(function (config) {
       console.log('resolveVisibility starts', Date.now() - now);
       return config;
-    }).then(resolveVisibility.onClient.bind(null, settings, query)).then(function (a, b, c) {
-      console.log('a:', a);
-      return a;
-    })
+    }).then(resolveVisibility.onClient.bind(null, settings, query))
     /**
      * Resolve modules (React components) in the config
      */
@@ -260,29 +258,50 @@ module.exports = function () {
    * Listen to store changes and
    * re-render app if anything has changed
    */
+  var appConfig = '{}';
   store.subscribe(function () {
+    var _store$getState4 = store.getState();
+
+    var config = _store$getState4.config;
+
+    var newAppConf = JSON.stringify(sortedObject(config.app || {}));
+    if (appConfig === newAppConf) {
+      console.log('No store change in config.app, lets not render');
+      return;
+    }
+    console.log('Rerender app because of store changes', appConfig, newAppConf);
+    appConfig = newAppConf;
     renderApp();
   });
-
+  window.renderApp = renderApp;
   /**
    * Re-render on resize
    */
   onResize(function () {
+    console.log('Rerender app because of Resize ');
     renderApp();
   });
 
+  /**
+   * TODO: The loadMoreOnScroll is connected to a scroll event lisener trough infiniteScroll
+   * But what we need is a function that is not just triggering on scroll, but when the bottom is not more then Y px down, and we have more to load.
+   * There are several situations where a scroll lisener is not enough.
+   * * DOM content lenght is shortere  then  viewport
+   * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
+   * * retrigger the event until it has enough modules to fill up the Y px below. 
+   */
   var loadMoreOnScroll = throttle(function () {
     /**
      * Destructure what we need from the state
      */
 
-    var _store$getState4 = store.getState();
+    var _store$getState5 = store.getState();
 
-    var _store$getState4$pagi = _store$getState4.pagination;
-    _store$getState4$pagi = _store$getState4$pagi === undefined ? {} : _store$getState4$pagi;
-    var isLoading = _store$getState4$pagi.isLoading;
-    var hasMore = _store$getState4$pagi.hasMore;
-    var originalPath = _store$getState4$pagi.originalPath;
+    var _store$getState5$pagi = _store$getState5.pagination;
+    _store$getState5$pagi = _store$getState5$pagi === undefined ? {} : _store$getState5$pagi;
+    var isLoading = _store$getState5$pagi.isLoading;
+    var hasMore = _store$getState5$pagi.hasMore;
+    var originalPath = _store$getState5$pagi.originalPath;
 
     /**
      * If we're already loading the next page
@@ -382,13 +401,14 @@ module.exports = function () {
      */
     return shouldReplaceState ? store.dispatch(replaceState(cacheState)) : Promise.resolve();
   })
-  /**
-   * Make sure we render the app fully at least once
-   * before we do the scrolling (restore position)
-   */
-  .then(function () {
-    return renderApp();
-  })
+  // TODO:
+  // Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
+  // A: . Ja - fordi den helt første renderinga kan være uten moduler (fordi det ikke kommer noen moduler fra serveren om du enabler back-funksjonalitet), deretter lastes moduler fra cache, deretter rendres det på nytt i linje 289
+  // FOLLOW UP:  Burde ikke  dette kunne gjøres av det som i dag ligger i scrollliseneren  hvis vi bytter den fra å være en scroll lisner, til å bare sjekke om det er 1000 px igjen til kanten. Det er flere tilfeler vi har hvor vi skulle rendra mer, men kommer i en state hvor vi ikke har gjort det.
+  //  * Make sure we render the app fully at least once
+  //  * before we do the scrolling (restore position)
+  //  */
+  // .then(() => renderApp())
   /**
    * Handle route features on first render
    * NOTE: Depends on the config meta flags (features toggles)
