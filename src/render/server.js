@@ -94,8 +94,8 @@ module.exports = function ({
       hasMore: true,
       isLoading: false,
       originalPath: req.path,
-      perPage: 1,
-      initialLimit: 35,
+      perPage: 10,
+      initialLimit: 10,
       ...getPaginationSettings(req, res),
       ...paginationQuery,
     };
