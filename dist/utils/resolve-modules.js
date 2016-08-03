@@ -4,9 +4,9 @@
  * Dependencies
  */
 var set = require('lodash.set');
-var asyncEach = require('async-each');
 var clone = require('stringify-clone');
 
+var resolvedModuleCache = [];
 /**
  * Utilities
  */
@@ -29,7 +29,6 @@ module.exports = function () {
      * Clone the config object to avoid mutation
      */
     var configCopy = clone(config);
-
     /**
      * Create an array of resolver specifications
      */
@@ -49,13 +48,27 @@ module.exports = function () {
      * (React components instead of type strings)
      */
     return new Promise(function (resolve, reject) {
-      asyncEach(resolvers, function (item, cb) {
-        getModule(item.type).then(function (ReactComponent) {
-          set(configCopy, item.path, ReactComponent);
-          cb();
-        }).catch(cb);
-      }, function (err) {
-        return err ? reject(err) : resolve(configCopy);
+      var resolvingModules = [];
+
+      // Pick modules from cache or add them to queue to be resolved
+      resolvers.map(function (item) {
+        if (!resolvedModuleCache[item.type]) {
+          resolvedModuleCache[item.type] = 'adding';
+          resolvingModules.push(getModule(item.type).then(function (module) {
+            return resolvedModuleCache[item.type] = module;
+          }));
+        }
+      });
+
+      // When all new modules are resolved, add them to the configCopy object we are resolving to..
+      Promise.all(resolvingModules).then(function () {
+        resolvers.forEach(function (resolver) {
+          var component = resolvedModuleCache[resolver.type];
+          set(configCopy, resolver.path, component);
+        });
+        resolve(configCopy);
+      }).catch(function (err) {
+        return reject(err);
       });
     });
   };

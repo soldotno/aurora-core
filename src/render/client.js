@@ -5,7 +5,7 @@ const React = require('react'); // eslint-disable-line no-unused-vars
 const ReactDOM = require('react-dom');
 const qs = require('qs');
 const pick = require('lodash.pick');
-
+const throttle = require('lodash.throttle');
 /**
  * Utilities
  */
@@ -15,7 +15,7 @@ const history = require('../utils/history-api');
 const handleScrollPosition = require('../utils/handle-scroll-position');
 const removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
 const updateQueryString = require('../utils/update-query-string');
-
+var sortedObject = require('sorted-object');
 /**
  * Components
  */
@@ -147,6 +147,7 @@ module.exports = function ({
     ]));
   };
 
+  let appConfig = '{}';
   /**
    * Create a function that
    * renders the application
@@ -163,6 +164,12 @@ module.exports = function ({
       pagination = {},
     } = store.getState();
 
+    const newAppConf = JSON.stringify(sortedObject(config.app || {}));
+    if(appConfig === newAppConf) {
+      // TODO: Now we assume that only changes on app is a reason to rerender! Will this be true in the future?
+      return;
+    }
+    appConfig = newAppConf;
     /**
      * Resolve config
      */
@@ -226,7 +233,6 @@ module.exports = function ({
   store.subscribe(() => {
     renderApp();
   });
-
   /**
    * Re-render on resize
    */
@@ -234,6 +240,68 @@ module.exports = function ({
     renderApp();
   });
 
+/**
+ * TODO: The loadMoreOnScroll is connected to a scroll event lisener trough infiniteScroll
+ * But what we need is a function that is not just triggering on scroll, but when the bottom is not more then Y px down, and we have more to load.
+ * There are several situations where a scroll lisener is not enough.
+ * * DOM content lenght is shortere  then  viewport
+ * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
+ * * retrigger the event until it has enough modules to fill up the Y px below.
+ */
+const loadMoreOnScroll =  throttle(() => {
+  /**
+   * Destructure what we need from the state
+   */
+  const {
+    pagination: {
+      isLoading,
+      hasMore,
+      originalPath,
+    } = {},
+  } = store.getState();
+
+  /**
+   * If we're already loading the next page
+   * or if we know that there is no more
+   * pages to fetch - then abort
+   */
+  if (isLoading || !hasMore) {
+    return;
+  }
+
+  /**
+   * Tell Redux to populate
+   * the next part of the config
+   */
+  store.dispatch(populateNextPage({
+    path: originalPath || location.pathname,
+    query: qs.parse(location.search.slice(1)),
+  }))
+  /**
+   * Handle application features on subsequent updates
+   * NOTE: Depends on the config meta flags (features toggles)
+   *
+   * Could be things like:
+   * - Dynamic pagination
+   * - Scroll position memory
+   */
+  .then(() => {
+    /**
+     * Get the entire redux state
+     */
+    const currentState = store.getState();
+
+      /**
+       * Handle features that are behind flags, such as
+       * - Back position memory
+       * - State caching
+       * - Versioning
+       */
+      featureFlags.enablePagination && updatePaginationQuery();
+      featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
+      featureFlags.enableVersioning && updateVersionQuery();
+  });
+}, 100);
   /**
    * Handle the rendering flow
    */
@@ -264,6 +332,8 @@ module.exports = function ({
       } = {},
     } = {} } = store.getState() || {};
 
+
+
     /**
      * Check if the current config has any modules
      */
@@ -286,11 +356,14 @@ module.exports = function ({
       Promise.resolve()
     );
   })
-  /**
-   * Make sure we render the app fully at least once
-   * before we do the scrolling (restore position)
-   */
-  .then(() => renderApp())
+  // TODO:
+  // Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
+  // A: . Ja - fordi den helt første renderinga kan være uten moduler (fordi det ikke kommer noen moduler fra serveren om du enabler back-funksjonalitet), deretter lastes moduler fra cache, deretter rendres det på nytt i linje 289
+  // FOLLOW UP:  Burde ikke  dette kunne gjøres av det som i dag ligger i scrollliseneren  hvis vi bytter den fra å være en scroll lisner, til å bare sjekke om det er 1000 px igjen til kanten. Det er flere tilfeler vi har hvor vi skulle rendra mer, men kommer i en state hvor vi ikke har gjort det.
+  //  * Make sure we render the app fully at least once
+  //  * before we do the scrolling (restore position)
+  //  */
+  // .then(() => renderApp())
   /**
    * Handle route features on first render
    * NOTE: Depends on the config meta flags (features toggles)
@@ -344,62 +417,6 @@ module.exports = function ({
    * Handle infinite scroll / pagination
    */
   .then(() => {
-    /**
-     * Infinite scroll handler
-     */
-    infiniteScroll(() => {
-      /**
-       * Destructure what we need from the state
-       */
-      const {
-        pagination: {
-          isLoading,
-          hasMore,
-          originalPath,
-        } = {},
-      } = store.getState();
-
-      /**
-       * If we're already loading the next page
-       * or if we know that there is no more
-       * pages to fetch - then abort
-       */
-      if (isLoading || !hasMore) {
-        return;
-      }
-
-      /**
-       * Tell Redux to populate
-       * the next part of the config
-       */
-      store.dispatch(populateNextPage({
-        path: originalPath || location.pathname,
-        query: qs.parse(location.search.slice(1)),
-      }))
-      /**
-       * Handle application features on subsequent updates
-       * NOTE: Depends on the config meta flags (features toggles)
-       *
-       * Could be things like:
-       * - Dynamic pagination
-       * - Scroll position memory
-       */
-      .then(() => {
-        /**
-         * Get the entire redux state
-         */
-        const currentState = store.getState();
-
-        /**
-         * Handle features that are behind flags, such as
-         * - Back position memory
-         * - State caching
-         * - Versioning
-         */
-        featureFlags.enablePagination && updatePaginationQuery();
-        featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
-        featureFlags.enableVersioning && updateVersionQuery();
-      });
-    });
+    infiniteScroll(loadMoreOnScroll);
   });
 };
