@@ -163,13 +163,12 @@ module.exports = function () {
     updateQueryString(pick(pagination, ['page', 'perPage', 'initialLimit', 'hasMore']));
   };
 
+  var appConfig = '{}';
   /**
    * Create a function that
    * renders the application
    */
   var renderApp = function renderApp() {
-    var now = Date.now();
-    console.log('RenderApp, starts', store.getState());
     /**
      * Pull the state we need
      * for rendering our app
@@ -185,21 +184,22 @@ module.exports = function () {
     var settings = _store$getState3$sett === undefined ? {} : _store$getState3$sett;
     var _store$getState3$pagi = _store$getState3.pagination;
     var pagination = _store$getState3$pagi === undefined ? {} : _store$getState3$pagi;
+
+
+    var newAppConf = JSON.stringify(sortedObject(config.app || {}));
+    if (appConfig === newAppConf) {
+      // TODO: Now we assume that only changes on app is a reason to rerender! Will this be true in the future?
+      return;
+    }
+    appConfig = newAppConf;
     /**
      * Resolve config
      */
-
-    return Promise.resolve(config).then(function (config) {
-      console.log('resolveVisibility starts', Date.now() - now);
-      return config;
-    }).then(resolveVisibility.onClient.bind(null, settings, query))
+    return Promise.resolve(config).then(resolveVisibility.onClient.bind(null, settings, query))
     /**
      * Resolve modules (React components) in the config
      */
-    .then(function (fun) {
-      console.log('resolveModules starts', Date.now() - now);
-      return resolveModules(fun);
-    })
+    .then(resolveModules)
     /**
      * Render React app
      *
@@ -216,8 +216,6 @@ module.exports = function () {
       var _ref2$app$options = _ref2$app.options;
       var options = _ref2$app$options === undefined ? {} : _ref2$app$options;
 
-
-      console.log('The actuall rendering starts', Date.now() - now);
       /**
        * Create a new Promise of rendering
        * the application
@@ -239,8 +237,7 @@ module.exports = function () {
          * to be able to know when the rendering is done (async).
          */
         function () {
-          console.log('Rendering finished', Date.now() - now);
-          resolve();
+          return resolve();
         });
       });
     })
@@ -258,27 +255,13 @@ module.exports = function () {
    * Listen to store changes and
    * re-render app if anything has changed
    */
-  var appConfig = '{}';
   store.subscribe(function () {
-    var _store$getState4 = store.getState();
-
-    var config = _store$getState4.config;
-
-    var newAppConf = JSON.stringify(sortedObject(config.app || {}));
-    if (appConfig === newAppConf) {
-      console.log('No store change in config.app, lets not render');
-      return;
-    }
-    console.log('Rerender app because of store changes', appConfig, newAppConf);
-    appConfig = newAppConf;
     renderApp();
   });
-  window.renderApp = renderApp;
   /**
    * Re-render on resize
    */
   onResize(function () {
-    console.log('Rerender app because of Resize ');
     renderApp();
   });
 
@@ -288,20 +271,20 @@ module.exports = function () {
    * There are several situations where a scroll lisener is not enough.
    * * DOM content lenght is shortere  then  viewport
    * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
-   * * retrigger the event until it has enough modules to fill up the Y px below. 
+   * * retrigger the event until it has enough modules to fill up the Y px below.
    */
   var loadMoreOnScroll = throttle(function () {
     /**
      * Destructure what we need from the state
      */
 
-    var _store$getState5 = store.getState();
+    var _store$getState4 = store.getState();
 
-    var _store$getState5$pagi = _store$getState5.pagination;
-    _store$getState5$pagi = _store$getState5$pagi === undefined ? {} : _store$getState5$pagi;
-    var isLoading = _store$getState5$pagi.isLoading;
-    var hasMore = _store$getState5$pagi.hasMore;
-    var originalPath = _store$getState5$pagi.originalPath;
+    var _store$getState4$pagi = _store$getState4.pagination;
+    _store$getState4$pagi = _store$getState4$pagi === undefined ? {} : _store$getState4$pagi;
+    var isLoading = _store$getState4$pagi.isLoading;
+    var hasMore = _store$getState4$pagi.hasMore;
+    var originalPath = _store$getState4$pagi.originalPath;
 
     /**
      * If we're already loading the next page
