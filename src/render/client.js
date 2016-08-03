@@ -147,13 +147,12 @@ module.exports = function ({
     ]));
   };
 
+  let appConfig = '{}';
   /**
    * Create a function that
    * renders the application
    */
   const renderApp = () => {
-    const now = Date.now();
-    console.log('RenderApp, starts', store.getState());
     /**
      * Pull the state we need
      * for rendering our app
@@ -164,22 +163,22 @@ module.exports = function ({
       settings = {},
       pagination = {},
     } = store.getState();
+
+    const newAppConf = JSON.stringify(sortedObject(config.app || {}));
+    if(appConfig === newAppConf) {
+      // TODO: Now we assume that only changes on app is a reason to rerender! Will this be true in the future?
+      return;
+    }
+    appConfig = newAppConf;
     /**
      * Resolve config
      */
     return Promise.resolve(config)
-    .then(config => {
-      console.log('resolveVisibility starts', Date.now() - now);
-      return config;
-    })
     .then(resolveVisibility.onClient.bind(null, settings, query))
     /**
      * Resolve modules (React components) in the config
      */
-    .then(fun => {
-      console.log('resolveModules starts', Date.now() - now);
-      return resolveModules(fun);
-    })
+    .then(resolveModules)
     /**
      * Render React app
      *
@@ -194,8 +193,6 @@ module.exports = function ({
       type: App,
       options = {}
     } }) => {
-
-      console.log('The actuall rendering starts', Date.now() - now);
       /**
        * Create a new Promise of rendering
        * the application
@@ -217,13 +214,9 @@ module.exports = function ({
            * NOTE: We're using the callback available for ReactDOM.render
            * to be able to know when the rendering is done (async).
            */
-          () => {
-            console.log('Rendering finished', Date.now() - now);
-            resolve();
-          }
+          () => resolve()
         );
       });
-
     })
     /**
      * Make sure errors are thrown
@@ -237,24 +230,13 @@ module.exports = function ({
    * Listen to store changes and
    * re-render app if anything has changed
    */
-  let appConfig = '{}';
   store.subscribe(() => {
-    const {config} = store.getState();
-    const newAppConf = JSON.stringify(sortedObject(config.app || {}));
-    if(appConfig === newAppConf) {
-    console.log('No store change in config.app, lets not render');
-      return;
-    }
-    console.log('Rerender app because of store changes', appConfig, newAppConf );
-    appConfig = newAppConf;
     renderApp();
   });
-  window.renderApp = renderApp;
   /**
    * Re-render on resize
    */
   onResize(() => {
-    console.log('Rerender app because of Resize ');
     renderApp();
   });
 
@@ -264,7 +246,7 @@ module.exports = function ({
  * There are several situations where a scroll lisener is not enough.
  * * DOM content lenght is shortere  then  viewport
  * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
- * * retrigger the event until it has enough modules to fill up the Y px below. 
+ * * retrigger the event until it has enough modules to fill up the Y px below.
  */
 const loadMoreOnScroll =  throttle(() => {
   /**
