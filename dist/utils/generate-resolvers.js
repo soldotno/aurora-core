@@ -38,8 +38,10 @@ module.exports = function generateResolvers() {
      */
     if (module.options && Array.isArray(module.options.modules)) {
       module.options.modules.forEach(function (module, i) {
-        var nextPath = path + '.options.modules[' + i + ']';
-        generateResolversRecursively(nextPath, module);
+        if (module) {
+          var nextPath = path + '.options.modules[' + i + ']';
+          generateResolversRecursively(nextPath, module);
+        }
       });
     }
   }

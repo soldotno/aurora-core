@@ -31,8 +31,10 @@ module.exports = function generateResolvers(
      */
     if (module.options && Array.isArray(module.options.modules)) {
       module.options.modules.forEach((module, i) => {
-        const nextPath = `${path}.options.modules[${i}]`;
-        generateResolversRecursively(nextPath, module);
+        if(module) {
+          const nextPath = `${path}.options.modules[${i}]`;
+          generateResolversRecursively(nextPath, module);
+        }
       });
     }
   }
