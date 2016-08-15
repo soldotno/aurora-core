@@ -8,7 +8,7 @@ const React = require('react');
  * data fetching on both the client
  * and server for Aurora modules
  */
-module.exports = function(stateName) {
+module.exports = function(stateName, errorName) {
   return {
     /**
      * These are the props
@@ -47,7 +47,8 @@ module.exports = function(stateName) {
      */
     getInitialState() {
       return {
-        [stateName]: this.props._data
+        [stateName]: this.props._data,
+        [errorName]: false,
       };
     },
 
@@ -105,7 +106,8 @@ module.exports = function(stateName) {
        */
       if (!_data) {
         getData(Object.assign({}, { __settings: settings }, _dataOptions))
-        .then((_data) => this.setState({ [stateName]: _data }));
+        .then((_data) => this.setState({ [stateName]: _data }))
+        .catch((_data) => this.setState({ [errorName]: _data }));
       }
     },
 

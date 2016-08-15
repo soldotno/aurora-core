@@ -12,7 +12,7 @@ var React = require('react');
  * data fetching on both the client
  * and server for Aurora modules
  */
-module.exports = function (stateName) {
+module.exports = function (stateName, errorName) {
   return {
     /**
      * These are the props
@@ -51,7 +51,9 @@ module.exports = function (stateName) {
      * props (might have been loaded server-side)
      */
     getInitialState: function getInitialState() {
-      return _defineProperty({}, stateName, this.props._data);
+      var _ref;
+
+      return _ref = {}, _defineProperty(_ref, stateName, this.props._data), _defineProperty(_ref, errorName, false), _ref;
     },
 
 
@@ -118,6 +120,8 @@ module.exports = function (stateName) {
       if (!_data) {
         getData(Object.assign({}, { __settings: settings }, _dataOptions)).then(function (_data) {
           return _this2.setState(_defineProperty({}, stateName, _data));
+        }).catch(function (_data) {
+          return _this2.setState(_defineProperty({}, errorName, _data));
         });
       }
     },
