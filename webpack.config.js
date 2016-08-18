@@ -119,7 +119,7 @@ module.exports = {
       exclude: /node_modules/
     }, {
       test: /\.scss$/,
-      loader: !isProduction ? 'style!css!postcss!sass' : 'css!postcss!sass'
+      loader: !isProduction ? 'style!css!postcss!sass' : 'css?minimize&-autoprefixer!postcss!sass'
     }]
   },
 
