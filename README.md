@@ -1,5 +1,10 @@
 [![Dependency Status](https://david-dm.org/soldotno/aurora-core.svg)](https://david-dm.org/soldotno/aurora-core) [![Build Status](https://codeship.com/projects/15c95c20-24cd-0134-cd6d-7a46f2e0a594/status?branch=master)](https://codeship.com/projects/161548)
 
+<a href="https://codeclimate.com/github/soldotno/aurora-core"><img src="https://codeclimate.com/github/soldotno/aurora-core/badges/gpa.svg" /></a>
+<a href="https://codeclimate.com/github/soldotno/aurora-core/coverage"><img src="https://codeclimate.com/github/soldotno/aurora-core/badges/coverage.svg" /></a>
+<a href="https://codeclimate.com/github/soldotno/aurora-core"><img src="https://codeclimate.com/github/soldotno/aurora-core/badges/issue_count.svg" /></a>
+
+
 Aurora Core (development)
 =========================
 
