@@ -140,6 +140,7 @@ module.exports = function ({
   };
 
   let appConfig = '{}';
+  let paginationConf = '{}';
   /**
    * Create a function that
    * renders the application
@@ -157,11 +158,14 @@ module.exports = function ({
     } = store.getState();
 
     const newAppConf = JSON.stringify(sortedObject(config.app || {}));
-    if(appConfig === newAppConf) {
-      // TODO: Now we assume that only changes on app is a reason to rerender! Will this be true in the future?
+    const newPaginationConf = JSON.stringify(sortedObject(pagination || {}));
+    if(appConfig === newAppConf && paginationConf === newPaginationConf) {
+      // TODO: Now we assume that only changes on app and pagination is a reason to rerender!
+      // will this be true in the future?
       return;
     }
     appConfig = newAppConf;
+    paginationConf = newPaginationConf;
     /**
      * Resolve config
      */
@@ -296,11 +300,7 @@ const loadMoreUntilFinished =  () => {
       featureFlags.enableVersioning && updateVersionQuery();
   })
   .then(() => {
-    // since we had more lets try again until its empty
-    setTimeout(
-      () => {
-        loadMoreUntilFinished();
-      }, 100);
+    loadMoreUntilFinished();
   });
 };
   /**

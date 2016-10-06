@@ -9,7 +9,6 @@ var React = require('react'); // eslint-disable-line no-unused-vars
 var ReactDOM = require('react-dom');
 var qs = require('qs');
 var pick = require('lodash.pick');
-var throttle = require('lodash.throttle');
 /**
  * Utilities
  */
@@ -29,14 +28,6 @@ var ContextWrapper = require('../components/ContextWrapper');
  * Import our store configuration function
  */
 var configureStore = require('../store/configure-store').default;
-
-/**
- * Create an instance of infinite scroll
- */
-var infiniteScroll = require('everscroll')({
-  distance: 1000,
-  disableCallback: true
-});
 
 /**
  * Export function to be used as client renderer (extendable)
@@ -164,6 +155,7 @@ module.exports = function () {
   };
 
   var appConfig = '{}';
+  var paginationConf = '{}';
   /**
    * Create a function that
    * renders the application
@@ -187,11 +179,14 @@ module.exports = function () {
 
 
     var newAppConf = JSON.stringify(sortedObject(config.app || {}));
-    if (appConfig === newAppConf) {
-      // TODO: Now we assume that only changes on app is a reason to rerender! Will this be true in the future?
+    var newPaginationConf = JSON.stringify(sortedObject(pagination || {}));
+    if (appConfig === newAppConf && paginationConf === newPaginationConf) {
+      // TODO: Now we assume that only changes on app and pagination is a reason to rerender!
+      // will this be true in the future?
       return;
     }
     appConfig = newAppConf;
+    paginationConf = newPaginationConf;
     /**
      * Resolve config
      */
@@ -329,10 +324,7 @@ module.exports = function () {
       featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
       featureFlags.enableVersioning && updateVersionQuery();
     }).then(function () {
-      // since we had more lets try again until its empty
-      setTimeout(function () {
-        loadMoreUntilFinished();
-      }, 100);
+      loadMoreUntilFinished();
     });
   };
   /**
