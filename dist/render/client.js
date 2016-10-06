@@ -173,6 +173,7 @@ module.exports = function () {
      * Pull the state we need
      * for rendering our app
      */
+
     var _store$getState3 = store.getState();
 
     var _store$getState3$vers = _store$getState3.version;
@@ -272,10 +273,11 @@ module.exports = function () {
    * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
    * * retrigger the event until it has enough modules to fill up the Y px below.
    */
-  var loadMoreOnScroll = throttle(function () {
+  var loadMoreUntilFinished = function loadMoreUntilFinished() {
     /**
      * Destructure what we need from the state
      */
+
     var _store$getState4 = store.getState();
 
     var _store$getState4$pagi = _store$getState4.pagination;
@@ -302,6 +304,7 @@ module.exports = function () {
       path: originalPath || location.pathname,
       query: qs.parse(location.search.slice(1))
     }))
+
     /**
      * Handle application features on subsequent updates
      * NOTE: Depends on the config meta flags (features toggles)
@@ -325,8 +328,13 @@ module.exports = function () {
       featureFlags.enablePagination && updatePaginationQuery();
       featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
       featureFlags.enableVersioning && updateVersionQuery();
+    }).then(function () {
+      // since we had more lets try again until its empty
+      setTimeout(function () {
+        loadMoreUntilFinished();
+      }, 100);
     });
-  }, 100);
+  };
   /**
    * Handle the rendering flow
    */
@@ -412,6 +420,7 @@ module.exports = function () {
     /**
      * Pull out the modules list of the current config from redux state
      */
+
     var _ref4 = store.getState() || {};
 
     var _ref4$config = _ref4.config;
@@ -447,6 +456,6 @@ module.exports = function () {
    * Handle infinite scroll / pagination
    */
   .then(function () {
-    infiniteScroll(loadMoreOnScroll);
+    loadMoreUntilFinished();
   });
 };

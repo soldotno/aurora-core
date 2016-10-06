@@ -5,7 +5,6 @@ const React = require('react'); // eslint-disable-line no-unused-vars
 const ReactDOM = require('react-dom');
 const qs = require('qs');
 const pick = require('lodash.pick');
-const throttle = require('lodash.throttle');
 /**
  * Utilities
  */
@@ -26,13 +25,6 @@ const ContextWrapper = require('../components/ContextWrapper');
  */
 const configureStore = require('../store/configure-store').default;
 
-/**
- * Create an instance of infinite scroll
- */
-const infiniteScroll = require('everscroll')({
-  distance: 1000,
-  disableCallback: true
-});
 
 /**
  * Export function to be used as client renderer (extendable)
@@ -248,7 +240,7 @@ module.exports = function ({
  * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
  * * retrigger the event until it has enough modules to fill up the Y px below.
  */
-const loadMoreOnScroll =  throttle(() => {
+const loadMoreUntilFinished =  () => {
   /**
    * Destructure what we need from the state
    */
@@ -277,6 +269,8 @@ const loadMoreOnScroll =  throttle(() => {
     path: originalPath || location.pathname,
     query: qs.parse(location.search.slice(1)),
   }))
+
+
   /**
    * Handle application features on subsequent updates
    * NOTE: Depends on the config meta flags (features toggles)
@@ -300,8 +294,15 @@ const loadMoreOnScroll =  throttle(() => {
       featureFlags.enablePagination && updatePaginationQuery();
       featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
       featureFlags.enableVersioning && updateVersionQuery();
+  })
+  .then(() => {
+    // since we had more lets try again until its empty
+    setTimeout(
+      () => {
+        loadMoreUntilFinished();
+      }, 100);
   });
-}, 100);
+};
   /**
    * Handle the rendering flow
    */
@@ -417,6 +418,6 @@ const loadMoreOnScroll =  throttle(() => {
    * Handle infinite scroll / pagination
    */
   .then(() => {
-    infiniteScroll(loadMoreOnScroll);
+    loadMoreUntilFinished();
   });
 };
