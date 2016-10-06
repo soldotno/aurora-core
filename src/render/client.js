@@ -25,6 +25,13 @@ const ContextWrapper = require('../components/ContextWrapper');
  */
 const configureStore = require('../store/configure-store').default;
 
+/**
+ * Create an instance of infinite scroll
+ */
+const infiniteScroll = require('everscroll')({
+  distance: 1500,
+  disableCallback: true
+});
 
 /**
  * Export function to be used as client renderer (extendable)
@@ -236,15 +243,8 @@ module.exports = function ({
     renderApp();
   });
 
-/**
- * TODO: The loadMoreOnScroll is connected to a scroll event lisener trough infiniteScroll
- * But what we need is a function that is not just triggering on scroll, but when the bottom is not more then Y px down, and we have more to load.
- * There are several situations where a scroll lisener is not enough.
- * * DOM content lenght is shortere  then  viewport
- * * scroll event is triggered and render new modules, but they new modules render are not filling up to Y px down. It would make sence to
- * * retrigger the event until it has enough modules to fill up the Y px below.
- */
-const loadMoreUntilFinished =  () => {
+
+const loadMore = () => {
   /**
    * Destructure what we need from the state
    */
@@ -262,14 +262,14 @@ const loadMoreUntilFinished =  () => {
    * pages to fetch - then abort
    */
   if (isLoading || !hasMore) {
-    return;
+    return Promise.resolve(true);
   }
 
   /**
    * Tell Redux to populate
    * the next part of the config
    */
-  store.dispatch(populateNextPage({
+  return store.dispatch(populateNextPage({
     path: originalPath || location.pathname,
     query: qs.parse(location.search.slice(1)),
   }))
@@ -298,11 +298,34 @@ const loadMoreUntilFinished =  () => {
       featureFlags.enablePagination && updatePaginationQuery();
       featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
       featureFlags.enableVersioning && updateVersionQuery();
-  })
-  .then(() => {
-    loadMoreUntilFinished();
   });
 };
+
+
+/**
+ * Loads so many articles that we have a scroll bar!
+ */
+const loadMoreModulesThenLenghtOfViewPort = () => {
+  loadMore()
+  .then((done) => {
+    if(done) return;
+    if(isDocument4timesLongerThenViewPort()) {
+      loadMoreModulesThenLenghtOfViewPort();
+    } else {
+      infiniteScroll(loadMore);
+    }
+  })
+  .catch(err => {
+    console.warn('Failed loading more modules', err);
+  });
+};
+
+function isDocument4timesLongerThenViewPort() {
+  const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  const documentHeight = document.body.clientHeight;
+  return viewPortHeight*4 < documentHeight;
+}
+
   /**
    * Handle the rendering flow
    */
@@ -418,6 +441,6 @@ const loadMoreUntilFinished =  () => {
    * Handle infinite scroll / pagination
    */
   .then(() => {
-    loadMoreUntilFinished();
+    loadMoreModulesThenLenghtOfViewPort();
   });
 };
