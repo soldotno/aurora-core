@@ -24,6 +24,7 @@ module.exports = function (clientStyles) {
      * this in development since
      * we want hot loading (thus doing this another way)
      */
+
     componentWillMount: function componentWillMount() {
       if (isBrowser && !__DEVELOPMENT__) {
         injectStyles(clientStyles);

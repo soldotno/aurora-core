@@ -89,6 +89,7 @@ exports.default = function () {
      * Exposed action creator
      * for refreshing the config
      */
+
     refreshConfig: function refreshConfig() {
       var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
