@@ -290,6 +290,7 @@ module.exports = function () {
      */
 
     if (isLoading || !hasMore) {
+      debug('We are done loading. isLoading: ' + isLoading + ', !hasMore: ' + !hasMore);
       return Promise.resolve(true);
     }
 
@@ -336,7 +337,7 @@ module.exports = function () {
       debug('loadMoreModulesThenLenghtOfViewPort.then');
       if (done) return;
       debug('loadMoreModulesThenLenghtOfViewPort.then, not done');
-      if (!isDocument4timesLongerThenViewPort()) {
+      if (!isDocumentTwotimesLongerThenViewPort()) {
         debug('loadMoreModulesThenLenghtOfViewPort.then, Load more ');
         loadMoreModulesThenLenghtOfViewPort();
       } else {
@@ -348,12 +349,12 @@ module.exports = function () {
     });
   };
 
-  function isDocument4timesLongerThenViewPort() {
+  function isDocumentTwotimesLongerThenViewPort() {
     var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    debug('isDocument4timesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
+    debug('isDocumentTwotimesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
     var documentHeight = document.body.clientHeight;
-    debug('isDocument4timesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
-    return viewPortHeight * 4 < documentHeight;
+    debug('isDocumentTwotimesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
+    return viewPortHeight * 2 < documentHeight;
   }
 
   /**

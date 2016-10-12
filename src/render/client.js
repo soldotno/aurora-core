@@ -264,6 +264,7 @@ const loadMore = () => {
    * pages to fetch - then abort
    */
   if (isLoading || !hasMore) {
+    debug(`We are done loading. isLoading: ${isLoading}, !hasMore: ${!hasMore}`);
     return Promise.resolve(true);
   }
 
