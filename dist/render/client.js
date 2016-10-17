@@ -41,7 +41,7 @@ var infiniteScroll = require('everscroll')({
  * Export function to be used as client renderer (extendable)
  */
 module.exports = function () {
-  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var _ref$getRoute = _ref.getRoute;
   var getRoute = _ref$getRoute === undefined ? function () {

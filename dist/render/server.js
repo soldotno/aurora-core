@@ -103,7 +103,7 @@ module.exports = function (_ref) {
       limit: 0,
       settings: settings
     }).then(function () {
-      var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       var _ref2$meta = _ref2.meta;
       _ref2$meta = _ref2$meta === undefined ? {} : _ref2$meta;

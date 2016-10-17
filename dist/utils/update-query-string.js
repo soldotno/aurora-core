@@ -17,7 +17,7 @@ var history = require('./history-api');
  * an object to update the query string
  */
 module.exports = function () {
-  var queryUpdate = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var queryUpdate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   /**
    * Abort if not browser

@@ -24,7 +24,7 @@ var cache = lru({ max: 500 });
  * styles from an Aurora config
  */
 module.exports = function () {
-  var app = arguments.length <= 0 || arguments[0] === undefined ? { options: { modules: [] } } : arguments[0];
+  var app = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { options: { modules: [] } };
 
   /**
    * Create an initial array to hold all the styles
