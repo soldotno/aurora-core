@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function () {
-  var getRoute = arguments.length <= 0 || arguments[0] === undefined ? function () {
+  var getRoute = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {
     return console.warn('No getRoute() method supplied to constructor');
-  } : arguments[0];
+  };
 
   /**
    * Pending action for
@@ -90,7 +90,7 @@ exports.default = function () {
      * for refreshing the config
      */
     refreshConfig: function refreshConfig() {
-      var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       var _ref3$path = _ref3.path;
       var path = _ref3$path === undefined ? '/' : _ref3$path;
@@ -149,7 +149,7 @@ exports.default = function () {
      * page of the config
      */
     populateNextPage: function populateNextPage() {
-      var _ref4 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       var _ref4$path = _ref4.path;
       var path = _ref4$path === undefined ? '/' : _ref4$path;
