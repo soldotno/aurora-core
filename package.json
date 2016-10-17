@@ -46,7 +46,7 @@
     "lodash.compose": "2.4.1",
     "lodash.pick": "4.4.0",
     "lodash.set": "4.3.2",
-    "lodash.throttle": "4.1.0",
+    "lodash.throttle": "4.1.1",
     "lru-cache": "4.0.1",
     "match-when-es5": "2.0.0",
     "md5": "2.1.0",
