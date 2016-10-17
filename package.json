@@ -35,7 +35,7 @@
     "aurora-sass-loader": "soldotno/aurora-sass-loader.git#master",
     "babel-polyfill": "6.9.1",
     "clean-css": "3.4.19",
-    "css-loader": "0.23.1",
+    "css-loader": "0.24.0",
     "debug": "2.2.0",
     "deep-equal": "1.0.1",
     "delay": "1.3.1",
