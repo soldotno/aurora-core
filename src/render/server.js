@@ -36,7 +36,8 @@ module.exports = function ({
   getUserSettings = () => console.warn('No getUserSettings() method supplied to constructor'),
   getPaginationSettings = () => console.warn('No getPaginationSettings() method supplied to constructor'),
   isVisible = () => console.warn('No isVisible() method supplied to constructor'),
-  enableServerRender = false,
+  enableHtmlServerRender = false,
+  enableCssServerRender = false,
 }) {
   /**
    * Utilities
@@ -145,7 +146,7 @@ module.exports = function ({
      * and data loading is enabled - if not we just
      * short circuit this step
      */
-    const configWithDataResolved = enableServerRender ? (
+    const configWithDataResolved = enableHtmlServerRender ? (
       configWithVisibilityResolved.then((config) => Promise.race([
         delay(2000).then(() => config),
         resolveData(settings, config),
@@ -197,7 +198,7 @@ module.exports = function ({
       /**
        * Pull out all critical styles
        */
-      const criticalStyles = enableServerRender ? extractStyles(app) : '';
+      const criticalStyles = enableCssServerRender ? extractStyles(app) : '';
 
       /**
        * Create the actual HTML
