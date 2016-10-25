@@ -41,7 +41,7 @@ var infiniteScroll = require('everscroll')({
  * Export function to be used as client renderer (extendable)
  */
 module.exports = function () {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   var _ref$getRoute = _ref.getRoute;
   var getRoute = _ref$getRoute === undefined ? function () {
@@ -173,6 +173,7 @@ module.exports = function () {
      * Pull the state we need
      * for rendering our app
      */
+
     var _store$getState3 = store.getState();
 
     var _store$getState3$vers = _store$getState3.version;
@@ -271,6 +272,7 @@ module.exports = function () {
     /**
      * Destructure what we need from the state
      */
+
     var _store$getState4 = store.getState();
 
     var _store$getState4$pagi = _store$getState4.pagination;
@@ -431,6 +433,7 @@ module.exports = function () {
     /**
      * Pull out the modules list of the current config from redux state
      */
+
     var _ref4 = store.getState() || {};
 
     var _ref4$config = _ref4.config;

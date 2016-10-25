@@ -60,8 +60,10 @@ module.exports = function (_ref) {
   var isVisible = _ref$isVisible === undefined ? function () {
     return console.warn('No isVisible() method supplied to constructor');
   } : _ref$isVisible;
-  var _ref$enableServerRend = _ref.enableServerRender;
-  var enableServerRender = _ref$enableServerRend === undefined ? false : _ref$enableServerRend;
+  var _ref$enableHtmlServer = _ref.enableHtmlServerRender;
+  var enableHtmlServerRender = _ref$enableHtmlServer === undefined ? false : _ref$enableHtmlServer;
+  var _ref$enableCssServerR = _ref.enableCssServerRender;
+  var enableCssServerRender = _ref$enableCssServerR === undefined ? false : _ref$enableCssServerR;
 
   /**
    * Utilities
@@ -103,7 +105,7 @@ module.exports = function (_ref) {
       limit: 0,
       settings: settings
     }).then(function () {
-      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       var _ref2$meta = _ref2.meta;
       _ref2$meta = _ref2$meta === undefined ? {} : _ref2$meta;
@@ -175,7 +177,7 @@ module.exports = function (_ref) {
      * and data loading is enabled - if not we just
      * short circuit this step
      */
-    var configWithDataResolved = enableServerRender ? configWithVisibilityResolved.then(function (config) {
+    var configWithDataResolved = enableHtmlServerRender ? configWithVisibilityResolved.then(function (config) {
       return Promise.race([delay(2000).then(function () {
         return config;
       }), resolveData(settings, config)]);
@@ -227,7 +229,7 @@ module.exports = function (_ref) {
       /**
        * Pull out all critical styles
        */
-      var criticalStyles = enableServerRender ? extractStyles(app) : '';
+      var criticalStyles = enableCssServerRender ? extractStyles(app) : '';
 
       /**
        * Create the actual HTML

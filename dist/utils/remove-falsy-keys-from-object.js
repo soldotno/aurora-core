@@ -9,7 +9,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * keys from an object and returns the result
  */
 module.exports = function () {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var obj = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   return Object.keys(obj).reduce(function (result, key) {
     return obj[key] && obj[key] !== 0 && obj[key] !== '' ? _extends({}, result, _defineProperty({}, key, obj[key])) : result;
