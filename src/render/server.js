@@ -119,6 +119,7 @@ module.exports = function ({
       page: hasPaginationQuery ? 0 : pagination.page,
       version: requestedVersion,
       settings,
+      configStatusCode
     });
 
     /**
@@ -131,6 +132,9 @@ module.exports = function ({
      */
     const configMeta = config
     .then(({ meta }) => meta);
+
+    const configStatusCode = config
+    .then(({ status }) => status);
 
     /**
      * Create a config with the visibility resolved
@@ -171,17 +175,20 @@ module.exports = function ({
       configMeta,
       configWithDataResolved,
       configWithModulesResolved,
+      configStatusCode,
     ])
     .then(([
       latestVersion,
       { version, flags } = {},
       config,
       { app, app: { options = {}, type: App } } = {},
+      statusCode
     ]) => {
-      /**
-       * Render the app as
-       * as markup string
-       */
+
+      if(statusCode === 404) {
+        return next();
+      }
+
       const appMarkup = ReactDOMServer.renderToString(
         <ContextWrapper
           actions={{}}
