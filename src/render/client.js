@@ -14,6 +14,8 @@ const history = require('../utils/history-api');
 const handleScrollPosition = require('../utils/handle-scroll-position');
 const removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
 const updateQueryString = require('../utils/update-query-string');
+const debug = require('debug')('aurora-core:render/client.js');
+
 var sortedObject = require('sorted-object');
 /**
  * Components
@@ -262,6 +264,7 @@ const loadMore = () => {
    * pages to fetch - then abort
    */
   if (isLoading || !hasMore) {
+    debug(`We are done loading. isLoading: ${isLoading}, !hasMore: ${!hasMore}`);
     return Promise.resolve(true);
   }
 
@@ -308,10 +311,14 @@ const loadMore = () => {
 const loadMoreModulesThenLenghtOfViewPort = () => {
   loadMore()
   .then((done) => {
+    debug('loadMoreModulesThenLenghtOfViewPort.then');
     if(done) return;
-    if(isDocument4timesLongerThenViewPort()) {
+    debug('loadMoreModulesThenLenghtOfViewPort.then, not done');
+    if(!isDocument4timesLongerThenViewPort()) {
+      debug('loadMoreModulesThenLenghtOfViewPort.then, Load more ');
       loadMoreModulesThenLenghtOfViewPort();
     } else {
+      debug('loadMoreModulesThenLenghtOfViewPort.then, attach infiniteScroll');
       infiniteScroll(loadMore);
     }
   })
@@ -322,8 +329,10 @@ const loadMoreModulesThenLenghtOfViewPort = () => {
 
 function isDocument4timesLongerThenViewPort() {
   const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  debug('isDocument4timesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
   const documentHeight = document.body.clientHeight;
-  return viewPortHeight*4 < documentHeight;
+  debug('isDocument4timesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
+  return viewPortHeight * 4 < documentHeight;
 }
 
   /**

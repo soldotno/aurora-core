@@ -18,6 +18,8 @@ var history = require('../utils/history-api');
 var handleScrollPosition = require('../utils/handle-scroll-position');
 var removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
 var updateQueryString = require('../utils/update-query-string');
+var debug = require('debug')('aurora-core:render/client.js');
+
 var sortedObject = require('sorted-object');
 /**
  * Components
@@ -41,7 +43,7 @@ var infiniteScroll = require('everscroll')({
  * Export function to be used as client renderer (extendable)
  */
 module.exports = function () {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   var _ref$getRoute = _ref.getRoute;
   var getRoute = _ref$getRoute === undefined ? function () {
@@ -173,6 +175,7 @@ module.exports = function () {
      * Pull the state we need
      * for rendering our app
      */
+
     var _store$getState3 = store.getState();
 
     var _store$getState3$vers = _store$getState3.version;
@@ -271,6 +274,7 @@ module.exports = function () {
     /**
      * Destructure what we need from the state
      */
+
     var _store$getState4 = store.getState();
 
     var _store$getState4$pagi = _store$getState4.pagination;
@@ -286,6 +290,7 @@ module.exports = function () {
      */
 
     if (isLoading || !hasMore) {
+      debug('We are done loading. isLoading: ' + isLoading + ', !hasMore: ' + !hasMore);
       return Promise.resolve(true);
     }
 
@@ -329,10 +334,14 @@ module.exports = function () {
    */
   var loadMoreModulesThenLenghtOfViewPort = function loadMoreModulesThenLenghtOfViewPort() {
     loadMore().then(function (done) {
+      debug('loadMoreModulesThenLenghtOfViewPort.then');
       if (done) return;
-      if (isDocument4timesLongerThenViewPort()) {
+      debug('loadMoreModulesThenLenghtOfViewPort.then, not done');
+      if (!isDocument4timesLongerThenViewPort()) {
+        debug('loadMoreModulesThenLenghtOfViewPort.then, Load more ');
         loadMoreModulesThenLenghtOfViewPort();
       } else {
+        debug('loadMoreModulesThenLenghtOfViewPort.then, attach infiniteScroll');
         infiniteScroll(loadMore);
       }
     }).catch(function (err) {
@@ -342,7 +351,9 @@ module.exports = function () {
 
   function isDocument4timesLongerThenViewPort() {
     var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    debug('isDocument4timesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
     var documentHeight = document.body.clientHeight;
+    debug('isDocument4timesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
     return viewPortHeight * 4 < documentHeight;
   }
 
@@ -431,6 +442,7 @@ module.exports = function () {
     /**
      * Pull out the modules list of the current config from redux state
      */
+
     var _ref4 = store.getState() || {};
 
     var _ref4$config = _ref4.config;

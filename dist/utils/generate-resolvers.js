@@ -7,11 +7,11 @@
  * NOTE: Read resolving.md
  */
 module.exports = function generateResolvers() {
-  var initialPath = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  var module = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var createResolver = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {
+  var initialPath = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+  var module = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var createResolver = arguments.length <= 2 || arguments[2] === undefined ? function () {
     return console.log('no function for creating a resolver supplied');
-  };
+  } : arguments[2];
 
   /**
    * Create an initial array that will
@@ -25,8 +25,8 @@ module.exports = function generateResolvers() {
    * (specific to Aurora configs and the convention of options.modules[..])
    */
   function generateResolversRecursively() {
-    var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    var module = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var path = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+    var module = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     /**
      * Create a resolver for the current level

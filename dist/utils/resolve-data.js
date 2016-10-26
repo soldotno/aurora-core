@@ -18,13 +18,13 @@ var generateResolvers = require('./generate-resolvers');
  * Takes a config object to be resolved
  */
 module.exports = function () {
-  var getModule = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {
+  var getModule = arguments.length <= 0 || arguments[0] === undefined ? function () {
     return console.warn('No getModule() method supplied to constructor');
-  };
+  } : arguments[0];
 
   return function () {
-    var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var settings = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var config = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     /**
      * Clone the config to avoid mutation

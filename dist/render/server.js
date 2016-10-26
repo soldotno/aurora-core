@@ -60,8 +60,10 @@ module.exports = function (_ref) {
   var isVisible = _ref$isVisible === undefined ? function () {
     return console.warn('No isVisible() method supplied to constructor');
   } : _ref$isVisible;
-  var _ref$enableServerRend = _ref.enableServerRender;
-  var enableServerRender = _ref$enableServerRend === undefined ? false : _ref$enableServerRend;
+  var _ref$enableHtmlServer = _ref.enableHtmlServerRender;
+  var enableHtmlServerRender = _ref$enableHtmlServer === undefined ? false : _ref$enableHtmlServer;
+  var _ref$enableCssServerR = _ref.enableCssServerRender;
+  var enableCssServerRender = _ref$enableCssServerR === undefined ? false : _ref$enableCssServerR;
 
   /**
    * Utilities
@@ -103,7 +105,7 @@ module.exports = function (_ref) {
       limit: 0,
       settings: settings
     }).then(function () {
-      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       var _ref2$meta = _ref2.meta;
       _ref2$meta = _ref2$meta === undefined ? {} : _ref2$meta;
@@ -144,7 +146,8 @@ module.exports = function (_ref) {
       limit: hasPaginationQuery ? 0 : pagination.page * pagination.perPage + pagination.initialLimit,
       page: hasPaginationQuery ? 0 : pagination.page,
       version: requestedVersion,
-      settings: settings
+      settings: settings,
+      configStatusCode: configStatusCode
     });
 
     /**
@@ -160,11 +163,16 @@ module.exports = function (_ref) {
       return meta;
     });
 
+    var configStatusCode = config.then(function (_ref4) {
+      var status = _ref4.status;
+      return status;
+    });
+
     /**
      * Create a config with the visibility resolved
      */
-    var configWithVisibilityResolved = config.then(function (_ref4) {
-      var config = _ref4.data.config;
+    var configWithVisibilityResolved = config.then(function (_ref5) {
+      var config = _ref5.data.config;
       return config;
     }).then(resolveVisibility.onServer);
 
@@ -175,7 +183,7 @@ module.exports = function (_ref) {
      * and data loading is enabled - if not we just
      * short circuit this step
      */
-    var configWithDataResolved = enableServerRender ? configWithVisibilityResolved.then(function (config) {
+    var configWithDataResolved = enableHtmlServerRender ? configWithVisibilityResolved.then(function (config) {
       return Promise.race([delay(2000).then(function () {
         return config;
       }), resolveData(settings, config)]);
@@ -191,27 +199,29 @@ module.exports = function (_ref) {
      * to the function that creates
      * the initial markup and serves it to the client
      */
-    Promise.all([latestVersion, configMeta, configWithDataResolved, configWithModulesResolved]).then(function (_ref5) {
-      var _ref6 = _slicedToArray(_ref5, 4);
+    Promise.all([latestVersion, configMeta, configWithDataResolved, configWithModulesResolved, configStatusCode]).then(function (_ref6) {
+      var _ref7 = _slicedToArray(_ref6, 5);
 
-      var latestVersion = _ref6[0];
-      var _ref6$ = _ref6[1];
-      _ref6$ = _ref6$ === undefined ? {} : _ref6$;
-      var version = _ref6$.version;
-      var flags = _ref6$.flags;
-      var config = _ref6[2];
-      var _ref6$2 = _ref6[3];
-      _ref6$2 = _ref6$2 === undefined ? {} : _ref6$2;
-      var app = _ref6$2.app;
-      var _ref6$2$app = _ref6$2.app;
-      var _ref6$2$app$options = _ref6$2$app.options;
-      var options = _ref6$2$app$options === undefined ? {} : _ref6$2$app$options;
-      var App = _ref6$2$app.type;
+      var latestVersion = _ref7[0];
+      var _ref7$ = _ref7[1];
+      _ref7$ = _ref7$ === undefined ? {} : _ref7$;
+      var version = _ref7$.version;
+      var flags = _ref7$.flags;
+      var config = _ref7[2];
+      var _ref7$2 = _ref7[3];
+      _ref7$2 = _ref7$2 === undefined ? {} : _ref7$2;
+      var app = _ref7$2.app;
+      var _ref7$2$app = _ref7$2.app;
+      var _ref7$2$app$options = _ref7$2$app.options;
+      var options = _ref7$2$app$options === undefined ? {} : _ref7$2$app$options;
+      var App = _ref7$2$app.type;
+      var statusCode = _ref7[4];
 
-      /**
-       * Render the app as
-       * as markup string
-       */
+
+      if (statusCode === 404) {
+        return next();
+      }
+
       var appMarkup = ReactDOMServer.renderToString(React.createElement(
         ContextWrapper,
         {
@@ -227,7 +237,7 @@ module.exports = function (_ref) {
       /**
        * Pull out all critical styles
        */
-      var criticalStyles = enableServerRender ? extractStyles(app) : '';
+      var criticalStyles = enableCssServerRender ? extractStyles(app) : '';
 
       /**
        * Create the actual HTML

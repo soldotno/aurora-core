@@ -76,8 +76,9 @@ if (!isProduction) {
 module.exports = {
   /**
    * Use source maps for better debugging
+   * http://cheng.logdown.com/posts/2016/03/25/679045
    */
-  devtool: !isProduction ? 'inline-source-map' : 'source-map',
+  devtool: isProduction ? 'cheap-module-source-map' : 'cheap-module-eval-source-map',
 
   /**
    * Add our entry file(s)
