@@ -146,8 +146,8 @@ module.exports = function (_ref) {
       limit: hasPaginationQuery ? 0 : pagination.page * pagination.perPage + pagination.initialLimit,
       page: hasPaginationQuery ? 0 : pagination.page,
       version: requestedVersion,
-      settings: settings
-
+      settings: settings,
+      configStatusCode: configStatusCode
     });
 
     /**
@@ -218,7 +218,6 @@ module.exports = function (_ref) {
       var statusCode = _ref7[4];
 
 
-      //if
       if (statusCode === 404) {
         return next();
       }

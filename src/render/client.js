@@ -314,7 +314,7 @@ const loadMoreModulesThenLenghtOfViewPort = () => {
     debug('loadMoreModulesThenLenghtOfViewPort.then');
     if(done) return;
     debug('loadMoreModulesThenLenghtOfViewPort.then, not done');
-    if(!isDocumentTwotimesLongerThenViewPort()) {
+    if(!isDocument4timesLongerThenViewPort()) {
       debug('loadMoreModulesThenLenghtOfViewPort.then, Load more ');
       loadMoreModulesThenLenghtOfViewPort();
     } else {
@@ -327,12 +327,12 @@ const loadMoreModulesThenLenghtOfViewPort = () => {
   });
 };
 
-function isDocumentTwotimesLongerThenViewPort() {
+function isDocument4timesLongerThenViewPort() {
   const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  debug('isDocumentTwotimesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
+  debug('isDocument4timesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
   const documentHeight = document.body.clientHeight;
-  debug('isDocumentTwotimesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
-  return viewPortHeight*2 < documentHeight;
+  debug('isDocument4timesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
+  return viewPortHeight * 4 < documentHeight;
 }
 
   /**
