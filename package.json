@@ -4,7 +4,7 @@
   "description": "Aurora Application Assembler Core",
   "main": "index.js",
   "engines": {
-    "node": "5.12.0"
+    "node": ">=5.12.0"
   },
   "scripts": {
     "test": "npm run test:server && npm run test:client",
