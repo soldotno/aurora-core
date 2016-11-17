@@ -18,8 +18,8 @@ var StyleInjectMixin = require('../mixins/style-inject-mixin');
  * in the Aurora frontend
  */
 module.exports = function (_ref) {
-  var serverPath = _ref.serverPath;
-  var clientStyles = _ref.clientStyles;
+  var serverPath = _ref.serverPath,
+      clientStyles = _ref.clientStyles;
 
   /**
    * Load the styles for server rendering with the Aurora Sass loader

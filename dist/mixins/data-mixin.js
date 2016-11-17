@@ -63,9 +63,8 @@ module.exports = function (stateName, errorName) {
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
       var _this = this;
 
-      var _props$_hideOnClient = this.props._hideOnClient;
-
-      var _hideOnClient = _props$_hideOnClient === undefined ? false : _props$_hideOnClient;
+      var _props$_hideOnClient = this.props._hideOnClient,
+          _hideOnClient = _props$_hideOnClient === undefined ? false : _props$_hideOnClient;
 
       !this.state[stateName] && this.setState(_defineProperty({}, stateName, nextProps._data), function () {
         !_hideOnClient && _this._handleData();
@@ -83,19 +82,18 @@ module.exports = function (stateName, errorName) {
       /**
        * Pull out what we need from props
        */
-      var _props = this.props;
-      var _data = _props._data;
-      var _props$_dataOptions = _props._dataOptions;
-
-      var _dataOptions = _props$_dataOptions === undefined ? {} : _props$_dataOptions;
+      var _props = this.props,
+          _data = _props._data,
+          _props$_dataOptions = _props._dataOptions,
+          _dataOptions = _props$_dataOptions === undefined ? {} : _props$_dataOptions;
 
       /**
        * Pull out what we need from context
        */
 
 
-      var _context$settings = this.context.settings;
-      var settings = _context$settings === undefined ? {} : _context$settings;
+      var _context$settings = this.context.settings,
+          settings = _context$settings === undefined ? {} : _context$settings;
 
       /**
        * Pull the 'getData' method
@@ -103,8 +101,8 @@ module.exports = function (stateName, errorName) {
        * data fetching must implement
        */
 
-      var _constructor$getData = this.constructor.getData;
-      var getData = _constructor$getData === undefined ? function () {
+      var _constructor$getData = this.constructor.getData,
+          getData = _constructor$getData === undefined ? function () {
         return Promise.resolve({ crap: 5 });
       } : _constructor$getData;
 
@@ -131,9 +129,8 @@ module.exports = function (stateName, errorName) {
        * aurora-visibility-mixin, if not
        * we'll default to performing the handling
        */
-      var _props$_hideOnClient2 = this.props._hideOnClient;
-
-      var _hideOnClient = _props$_hideOnClient2 === undefined ? false : _props$_hideOnClient2;
+      var _props$_hideOnClient2 = this.props._hideOnClient,
+          _hideOnClient = _props$_hideOnClient2 === undefined ? false : _props$_hideOnClient2;
 
       /**
        * Only do data handling if the

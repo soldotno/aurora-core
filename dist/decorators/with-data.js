@@ -19,18 +19,18 @@ var DataMixin = require('../mixins/data-mixin');
  * for adding Aurora data fetching
  */
 module.exports = function (_ref) {
-  var _ref$fetchData = _ref.fetchData;
-  var fetchData = _ref$fetchData === undefined ? function () {
+  var _ref$fetchData = _ref.fetchData,
+      fetchData = _ref$fetchData === undefined ? function () {
     return Promise.resolve();
-  } : _ref$fetchData;
-  var _ref$dataProp = _ref.dataProp;
-  var dataProp = _ref$dataProp === undefined ? 'data' : _ref$dataProp;
-  var _ref$loadingProp = _ref.loadingProp;
-  var loadingProp = _ref$loadingProp === undefined ? 'isLoading' : _ref$loadingProp;
-  var _ref$errorProp = _ref.errorProp;
-  var errorProp = _ref$errorProp === undefined ? 'error' : _ref$errorProp;
-  var _ref$disableServerLoa = _ref.disableServerLoading;
-  var disableServerLoading = _ref$disableServerLoa === undefined ? false : _ref$disableServerLoa;
+  } : _ref$fetchData,
+      _ref$dataProp = _ref.dataProp,
+      dataProp = _ref$dataProp === undefined ? 'data' : _ref$dataProp,
+      _ref$loadingProp = _ref.loadingProp,
+      loadingProp = _ref$loadingProp === undefined ? 'isLoading' : _ref$loadingProp,
+      _ref$errorProp = _ref.errorProp,
+      errorProp = _ref$errorProp === undefined ? 'error' : _ref$errorProp,
+      _ref$disableServerLoa = _ref.disableServerLoading,
+      disableServerLoading = _ref$disableServerLoa === undefined ? false : _ref$disableServerLoa;
 
   return function (Component) {
     var withData = React.createClass({

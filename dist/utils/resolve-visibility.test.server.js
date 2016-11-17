@@ -43,15 +43,15 @@ after(function () {
  * Create a mock for the getModule method
  */
 var isVisibleMockSmall = function isVisibleMockSmall() {
-  var settings = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-  var query = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-  var visibility = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+  var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var query = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var visibility = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   /**
    * Destructure visibility
    */
-  var include = visibility.include;
-  var exclude = visibility.exclude;
+  var include = visibility.include,
+      exclude = visibility.exclude;
 
 
   var size = 'small';
@@ -69,15 +69,15 @@ var isVisibleMockSmall = function isVisibleMockSmall() {
  * Create a mock for the getModule method
  */
 var isVisibleMockLarge = function isVisibleMockLarge() {
-  var settings = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-  var query = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-  var visibility = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+  var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var query = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var visibility = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   /**
    * Destructure visibility
    */
-  var include = visibility.include;
-  var exclude = visibility.exclude;
+  var include = visibility.include,
+      exclude = visibility.exclude;
 
 
   var size = 'large';

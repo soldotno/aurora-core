@@ -36,34 +36,34 @@ var hash = require('../../bundle-hash');
  * on the server
  */
 module.exports = function (_ref) {
-  var _ref$createHTML = _ref.createHTML;
-  var createHTML = _ref$createHTML === undefined ? function () {
+  var _ref$createHTML = _ref.createHTML,
+      createHTML = _ref$createHTML === undefined ? function () {
     return console.warn('No createHtml() method supplied to constructor');
-  } : _ref$createHTML;
-  var _ref$getRoute = _ref.getRoute;
-  var getRoute = _ref$getRoute === undefined ? function () {
+  } : _ref$createHTML,
+      _ref$getRoute = _ref.getRoute,
+      getRoute = _ref$getRoute === undefined ? function () {
     return console.warn('No getRoute() method supplied to constructor');
-  } : _ref$getRoute;
-  var _ref$getModule = _ref.getModule;
-  var getModule = _ref$getModule === undefined ? function () {
+  } : _ref$getRoute,
+      _ref$getModule = _ref.getModule,
+      getModule = _ref$getModule === undefined ? function () {
     return console.warn('No getModule() method supplied to constructor');
-  } : _ref$getModule;
-  var _ref$getUserSettings = _ref.getUserSettings;
-  var getUserSettings = _ref$getUserSettings === undefined ? function () {
+  } : _ref$getModule,
+      _ref$getUserSettings = _ref.getUserSettings,
+      getUserSettings = _ref$getUserSettings === undefined ? function () {
     return console.warn('No getUserSettings() method supplied to constructor');
-  } : _ref$getUserSettings;
-  var _ref$getPaginationSet = _ref.getPaginationSettings;
-  var getPaginationSettings = _ref$getPaginationSet === undefined ? function () {
+  } : _ref$getUserSettings,
+      _ref$getPaginationSet = _ref.getPaginationSettings,
+      getPaginationSettings = _ref$getPaginationSet === undefined ? function () {
     return console.warn('No getPaginationSettings() method supplied to constructor');
-  } : _ref$getPaginationSet;
-  var _ref$isVisible = _ref.isVisible;
-  var isVisible = _ref$isVisible === undefined ? function () {
+  } : _ref$getPaginationSet,
+      _ref$isVisible = _ref.isVisible,
+      isVisible = _ref$isVisible === undefined ? function () {
     return console.warn('No isVisible() method supplied to constructor');
-  } : _ref$isVisible;
-  var _ref$enableHtmlServer = _ref.enableHtmlServerRender;
-  var enableHtmlServerRender = _ref$enableHtmlServer === undefined ? false : _ref$enableHtmlServer;
-  var _ref$enableCssServerR = _ref.enableCssServerRender;
-  var enableCssServerRender = _ref$enableCssServerR === undefined ? false : _ref$enableCssServerR;
+  } : _ref$isVisible,
+      _ref$enableHtmlServer = _ref.enableHtmlServerRender,
+      enableHtmlServerRender = _ref$enableHtmlServer === undefined ? false : _ref$enableHtmlServer,
+      _ref$enableCssServerR = _ref.enableCssServerRender,
+      enableCssServerRender = _ref$enableCssServerR === undefined ? false : _ref$enableCssServerR;
 
   /**
    * Utilities
@@ -105,9 +105,9 @@ module.exports = function (_ref) {
       limit: 0,
       settings: settings
     }).then(function () {
-      var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref2$meta = _ref2.meta;
 
-      var _ref2$meta = _ref2.meta;
       _ref2$meta = _ref2$meta === undefined ? {} : _ref2$meta;
       var version = _ref2$meta.version;
       return version;
@@ -200,22 +200,22 @@ module.exports = function (_ref) {
      * the initial markup and serves it to the client
      */
     Promise.all([latestVersion, configMeta, configWithDataResolved, configWithModulesResolved, configStatusCode]).then(function (_ref6) {
-      var _ref7 = _slicedToArray(_ref6, 5);
+      var _ref7 = _slicedToArray(_ref6, 5),
+          latestVersion = _ref7[0],
+          _ref7$ = _ref7[1];
 
-      var latestVersion = _ref7[0];
-      var _ref7$ = _ref7[1];
       _ref7$ = _ref7$ === undefined ? {} : _ref7$;
-      var version = _ref7$.version;
-      var flags = _ref7$.flags;
-      var config = _ref7[2];
-      var _ref7$2 = _ref7[3];
+      var version = _ref7$.version,
+          flags = _ref7$.flags,
+          config = _ref7[2],
+          _ref7$2 = _ref7[3];
       _ref7$2 = _ref7$2 === undefined ? {} : _ref7$2;
-      var app = _ref7$2.app;
-      var _ref7$2$app = _ref7$2.app;
-      var _ref7$2$app$options = _ref7$2$app.options;
-      var options = _ref7$2$app$options === undefined ? {} : _ref7$2$app$options;
-      var App = _ref7$2$app.type;
-      var statusCode = _ref7[4];
+      var app = _ref7$2.app,
+          _ref7$2$app = _ref7$2.app,
+          _ref7$2$app$options = _ref7$2$app.options,
+          options = _ref7$2$app$options === undefined ? {} : _ref7$2$app$options,
+          App = _ref7$2$app.type,
+          statusCode = _ref7[4];
 
 
       if (statusCode === 404) {

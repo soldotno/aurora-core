@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function () {
-  var getRoute = arguments.length <= 0 || arguments[0] === undefined ? function () {
+  var getRoute = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {
     return console.warn('No getRoute() method supplied to constructor');
-  } : arguments[0];
+  };
 
   /**
    * Pending action for
@@ -24,8 +24,8 @@ exports.default = function () {
    * refreshing the config
    */
   function refreshConfigSuccess(_ref) {
-    var meta = _ref.meta;
-    var data = _ref.data;
+    var meta = _ref.meta,
+        data = _ref.data;
 
     return {
       type: REFRESH_CONFIG_SUCCESS,
@@ -62,8 +62,8 @@ exports.default = function () {
    * page of the config
    */
   function populateNextPageSuccess(_ref2) {
-    var meta = _ref2.meta;
-    var data = _ref2.data;
+    var meta = _ref2.meta,
+        data = _ref2.data;
 
     return {
       type: POPULATE_NEXT_PAGE_SUCCESS,
@@ -89,22 +89,19 @@ exports.default = function () {
      * Exposed action creator
      * for refreshing the config
      */
-
     refreshConfig: function refreshConfig() {
-      var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-      var _ref3$path = _ref3.path;
-      var path = _ref3$path === undefined ? '/' : _ref3$path;
-      var _ref3$query = _ref3.query;
-      var query = _ref3$query === undefined ? {} : _ref3$query;
+      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref3$path = _ref3.path,
+          path = _ref3$path === undefined ? '/' : _ref3$path,
+          _ref3$query = _ref3.query,
+          query = _ref3$query === undefined ? {} : _ref3$query;
 
       return function (dispatch, getState) {
-        var _getState = getState();
-
-        var _getState$pagination$ = _getState.pagination.initialLimit;
-        var initialLimit = _getState$pagination$ === undefined ? 5 : _getState$pagination$;
-        var _getState$settings = _getState.settings;
-        var settings = _getState$settings === undefined ? {} : _getState$settings;
+        var _getState = getState(),
+            _getState$pagination$ = _getState.pagination.initialLimit,
+            initialLimit = _getState$pagination$ === undefined ? 5 : _getState$pagination$,
+            _getState$settings = _getState.settings,
+            settings = _getState$settings === undefined ? {} : _getState$settings;
 
         /**
          * Dispatch the pending action for
@@ -112,6 +109,7 @@ exports.default = function () {
          * that we've initiated the request
          * and that things are loading
          */
+
 
         dispatch(refreshConfigPending());
 
@@ -150,27 +148,25 @@ exports.default = function () {
      * page of the config
      */
     populateNextPage: function populateNextPage() {
-      var _ref4 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-      var _ref4$path = _ref4.path;
-      var path = _ref4$path === undefined ? '/' : _ref4$path;
-      var _ref4$query = _ref4.query;
-      var query = _ref4$query === undefined ? {} : _ref4$query;
+      var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref4$path = _ref4.path,
+          path = _ref4$path === undefined ? '/' : _ref4$path,
+          _ref4$query = _ref4.query,
+          query = _ref4$query === undefined ? {} : _ref4$query;
 
       return function (dispatch, getState) {
-        var _getState2 = getState();
-
-        var _getState2$pagination = _getState2.pagination;
-        var _getState2$pagination2 = _getState2$pagination.page;
-        var page = _getState2$pagination2 === undefined ? 0 : _getState2$pagination2;
-        var _getState2$pagination3 = _getState2$pagination.perPage;
-        var perPage = _getState2$pagination3 === undefined ? 5 : _getState2$pagination3;
-        var _getState2$pagination4 = _getState2$pagination.initialLimit;
-        var initialLimit = _getState2$pagination4 === undefined ? 0 : _getState2$pagination4;
-        var _getState2$settings = _getState2.settings;
-        var settings = _getState2$settings === undefined ? {} : _getState2$settings;
-        var _getState2$version = _getState2.version;
-        var version = _getState2$version === undefined ? '' : _getState2$version;
+        var _getState2 = getState(),
+            _getState2$pagination = _getState2.pagination,
+            _getState2$pagination2 = _getState2$pagination.page,
+            page = _getState2$pagination2 === undefined ? 0 : _getState2$pagination2,
+            _getState2$pagination3 = _getState2$pagination.perPage,
+            perPage = _getState2$pagination3 === undefined ? 5 : _getState2$pagination3,
+            _getState2$pagination4 = _getState2$pagination.initialLimit,
+            initialLimit = _getState2$pagination4 === undefined ? 0 : _getState2$pagination4,
+            _getState2$settings = _getState2.settings,
+            settings = _getState2$settings === undefined ? {} : _getState2$settings,
+            _getState2$version = _getState2.version,
+            version = _getState2$version === undefined ? '' : _getState2$version;
 
         /**
          * Dispatch the pending action for
@@ -178,6 +174,7 @@ exports.default = function () {
          * to signal that we've initiated the request
          * and that things are loading
          */
+
 
         dispatch(populateNextPagePending());
 
