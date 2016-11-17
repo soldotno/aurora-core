@@ -304,37 +304,6 @@ const loadMore = () => {
   });
 };
 
-
-/**
- * Loads so many articles that we have a scroll bar!
- */
-const loadMoreModulesThenLenghtOfViewPort = () => {
-  loadMore()
-  .then((done) => {
-    debug('loadMoreModulesThenLenghtOfViewPort.then');
-    if(done) return;
-    debug('loadMoreModulesThenLenghtOfViewPort.then, not done');
-    if(!isDocument4timesLongerThenViewPort()) {
-      debug('loadMoreModulesThenLenghtOfViewPort.then, Load more ');
-      loadMoreModulesThenLenghtOfViewPort();
-    } else {
-      debug('loadMoreModulesThenLenghtOfViewPort.then, attach infiniteScroll');
-      infiniteScroll(loadMore);
-    }
-  })
-  .catch(err => {
-    console.warn('Failed loading more modules', err);
-  });
-};
-
-function isDocument4timesLongerThenViewPort() {
-  const viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  debug('isDocument4timesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
-  const documentHeight = document.body.clientHeight;
-  debug('isDocument4timesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
-  return viewPortHeight * 4 < documentHeight;
-}
-
   /**
    * Handle the rendering flow
    */
@@ -450,6 +419,6 @@ function isDocument4timesLongerThenViewPort() {
    * Handle infinite scroll / pagination
    */
   .then(() => {
-    loadMoreModulesThenLenghtOfViewPort();
+    infiniteScroll(loadMore);
   });
 };
