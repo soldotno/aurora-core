@@ -20,9 +20,9 @@ var generateResolvers = require('./generate-resolvers');
  * function above (generatePaths)
  */
 module.exports = function () {
-  var getModule = arguments.length <= 0 || arguments[0] === undefined ? function () {
+  var getModule = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {
     return console.warn('No getModule() method supplied to constructor');
-  } : arguments[0];
+  };
 
   return function (config) {
     /**
@@ -33,8 +33,8 @@ module.exports = function () {
      * Create an array of resolver specifications
      */
     var resolvers = generateResolvers('app', configCopy.app, function (_ref) {
-      var path = _ref.path;
-      var module = _ref.module;
+      var path = _ref.path,
+          module = _ref.module;
 
       return {
         path: path + '.type',

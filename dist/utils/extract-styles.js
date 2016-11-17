@@ -24,7 +24,7 @@ var cache = lru({ max: 500 });
  * styles from an Aurora config
  */
 module.exports = function () {
-  var app = arguments.length <= 0 || arguments[0] === undefined ? { options: { modules: [] } } : arguments[0];
+  var app = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { options: { modules: [] } };
 
   /**
    * Create an initial array to hold all the styles
@@ -37,12 +37,12 @@ module.exports = function () {
    * styles to extract (static getStyles() method on every module)
    */
   function extractStylesRecursively(_ref) {
-    var _ref$type$getStyles = _ref.type.getStyles;
-    var getStyles = _ref$type$getStyles === undefined ? function () {
+    var _ref$type$getStyles = _ref.type.getStyles,
+        getStyles = _ref$type$getStyles === undefined ? function () {
       return '';
-    } : _ref$type$getStyles;
-    var _ref$options$modules = _ref.options.modules;
-    var modules = _ref$options$modules === undefined ? [] : _ref$options$modules;
+    } : _ref$type$getStyles,
+        _ref$options$modules = _ref.options.modules,
+        modules = _ref$options$modules === undefined ? [] : _ref$options$modules;
 
     criticalStyles.push(getStyles());
     modules.forEach(extractStylesRecursively);

@@ -43,18 +43,17 @@ var infiniteScroll = require('everscroll')({
  * Export function to be used as client renderer (extendable)
  */
 module.exports = function () {
-  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref$getRoute = _ref.getRoute;
-  var getRoute = _ref$getRoute === undefined ? function () {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$getRoute = _ref.getRoute,
+      getRoute = _ref$getRoute === undefined ? function () {
     return console.warn('No getRoute() method supplied to constructor');
-  } : _ref$getRoute;
-  var _ref$getModule = _ref.getModule;
-  var getModule = _ref$getModule === undefined ? function () {
+  } : _ref$getRoute,
+      _ref$getModule = _ref.getModule,
+      getModule = _ref$getModule === undefined ? function () {
     return console.warn('No getModule() method supplied to constructor');
-  } : _ref$getModule;
-  var _ref$isVisible = _ref.isVisible;
-  var isVisible = _ref$isVisible === undefined ? function () {
+  } : _ref$getModule,
+      _ref$isVisible = _ref.isVisible,
+      isVisible = _ref$isVisible === undefined ? function () {
     return console.warn('No isVisible() method supplied to constructor');
   } : _ref$isVisible;
 
@@ -68,15 +67,15 @@ module.exports = function () {
    * Import and instantiate action creators
    */
 
-  var _require$default = require('../actions').default(getRoute);
-
-  var replaceState = _require$default.replaceState;
-  var refreshConfig = _require$default.refreshConfig;
-  var populateNextPage = _require$default.populateNextPage;
+  var _require$default = require('../actions').default(getRoute),
+      replaceState = _require$default.replaceState,
+      refreshConfig = _require$default.refreshConfig,
+      populateNextPage = _require$default.populateNextPage;
 
   /**
    * Parse the query string
    */
+
 
   var query = qs.parse((location.search || '').slice(1));
 
@@ -143,10 +142,9 @@ module.exports = function () {
    * to the query string
    */
   var updateVersionQuery = function updateVersionQuery() {
-    var _store$getState = store.getState();
-
-    var _store$getState$versi = _store$getState.version;
-    var version = _store$getState$versi === undefined ? '' : _store$getState$versi;
+    var _store$getState = store.getState(),
+        _store$getState$versi = _store$getState.version,
+        version = _store$getState$versi === undefined ? '' : _store$getState$versi;
 
     updateQueryString({ version: version });
   };
@@ -156,10 +154,8 @@ module.exports = function () {
    * query to the history state and browser history
    */
   var updatePaginationQuery = function updatePaginationQuery() {
-    var _store$getState2 = store.getState();
-
-    var pagination = _store$getState2.pagination;
-
+    var _store$getState2 = store.getState(),
+        pagination = _store$getState2.pagination;
 
     updateQueryString(pick(pagination, ['page', 'perPage', 'initialLimit', 'hasMore']));
   };
@@ -175,18 +171,15 @@ module.exports = function () {
      * Pull the state we need
      * for rendering our app
      */
-
-    var _store$getState3 = store.getState();
-
-    var _store$getState3$vers = _store$getState3.version;
-    var version = _store$getState3$vers === undefined ? '' : _store$getState3$vers;
-    var _store$getState3$conf = _store$getState3.config;
-    var config = _store$getState3$conf === undefined ? {} : _store$getState3$conf;
-    var _store$getState3$sett = _store$getState3.settings;
-    var settings = _store$getState3$sett === undefined ? {} : _store$getState3$sett;
-    var _store$getState3$pagi = _store$getState3.pagination;
-    var pagination = _store$getState3$pagi === undefined ? {} : _store$getState3$pagi;
-
+    var _store$getState3 = store.getState(),
+        _store$getState3$vers = _store$getState3.version,
+        version = _store$getState3$vers === undefined ? '' : _store$getState3$vers,
+        _store$getState3$conf = _store$getState3.config,
+        config = _store$getState3$conf === undefined ? {} : _store$getState3$conf,
+        _store$getState3$sett = _store$getState3.settings,
+        settings = _store$getState3$sett === undefined ? {} : _store$getState3$sett,
+        _store$getState3$pagi = _store$getState3.pagination,
+        pagination = _store$getState3$pagi === undefined ? {} : _store$getState3$pagi;
 
     var newAppConf = JSON.stringify(sortedObject(config.app || {}));
     var newPaginationConf = JSON.stringify(sortedObject(pagination || {}));
@@ -216,10 +209,10 @@ module.exports = function () {
      * (available as this.context - see React docs)
      */
     .then(function (_ref2) {
-      var _ref2$app = _ref2.app;
-      var App = _ref2$app.type;
-      var _ref2$app$options = _ref2$app.options;
-      var options = _ref2$app$options === undefined ? {} : _ref2$app$options;
+      var _ref2$app = _ref2.app,
+          App = _ref2$app.type,
+          _ref2$app$options = _ref2$app.options,
+          options = _ref2$app$options === undefined ? {} : _ref2$app$options;
 
       /**
        * Create a new Promise of rendering
@@ -274,14 +267,13 @@ module.exports = function () {
     /**
      * Destructure what we need from the state
      */
+    var _store$getState4 = store.getState(),
+        _store$getState4$pagi = _store$getState4.pagination;
 
-    var _store$getState4 = store.getState();
-
-    var _store$getState4$pagi = _store$getState4.pagination;
     _store$getState4$pagi = _store$getState4$pagi === undefined ? {} : _store$getState4$pagi;
-    var isLoading = _store$getState4$pagi.isLoading;
-    var hasMore = _store$getState4$pagi.hasMore;
-    var originalPath = _store$getState4$pagi.originalPath;
+    var isLoading = _store$getState4$pagi.isLoading,
+        hasMore = _store$getState4$pagi.hasMore,
+        originalPath = _store$getState4$pagi.originalPath;
 
     /**
      * If we're already loading the next page
@@ -330,34 +322,6 @@ module.exports = function () {
   };
 
   /**
-   * Loads so many articles that we have a scroll bar!
-   */
-  var loadMoreModulesThenLenghtOfViewPort = function loadMoreModulesThenLenghtOfViewPort() {
-    loadMore().then(function (done) {
-      debug('loadMoreModulesThenLenghtOfViewPort.then');
-      if (done) return;
-      debug('loadMoreModulesThenLenghtOfViewPort.then, not done');
-      if (!isDocument4timesLongerThenViewPort()) {
-        debug('loadMoreModulesThenLenghtOfViewPort.then, Load more ');
-        loadMoreModulesThenLenghtOfViewPort();
-      } else {
-        debug('loadMoreModulesThenLenghtOfViewPort.then, attach infiniteScroll');
-        infiniteScroll(loadMore);
-      }
-    }).catch(function (err) {
-      console.warn('Failed loading more modules', err);
-    });
-  };
-
-  function isDocument4timesLongerThenViewPort() {
-    var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    debug('isDocument4timesLongerThenViewPort.then, viewPortHeight ', viewPortHeight);
-    var documentHeight = document.body.clientHeight;
-    debug('isDocument4timesLongerThenViewPort.then, documentHeight ', document.body.clientHeight);
-    return viewPortHeight * 4 < documentHeight;
-  }
-
-  /**
    * Handle the rendering flow
    */
   Promise.resolve()
@@ -382,16 +346,16 @@ module.exports = function () {
      * Pull out the modules list of the current config from redux state
      */
 
-    var _ref3 = store.getState() || {};
+    var _ref3 = store.getState() || {},
+        _ref3$config = _ref3.config;
 
-    var _ref3$config = _ref3.config;
     _ref3$config = _ref3$config === undefined ? {} : _ref3$config;
     var _ref3$config$app = _ref3$config.app;
     _ref3$config$app = _ref3$config$app === undefined ? {} : _ref3$config$app;
     var _ref3$config$app$opti = _ref3$config$app.options;
     _ref3$config$app$opti = _ref3$config$app$opti === undefined ? {} : _ref3$config$app$opti;
-    var _ref3$config$app$opti2 = _ref3$config$app$opti.modules;
-    var modules = _ref3$config$app$opti2 === undefined ? [] : _ref3$config$app$opti2;
+    var _ref3$config$app$opti2 = _ref3$config$app$opti.modules,
+        modules = _ref3$config$app$opti2 === undefined ? [] : _ref3$config$app$opti2;
 
     /**
      * Check if the current config has any modules
@@ -442,17 +406,16 @@ module.exports = function () {
     /**
      * Pull out the modules list of the current config from redux state
      */
+    var _ref4 = store.getState() || {},
+        _ref4$config = _ref4.config;
 
-    var _ref4 = store.getState() || {};
-
-    var _ref4$config = _ref4.config;
     _ref4$config = _ref4$config === undefined ? {} : _ref4$config;
     var _ref4$config$app = _ref4$config.app;
     _ref4$config$app = _ref4$config$app === undefined ? {} : _ref4$config$app;
     var _ref4$config$app$opti = _ref4$config$app.options;
     _ref4$config$app$opti = _ref4$config$app$opti === undefined ? {} : _ref4$config$app$opti;
-    var _ref4$config$app$opti2 = _ref4$config$app$opti.modules;
-    var modules = _ref4$config$app$opti2 === undefined ? [] : _ref4$config$app$opti2;
+    var _ref4$config$app$opti2 = _ref4$config$app$opti.modules,
+        modules = _ref4$config$app$opti2 === undefined ? [] : _ref4$config$app$opti2;
 
     /**
      * Check if the current config has any modules
@@ -478,6 +441,6 @@ module.exports = function () {
    * Handle infinite scroll / pagination
    */
   .then(function () {
-    loadMoreModulesThenLenghtOfViewPort();
+    infiniteScroll(loadMore);
   });
 };

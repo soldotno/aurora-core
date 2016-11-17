@@ -36,10 +36,9 @@ var ContextWrapper = React.createClass({
    * Set the context using props
    */
   getChildContext: function getChildContext() {
-    var _props = this.props;
-    var children = _props.children;
-
-    var props = _objectWithoutProperties(_props, ['children']);
+    var _props = this.props,
+        children = _props.children,
+        props = _objectWithoutProperties(_props, ['children']);
 
     return _extends({}, props);
   },

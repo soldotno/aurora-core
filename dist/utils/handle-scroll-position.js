@@ -24,7 +24,7 @@ var AURORA_PREVIOUS_LOCATION = 'AURORA_PREVIOUS_LOCATION';
  * a browser resize event listener
  */
 module.exports = function () {
-  var currentLocation = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+  var currentLocation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
   /**
    * Abort if not in a browser

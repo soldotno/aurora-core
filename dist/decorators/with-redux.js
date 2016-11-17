@@ -1,8 +1,8 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /**
-                                                                                                                                                                                                                                                   * Dependencies
-                                                                                                                                                                                                                                                   */
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
+                                                                                                                                                                                                                                                                               * Dependencies
+                                                                                                                                                                                                                                                                               */
 
 
 var _react = require('react');
@@ -32,12 +32,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * for adding Aurora data fetching
  */
 module.exports = function (_ref) {
-  var _ref$reducer = _ref.reducer;
-  var reducer = _ref$reducer === undefined ? function () {
+  var _ref$reducer = _ref.reducer,
+      reducer = _ref$reducer === undefined ? function () {
     return console.log('No reducer supplied');
-  } : _ref$reducer;
-  var _ref$initialState = _ref.initialState;
-  var initialState = _ref$initialState === undefined ? {} : _ref$initialState;
+  } : _ref$reducer,
+      _ref$initialState = _ref.initialState,
+      initialState = _ref$initialState === undefined ? {} : _ref$initialState;
 
   /**
    * Create a logger (and default to pass-through if not browser)
