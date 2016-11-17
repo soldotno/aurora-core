@@ -28,8 +28,8 @@ const infiniteScroll = require('everscroll')({
 });
 
 /**
- * Export function to be used as client renderer (extendable)
- */
+* Export function to be used as client renderer (extendable)
+*/
 module.exports = function ({
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
   getModule = () => console.warn('No getModule() method supplied to constructor'),
@@ -158,20 +158,20 @@ module.exports = function ({
       return new Promise((resolve) => {
         ReactDOM.render(
           <ContextWrapper
-            actions={{}}
-            settings={settings}
+          actions={{}}
+          settings={settings}
           >
-            <App
-              newVersionAvailable={latestVersion !== version}
-              pagination={pagination}
-              {...options}
-            />
+          <App
+          newVersionAvailable={latestVersion !== version}
+          pagination={pagination}
+          {...options}
+          />
           </ContextWrapper>,
           document.querySelector('#app'),
 
           /*
-           NOTE: We're using the callback available for ReactDOM.render
-           to be able to know when the rendering is done (async).
+          NOTE: We're using the callback available for ReactDOM.render
+          to be able to know when the rendering is done (async).
           */
           () => resolve()
         );
@@ -196,38 +196,38 @@ module.exports = function ({
 
 
   const loadMore = () => {
-  // Destructure what we need from the state
-  const {
-    pagination: {
-      isLoading,
-      hasMore,
-      originalPath,
-    } = {},
-  } = store.getState();
+    // Destructure what we need from the state
+    const {
+      pagination: {
+        isLoading,
+        hasMore,
+        originalPath,
+      } = {},
+    } = store.getState();
 
-  // If we're already loading the next page or if we know that there is no more
-  // pages to fetch - then abort
-  if (isLoading || !hasMore) {
-    debug(`We are done loading. isLoading: ${isLoading}, !hasMore: ${!hasMore}`);
-    return Promise.resolve(true);
-  }
+    // If we're already loading the next page or if we know that there is no more
+    // pages to fetch - then abort
+    if (isLoading || !hasMore) {
+      debug(`We are done loading. isLoading: ${isLoading}, !hasMore: ${!hasMore}`);
+      return Promise.resolve(true);
+    }
 
-  // Tell Redux to populate the next part of the config
-  return store.dispatch(populateNextPage({
-    path: originalPath || location.pathname,
-    query: qs.parse(location.search.slice(1)),
-  }))
+    // Tell Redux to populate the next part of the config
+    return store.dispatch(populateNextPage({
+      path: originalPath || location.pathname,
+      query: qs.parse(location.search.slice(1)),
+    }))
 
 
-  // Handle application features on subsequent updates
-  // NOTE: Depends on the config meta flags (features toggles)
-  //
-  // Could be things like:
-  // - Dynamic pagination
-  // - Scroll position memory
-  .then(() => {
-    // Get the entire redux state
-    const currentState = store.getState();
+    // Handle application features on subsequent updates
+    // NOTE: Depends on the config meta flags (features toggles)
+    //
+    // Could be things like:
+    // - Dynamic pagination
+    // - Scroll position memory
+    .then(() => {
+      // Get the entire redux state
+      const currentState = store.getState();
 
       // Handle features that are behind flags, such as
       // - Back position memory
@@ -236,8 +236,8 @@ module.exports = function ({
       featureFlags.enablePagination && updatePaginationQuery();
       featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
       featureFlags.enableVersioning && updateVersionQuery();
-  });
-};
+    });
+  };
 
   // Handle the rendering flow
   Promise.resolve()
@@ -273,16 +273,16 @@ module.exports = function ({
       Promise.resolve()
     );
   })
-    /*
-     TODO:
-     Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
-     A: . Ja - fordi den helt første renderinga kan være uten moduler (fordi det ikke kommer noen moduler fra serveren om du enabler back-funksjonalitet), deretter lastes moduler fra cache, deretter rendres det på nytt i linje 289
-     FOLLOW UP:  Burde ikke  dette kunne gjøres av det som i dag ligger i scrollliseneren  hvis vi bytter den fra å være en scroll lisner, til å bare sjekke om det er 1000 px igjen til kanten. Det er flere tilfeler vi har hvor vi skulle rendra mer, men kommer i en state hvor vi ikke har gjort det.
-    */
-    /*
-     // Make sure we render the app fully at least once before we do the scrolling (restore position)
-     .then(() => renderApp())
-    */
+  /*
+  TODO:
+  Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
+  A: . Ja - fordi den helt første renderinga kan være uten moduler (fordi det ikke kommer noen moduler fra serveren om du enabler back-funksjonalitet), deretter lastes moduler fra cache, deretter rendres det på nytt i linje 289
+  FOLLOW UP:  Burde ikke  dette kunne gjøres av det som i dag ligger i scrollliseneren  hvis vi bytter den fra å være en scroll lisner, til å bare sjekke om det er 1000 px igjen til kanten. Det er flere tilfeler vi har hvor vi skulle rendra mer, men kommer i en state hvor vi ikke har gjort det.
+  */
+  /*
+  // Make sure we render the app fully at least once before we do the scrolling (restore position)
+  .then(() => renderApp())
+  */
 
   // Handle route features on first render
   // NOTE: Depends on the config meta flags (features toggles)
@@ -310,11 +310,11 @@ module.exports = function ({
     const currentConfigHasModules = !!modules.length;
 
     /*
-     If we have no config to render - populate one
-     (this happens if you render on client only - like in development)
+    If we have no config to render - populate one
+    (this happens if you render on client only - like in development)
 
-     If we have a config but no modules to render - populate the next page
-     (this happens when you render dynamic configs with geolocation - since that is a client only feature)
+    If we have a config but no modules to render - populate the next page
+    (this happens when you render dynamic configs with geolocation - since that is a client only feature)
     */
     if (!currentConfigHasModules) {
       store.dispatch(refreshConfig({
