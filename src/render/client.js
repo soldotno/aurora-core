@@ -31,7 +31,7 @@ const configureStore = require('../store/configure-store').default;
  * Create an instance of infinite scroll
  */
 const infiniteScroll = require('everscroll')({
-  distance: 1500,
+  distance: 4500,
   disableCallback: true
 });
 
