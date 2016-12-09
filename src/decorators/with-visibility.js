@@ -35,7 +35,7 @@ module.exports = function(Component) {
      */
     getDefaultProps() {
       return {
-        _hideOnServer: true,
+        _hideOnServer: false,
         _hideOnClient: false
       };
     },
@@ -101,8 +101,7 @@ module.exports = function(Component) {
       /**
        * Handle conditional visibility
        */
-      const { isVisible } = this.state;
-
+      var isVisible = this.state.isVisible;
       /**
        * Render either the component
        * that is wrapped or nothing

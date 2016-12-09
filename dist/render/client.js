@@ -2,16 +2,13 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-/**
- * Dependencies
- */
+// Dependencies
 var React = require('react'); // eslint-disable-line no-unused-vars
 var ReactDOM = require('react-dom');
 var qs = require('qs');
 var pick = require('lodash.pick');
-/**
- * Utilities
- */
+
+// Utilities
 var isUndefined = require('../utils/is-undefined');
 var onResize = require('../utils/on-resize');
 var history = require('../utils/history-api');
@@ -21,27 +18,22 @@ var updateQueryString = require('../utils/update-query-string');
 var debug = require('debug')('aurora-core:render/client.js');
 
 var sortedObject = require('sorted-object');
-/**
- * Components
- */
+
+// Components
 var ContextWrapper = require('../components/ContextWrapper');
 
-/**
- * Import our store configuration function
- */
+// Import our store configuration function
 var configureStore = require('../store/configure-store').default;
 
-/**
- * Create an instance of infinite scroll
- */
+// Create an instance of infinite scroll
 var infiniteScroll = require('everscroll')({
-  distance: 1500,
+  distance: 4500,
   disableCallback: true
 });
 
 /**
- * Export function to be used as client renderer (extendable)
- */
+* Export function to be used as client renderer (extendable)
+*/
 module.exports = function () {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref$getRoute = _ref.getRoute,
@@ -57,37 +49,26 @@ module.exports = function () {
     return console.warn('No isVisible() method supplied to constructor');
   } : _ref$isVisible;
 
-  /**
-   * Import and instantiate the necessary resolvers
-   */
+  // Import and instantiate the necessary resolvers
   var resolveModules = require('../utils/resolve-modules')(getModule);
   var resolveVisibility = require('../utils/resolve-visibility')(isVisible);
 
-  /**
-   * Import and instantiate action creators
-   */
+  // Import and instantiate action creators
 
   var _require$default = require('../actions').default(getRoute),
       replaceState = _require$default.replaceState,
       refreshConfig = _require$default.refreshConfig,
       populateNextPage = _require$default.populateNextPage;
 
-  /**
-   * Parse the query string
-   */
+  // Parse the query string
 
 
   var query = qs.parse((location.search || '').slice(1));
 
-  /**
-   * Get the original location
-   */
+  // Get the original location
   var originalLocation = window.location.pathname + window.location.search;
 
-  /**
-   * Pull out the pagination data
-   * for the parsed query string
-   */
+  // Pull out the pagination data for the parsed query string
   var paginationQuery = removeFalsyKeysFromObject({
     page: !isUndefined(query.page) ? +query.page : undefined,
     perPage: !isUndefined(query.perPage) ? +query.perPage : undefined,
@@ -95,28 +76,20 @@ module.exports = function () {
     hasMore: !isUndefined(query.hasMore) ? +query.hasMore : undefined
   });
 
-  /**
-   * Create a flag
-   */
+  // Create a flag
   var hasPaginationQuery = !!Object.keys(paginationQuery).length;
 
-  /**
-   * Pull out config feature flags from the server
-   */
+  // Pull out config feature flags from the server
   var featureFlags = _extends({
     enablePagination: false,
     enableScrollPositionMemory: false,
     enableVersioning: false
   }, window.__flags);
 
-  /**
-   * Get the latest available version
-   */
+  // Get the latest available version
   var latestVersion = window.__latestVersion || '';
 
-  /**
-   * Create the initial app state (redux)
-   */
+  // Create the initial app state (redux)
   var initialState = {
     error: null,
     version: query.version || window.__version || '',
@@ -132,15 +105,10 @@ module.exports = function () {
     }, window.__pagination, paginationQuery)
   };
 
-  /**
-   * Create the redux store
-   */
+  // Create the redux store
   var store = configureStore(initialState);
 
-  /**
-   * Create a function that adds the config version
-   * to the query string
-   */
+  // Create a function that adds the config version to the query string
   var updateVersionQuery = function updateVersionQuery() {
     var _store$getState = store.getState(),
         _store$getState$versi = _store$getState.version,
@@ -149,10 +117,8 @@ module.exports = function () {
     updateQueryString({ version: version });
   };
 
-  /**
-   * Create a function that adds the config and pagination
-   * query to the history state and browser history
-   */
+  // Create a function that adds the config and pagination
+  // query to the history state and browser history
   var updatePaginationQuery = function updatePaginationQuery() {
     var _store$getState2 = store.getState(),
         pagination = _store$getState2.pagination;
@@ -162,15 +128,10 @@ module.exports = function () {
 
   var appConfig = '{}';
   var paginationConf = '{}';
-  /**
-   * Create a function that
-   * renders the application
-   */
+
+  // Create a function that renders the application
   var renderApp = function renderApp() {
-    /**
-     * Pull the state we need
-     * for rendering our app
-     */
+    // Pull the state we need for rendering our app
     var _store$getState3 = store.getState(),
         _store$getState3$vers = _store$getState3.version,
         version = _store$getState3$vers === undefined ? '' : _store$getState3$vers,
@@ -190,34 +151,26 @@ module.exports = function () {
     }
     appConfig = newAppConf;
     paginationConf = newPaginationConf;
-    /**
-     * Resolve config
-     */
+
+    // Resolve config
     return Promise.resolve(config).then(resolveVisibility.onClient.bind(null, settings, query))
-    /**
-     * Resolve modules (React components) in the config
-     */
+
+    // Resolve modules (React components) in the config
     .then(resolveModules)
-    /**
-     * Render React app
-     *
-     * NOTE: To be able to have login data
-     * and global actions for logging in
-     * and other actions that needs to be
-     * available to every component in the
-     * tree we pass them down via context
-     * (available as this.context - see React docs)
-     */
+
+    // Render React app
+    //
+    // NOTE: To be able to have login data and global actions for logging in
+    // and other actions that needs to be available to every component in the
+    // tree we pass them down via context (available as this.context -
+    // see React docs)
     .then(function (_ref2) {
       var _ref2$app = _ref2.app,
           App = _ref2$app.type,
           _ref2$app$options = _ref2$app.options,
           options = _ref2$app$options === undefined ? {} : _ref2$app$options;
 
-      /**
-       * Create a new Promise of rendering
-       * the application
-       */
+      // Create a new Promise of rendering the application
       return new Promise(function (resolve) {
         ReactDOM.render(React.createElement(
           ContextWrapper,
@@ -230,18 +183,18 @@ module.exports = function () {
             pagination: pagination
           }, options))
         ), document.querySelector('#app'),
-        /**
-         * NOTE: We're using the callback available for ReactDOM.render
-         * to be able to know when the rendering is done (async).
-         */
+
+        /*
+        NOTE: We're using the callback available for ReactDOM.render
+        to be able to know when the rendering is done (async).
+        */
         function () {
           return resolve();
         });
       });
     })
-    /**
-     * Make sure errors are thrown
-     */
+
+    // Make sure errors are thrown
     .catch(function (err) {
       return setImmediate(function () {
         throw err;
@@ -249,24 +202,18 @@ module.exports = function () {
     });
   };
 
-  /**
-   * Listen to store changes and
-   * re-render app if anything has changed
-   */
+  // Listen to store changes and re-render app if anything has changed
   store.subscribe(function () {
     renderApp();
   });
-  /**
-   * Re-render on resize
-   */
+
+  // Re-render on resize
   onResize(function () {
     renderApp();
   });
 
   var loadMore = function loadMore() {
-    /**
-     * Destructure what we need from the state
-     */
+    // Destructure what we need from the state
     var _store$getState4 = store.getState(),
         _store$getState4$pagi = _store$getState4.pagination;
 
@@ -275,76 +222,53 @@ module.exports = function () {
         hasMore = _store$getState4$pagi.hasMore,
         originalPath = _store$getState4$pagi.originalPath;
 
-    /**
-     * If we're already loading the next page
-     * or if we know that there is no more
-     * pages to fetch - then abort
-     */
+    // If we're already loading the next page or if we know that there is no more
+    // pages to fetch - then abort
 
     if (isLoading || !hasMore) {
       debug('We are done loading. isLoading: ' + isLoading + ', !hasMore: ' + !hasMore);
       return Promise.resolve(true);
     }
 
-    /**
-     * Tell Redux to populate
-     * the next part of the config
-     */
+    // Tell Redux to populate the next part of the config
     return store.dispatch(populateNextPage({
       path: originalPath || location.pathname,
       query: qs.parse(location.search.slice(1))
     }))
 
-    /**
-     * Handle application features on subsequent updates
-     * NOTE: Depends on the config meta flags (features toggles)
-     *
-     * Could be things like:
-     * - Dynamic pagination
-     * - Scroll position memory
-     */
+    // Handle application features on subsequent updates
+    // NOTE: Depends on the config meta flags (features toggles)
+    //
+    // Could be things like:
+    // - Dynamic pagination
+    // - Scroll position memory
     .then(function () {
-      /**
-       * Get the entire redux state
-       */
+      // Get the entire redux state
       var currentState = store.getState();
 
-      /**
-       * Handle features that are behind flags, such as
-       * - Back position memory
-       * - State caching
-       * - Versioning
-       */
+      // Handle features that are behind flags, such as
+      // - Back position memory
+      // - State caching
+      // - Versioning
       featureFlags.enablePagination && updatePaginationQuery();
       featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
       featureFlags.enableVersioning && updateVersionQuery();
     });
   };
 
-  /**
-   * Handle the rendering flow
-   */
+  // Handle the rendering flow
   Promise.resolve()
-  /**
-   * Perform the initial rendering
-   * (Will resolve when the actual rendering is done)
-   */
+  // Perform the initial rendering (Will resolve when the actual rendering is done)
   .then(function () {
     return renderApp();
   })
-  /**
-   * Handle rendering stuff from cache
-   * (Back button memory)
-   */
+
+  // Handle rendering stuff from cache (Back button memory)
   .then(function () {
-    /**
-     * Pull out history state
-     */
+    // Pull out history state
     var cacheState = history.state || {};
 
-    /**
-     * Pull out the modules list of the current config from redux state
-     */
+    // Pull out the modules list of the current config from redux state
 
     var _ref3 = store.getState() || {},
         _ref3$config = _ref3.config;
@@ -357,55 +281,43 @@ module.exports = function () {
     var _ref3$config$app$opti2 = _ref3$config$app$opti.modules,
         modules = _ref3$config$app$opti2 === undefined ? [] : _ref3$config$app$opti2;
 
-    /**
-     * Check if the current config has any modules
-     */
+    // Check if the current config has any modules
 
     var currentConfigHasModules = !!modules.length;
 
-    /**
-     * Figure out if you should replace the config
-     * - If there is a pagination query
-     * - (and) If there is no modules in the current config
-     */
+    // Figure out if you should replace the config
+    // - If there is a pagination query
+    // - (and) If there is no modules in the current config
     var shouldReplaceState = hasPaginationQuery && !currentConfigHasModules;
 
-    /**
-     * Dispatch an action that replaces the
-     * current config with the one in cache
-     */
+    // Dispatch an action that replaces the current config with the one in cache
     return shouldReplaceState ? store.dispatch(replaceState(cacheState)) : Promise.resolve();
   })
-  // TODO:
-  // Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
-  // A: . Ja - fordi den helt første renderinga kan være uten moduler (fordi det ikke kommer noen moduler fra serveren om du enabler back-funksjonalitet), deretter lastes moduler fra cache, deretter rendres det på nytt i linje 289
-  // FOLLOW UP:  Burde ikke  dette kunne gjøres av det som i dag ligger i scrollliseneren  hvis vi bytter den fra å være en scroll lisner, til å bare sjekke om det er 1000 px igjen til kanten. Det er flere tilfeler vi har hvor vi skulle rendra mer, men kommer i en state hvor vi ikke har gjort det.
-  //  * Make sure we render the app fully at least once
-  //  * before we do the scrolling (restore position)
-  //  */
-  // .then(() => renderApp())
-  /**
-   * Handle route features on first render
-   * NOTE: Depends on the config meta flags (features toggles)
-   *
-   * Could be things like:
-   * - Scroll position memory
-   */
+  /*
+  TODO:
+  Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
+  A: . Ja - fordi den helt første renderinga kan være uten moduler (fordi det ikke kommer noen moduler fra serveren om du enabler back-funksjonalitet), deretter lastes moduler fra cache, deretter rendres det på nytt i linje 289
+  FOLLOW UP:  Burde ikke  dette kunne gjøres av det som i dag ligger i scrollliseneren  hvis vi bytter den fra å være en scroll lisner, til å bare sjekke om det er 1000 px igjen til kanten. Det er flere tilfeler vi har hvor vi skulle rendra mer, men kommer i en state hvor vi ikke har gjort det.
+  */
+  /*
+  // Make sure we render the app fully at least once before we do the scrolling (restore position)
+  .then(() => renderApp())
+  */
+
+  // Handle route features on first render
+  // NOTE: Depends on the config meta flags (features toggles)
+  //
+  // Could be things like:
+  // - Scroll position memory
   .then(function () {
-    /**
-     * Scroll to the previous location if
-     * returning from an outbound visit (back-button)
-     */
+    // Scroll to the previous location if returning from an outbound visit (back-button)
     featureFlags.enableScrollPositionMemory && handleScrollPosition(originalLocation);
   })
-  /**
-   * Handle edge cases where we have no config
-   * available after loading the page
-   */
+
+  // Handle edge cases where we have no config
+  // available after loading the page
   .then(function () {
-    /**
-     * Pull out the modules list of the current config from redux state
-     */
+    // Pull out the modules list of the current config from redux state
     var _ref4 = store.getState() || {},
         _ref4$config = _ref4.config;
 
@@ -417,19 +329,16 @@ module.exports = function () {
     var _ref4$config$app$opti2 = _ref4$config$app$opti.modules,
         modules = _ref4$config$app$opti2 === undefined ? [] : _ref4$config$app$opti2;
 
-    /**
-     * Check if the current config has any modules
-     */
+    // Check if the current config has any modules
 
     var currentConfigHasModules = !!modules.length;
 
-    /**
-     * If we have no config to render - populate one
-     * (this happens if you render on client only - like in development)
-     *
-     * If we have a config but no modules to render - populate the next page
-     * (this happens when you render dynamic configs with geolocation - since that is a client only feature)
-     */
+    /*
+    If we have no config to render - populate one
+    (this happens if you render on client only - like in development)
+     If we have a config but no modules to render - populate the next page
+    (this happens when you render dynamic configs with geolocation - since that is a client only feature)
+    */
     if (!currentConfigHasModules) {
       store.dispatch(refreshConfig({
         path: location.pathname,
@@ -437,9 +346,8 @@ module.exports = function () {
       }));
     }
   })
-  /**
-   * Handle infinite scroll / pagination
-   */
+
+  // Handle infinite scroll / pagination
   .then(function () {
     infiniteScroll(loadMore);
   });
