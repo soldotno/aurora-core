@@ -40,11 +40,11 @@ module.exports = function () {
        */
 
       var children = modules.map(function (module, i) {
-        var Module = module.type;
+        var Module = module ? module.type : false;
 
-        return React.createElement(Module, _extends({
+        return Module ? React.createElement(Module, _extends({
           key: i
-        }, module.options));
+        }, module.options)) : null;
       });
 
       return children;
