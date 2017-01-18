@@ -30,6 +30,10 @@ const hash = require('../../bundle-hash');
  * on the server
  */
 module.exports = function ({
+  cacheHTML = {
+    get: Promise.reject('No cacheHTML method supplied to constructor'),
+    set: console.warn('No cacheHTML method supplied to constructor, skipping cache creation')
+  },
   createHTML = () => console.warn('No createHtml() method supplied to constructor'),
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
   getModule = () => console.warn('No getModule() method supplied to constructor'),
@@ -51,6 +55,14 @@ module.exports = function ({
    * Return an express route handler to render the server
    */
   return function renderServer(req, res, next) {
+    return cacheHTML.get(req)
+          .then(html => res.end(html))
+          .catch(err => renderServerInternal(req, res, next));
+  };
+
+  function renderServerInternal(req, res, next) {
+
+
     /**
      * Extract the pagination data from the query
      */
@@ -224,6 +236,7 @@ module.exports = function ({
         criticalStyles,
       });
 
+      cacheHTML.set(req, markup);
       /**
        * Return the created markup
        */
@@ -253,5 +266,5 @@ module.exports = function ({
        */
       res.status(500).send(err.message);
     });
-  };
+  }
 };
