@@ -99,7 +99,7 @@ module.exports = function (_ref) {
     req.aurora.settings = settings;
 
     return cacheHTML.get(req).then(function (html) {
-      return res.end(html);
+      return res.send(html);
     }).catch(function (err) {
       return renderServerInternal(req, res, next);
     });
