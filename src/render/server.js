@@ -55,6 +55,24 @@ module.exports = function ({
    * Return an express route handler to render the server
    */
   return function renderServer(req, res, next) {
+
+    const settings = {
+      ...getUserSettings(req, res)
+    };
+
+    const paginationQuery = removeFalsyKeysFromObject({
+      page: !isUndefined(req.query.page) ? +req.query.page : null,
+      perPage: !isUndefined(req.query.perPage) ? +req.query.perPage : null,
+      initialLimit: !isUndefined(req.query.initialLimit) ? +req.query.initialLimit : null,
+      hasMore: !isUndefined(req.query.hasMore) ? +req.query.hasMore : null,
+    });
+
+    const paginationKey = JSON.stringify(paginationQuery);
+    const settingsKey = JSON.stringify(settings);
+
+    req.aurora = {};
+    req.aurora.settings = settings;
+
     return cacheHTML.get(req)
           .then(html => res.end(html))
           .catch(err => renderServerInternal(req, res, next));
