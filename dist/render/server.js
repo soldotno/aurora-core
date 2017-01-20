@@ -36,7 +36,12 @@ var hash = require('../../bundle-hash');
  * on the server
  */
 module.exports = function (_ref) {
-  var _ref$createHTML = _ref.createHTML,
+  var _ref$cacheHTML = _ref.cacheHTML,
+      cacheHTML = _ref$cacheHTML === undefined ? {
+    get: Promise.reject('No cacheHTML method supplied to constructor'),
+    set: console.warn('No cacheHTML method supplied to constructor, skipping cache creation')
+  } : _ref$cacheHTML,
+      _ref$createHTML = _ref.createHTML,
       createHTML = _ref$createHTML === undefined ? function () {
     return console.warn('No createHtml() method supplied to constructor');
   } : _ref$createHTML,
@@ -77,6 +82,31 @@ module.exports = function (_ref) {
    * Return an express route handler to render the server
    */
   return function renderServer(req, res, next) {
+
+    var settings = _extends({}, getUserSettings(req, res));
+
+    var paginationQuery = removeFalsyKeysFromObject({
+      page: !isUndefined(req.query.page) ? +req.query.page : null,
+      perPage: !isUndefined(req.query.perPage) ? +req.query.perPage : null,
+      initialLimit: !isUndefined(req.query.initialLimit) ? +req.query.initialLimit : null,
+      hasMore: !isUndefined(req.query.hasMore) ? +req.query.hasMore : null
+    });
+
+    var paginationKey = JSON.stringify(paginationQuery);
+    var settingsKey = JSON.stringify(settings);
+
+    req.aurora = {};
+    req.aurora.settings = settings;
+
+    return cacheHTML.get(req).then(function (html) {
+      return res.end(html);
+    }).catch(function (err) {
+      return renderServerInternal(req, res, next);
+    });
+  };
+
+  function renderServerInternal(req, res, next) {
+
     /**
      * Extract the pagination data from the query
      */
@@ -256,6 +286,7 @@ module.exports = function (_ref) {
         criticalStyles: criticalStyles
       });
 
+      cacheHTML.set(req, markup);
       /**
        * Return the created markup
        */
@@ -285,5 +316,5 @@ module.exports = function (_ref) {
        */
       res.status(500).send(err.message);
     });
-  };
+  }
 };
