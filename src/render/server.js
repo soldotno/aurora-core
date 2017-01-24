@@ -31,8 +31,9 @@ const hash = require('../../bundle-hash');
  */
 module.exports = function ({
   cacheHTML = {
-    get: Promise.reject('No cacheHTML method supplied to constructor'),
-    set: console.warn('No cacheHTML method supplied to constructor, skipping cache creation')
+    get: Promise.reject('No cacheHTML.get method supplied to constructor'),
+    set: console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
+    addNonCachableHTML: console.warn('No cacheHTML.addNonCachableHTML supplied to constructor, no non-cached html will be appened.'),
   },
   createHTML = () => console.warn('No createHtml() method supplied to constructor'),
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
@@ -242,7 +243,7 @@ module.exports = function ({
        * that we'll return to
        * the client
        */
-      const markup = createHTML({
+      let markup = createHTML({
         appMarkup,
         config,
         pagination,
@@ -254,7 +255,14 @@ module.exports = function ({
         criticalStyles,
       });
 
+      // Set HTML cache.
       cacheHTML.set(req, markup);
+
+      // Add non-cachable HTML if provided.
+      if (typeof cacheHTML.addNonCachableHTML === 'function') {
+        markup = cacheHTML.addNonCachableHTML(markup, settings);
+      }
+
       /**
        * Return the created markup
        */
