@@ -40,7 +40,7 @@ module.exports = function (_ref) {
       cacheHTML = _ref$cacheHTML === undefined ? {
     get: Promise.reject('No cacheHTML.get method supplied to constructor'),
     set: console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
-    appendNonCachableHTML: console.warn('Non cacheHTML.nonCachableHTML supplied to constructor, no non-cached html will be appened.')
+    appendNonCachableHTML: console.warn('No cacheHTML.nonCachableHTML supplied to constructor, no non-cached html will be appened.')
   } : _ref$cacheHTML,
       _ref$createHTML = _ref.createHTML,
       createHTML = _ref$createHTML === undefined ? function () {
@@ -292,7 +292,6 @@ module.exports = function (_ref) {
 
       // Append non-cachable HTML if supplied.
       if (typeof cacheHTML.appendNonCachableHTML === 'function') {
-        console.log('here');
         markup = cacheHTML.appendNonCachableHTML(markup, settings);
       }
 
