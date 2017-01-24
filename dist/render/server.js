@@ -38,8 +38,9 @@ var hash = require('../../bundle-hash');
 module.exports = function (_ref) {
   var _ref$cacheHTML = _ref.cacheHTML,
       cacheHTML = _ref$cacheHTML === undefined ? {
-    get: Promise.reject('No cacheHTML method supplied to constructor'),
-    set: console.warn('No cacheHTML method supplied to constructor, skipping cache creation')
+    get: Promise.reject('No cacheHTML.get method supplied to constructor'),
+    set: console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
+    appendNonCachableHTML: console.warn('Non cacheHTML.nonCachableHTML supplied to constructor, no non-cached html will be appened.')
   } : _ref$cacheHTML,
       _ref$createHTML = _ref.createHTML,
       createHTML = _ref$createHTML === undefined ? function () {
@@ -286,7 +287,15 @@ module.exports = function (_ref) {
         criticalStyles: criticalStyles
       });
 
+      // Set HTML cache.
       cacheHTML.set(req, markup);
+
+      // Append non-cachable HTML if supplied.
+      if (typeof cacheHTML.appendNonCachableHTML === 'function') {
+        console.log('here');
+        markup = cacheHTML.appendNonCachableHTML(markup, settings);
+      }
+
       /**
        * Return the created markup
        */
