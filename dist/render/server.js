@@ -290,7 +290,7 @@ module.exports = function (_ref) {
       // Set HTML cache.
       cacheHTML.set(req, markup);
 
-      // Append non-cachable HTML if supplied.
+      // Add non-cachable HTML if provided.
       if (typeof cacheHTML.addNonCachableHTML === 'function') {
         markup = cacheHTML.addNonCachableHTML(markup, settings);
       }
