@@ -33,7 +33,7 @@ module.exports = function ({
   cacheHTML = {
     get: Promise.reject('No cacheHTML.get method supplied to constructor'),
     set: console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
-    appendNonCachableHTML: console.warn('No cacheHTML.nonCachableHTML supplied to constructor, no non-cached html will be appened.'),
+    addNonCachableHTML: console.warn('No cacheHTML.addNonCachableHTML supplied to constructor, no non-cached html will be appened.'),
   },
   createHTML = () => console.warn('No createHtml() method supplied to constructor'),
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
@@ -259,8 +259,8 @@ module.exports = function ({
       cacheHTML.set(req, markup);
 
       // Append non-cachable HTML if supplied.
-      if (typeof cacheHTML.appendNonCachableHTML === 'function') {
-        markup = cacheHTML.appendNonCachableHTML(markup, settings);
+      if (typeof cacheHTML.addNonCachableHTML === 'function') {
+        markup = cacheHTML.addNonCachableHTML(markup, settings);
       }
 
       /**
