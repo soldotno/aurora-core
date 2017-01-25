@@ -35,7 +35,7 @@ module.exports = function(Component) {
      */
     getDefaultProps() {
       return {
-        _hideOnServer: false,
+        _hideOnServer: true,
         _hideOnClient: false
       };
     },
