@@ -2,17 +2,21 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _getDisplayName = require('../utils/get-display-name');
+
+var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/**
- * Dependencies
- */
+// Dependencies
 var React = require('react');
 var hoistStatics = require('hoist-non-react-statics');
-/**
- * Aurora mixins
- */
+
+// Aurora mixins
 var DataMixin = require('../mixins/data-mixin');
+
 
 /**
  * Higher order component factory
@@ -34,37 +38,25 @@ module.exports = function (_ref) {
 
   return function (Component) {
     var withData = React.createClass({
-      /**
-       * Add a specific display name
-       */
-      displayName: 'withData',
+      // Add a specific display name
+      displayName: (0, _getDisplayName2.default)(Component) + 'WithData',
 
-      /**
-       * Add static methods needed
-       */
+      // Add static methods needed
       statics: {
         getData: function getData(options) {
-          /**
-           * The options object will have
-           * user defined settings (from getUserSettings)
-           * available as options.__settings
-           */
+          // The options object will have user defined settings (from getUserSettings) available as options.__settings
           if (disableServerLoading && typeof window === 'undefined') {
             return Promise.resolve();
-          } else {
-            return fetchData(options);
           }
+
+          return fetchData(options);
         }
       },
 
-      /**
-       * Add applicable mixins
-       */
+      // Add applicable mixins
       mixins: [DataMixin('__data', '__error')],
 
-      /**
-       * Render the component
-       */
+      // Render the component
       render: function render() {
         var _data;
 
@@ -76,11 +68,7 @@ module.exports = function (_ref) {
       }
     });
 
-    /**
-     * Return a decorated component
-     * with all the existing static
-     * methods hoisted
-     */
+    // Return a decorated component with all the existing static methods hoisted
     return hoistStatics(withData, Component);
   };
 };
