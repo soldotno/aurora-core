@@ -1,12 +1,10 @@
-/**
- * Dependencies
- */
+// Dependencies
 const React = require('react');
 const hoistStatics = require('hoist-non-react-statics');
-/**
- * Aurora mixins
- */
+
+// Aurora mixins
 const DataMixin = require('../mixins/data-mixin');
+import getDisplayName from '../utils/get-display-name';
 
 /**
  * Higher order component factory
@@ -21,39 +19,27 @@ module.exports = function({
 }) {
   return function(Component) {
     const withData = React.createClass({
-      /**
-       * Add a specific display name
-       */
-      displayName: 'withData',
+      // Add a specific display name
+      displayName: `${getDisplayName(Component)}WithData`,
 
-      /**
-       * Add static methods needed
-       */
+      // Add static methods needed
       statics: {
         getData(options) {
-          /**
-           * The options object will have
-           * user defined settings (from getUserSettings)
-           * available as options.__settings
-           */
+          // The options object will have user defined settings (from getUserSettings) available as options.__settings
           if (disableServerLoading && typeof window === 'undefined') {
             return Promise.resolve();
-          } else {
-            return fetchData(options);
           }
+
+          return fetchData(options);
         },
       },
 
-      /**
-       * Add applicable mixins
-       */
+      // Add applicable mixins
       mixins: [
         DataMixin('__data', '__error'),
       ],
 
-      /**
-       * Render the component
-       */
+      // Render the component
       render() {
         const data = {
           [dataProp]: this.state.__data,
@@ -71,11 +57,7 @@ module.exports = function({
       }
     });
 
-    /**
-     * Return a decorated component
-     * with all the existing static
-     * methods hoisted
-     */
+    // Return a decorated component with all the existing static methods hoisted
     return hoistStatics(withData, Component);
   };
 };
