@@ -21,8 +21,6 @@ var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
 var _reduxLogger = require('redux-logger');
 
-var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
-
 var _reactRedux = require('react-redux');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -42,7 +40,7 @@ module.exports = function (_ref) {
   /**
    * Create a logger (and default to pass-through if not browser)
    */
-  var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? (0, _reduxLogger2.default)() : function () {
+  var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? (0, _reduxLogger.createLogger)() : function () {
     return function (next) {
       return function (action) {
         return next(action);
