@@ -8,6 +8,8 @@
 Aurora Core (development)
 =========================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/soldotno/aurora-core.svg)](https://greenkeeper.io/)
+
 ![aurora](http://s21.postimg.org/obm72lwuv/aurora.png)
 
 Demo implementations
