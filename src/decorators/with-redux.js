@@ -5,7 +5,7 @@ import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { Provider } from 'react-redux';
 
 /**
