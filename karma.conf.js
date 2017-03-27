@@ -21,7 +21,7 @@ var configureKarma = function(webpackConfig) {
       /**
        * Run tests in Chrome and Firefox
        */
-      browsers: ['Firefox'],
+      browsers: ['Chrome'],
 
       /**
        * Just run once by default
