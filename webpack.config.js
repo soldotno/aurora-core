@@ -1,11 +1,7 @@
-/* eslint-disable */
-
 /**
  * Dependencies
  */
 var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
 
 /**
  * Import hash output plugin
@@ -35,8 +31,7 @@ var plugins = [
  */
 if (!isProduction) {
   plugins.push(new webpack.HotModuleReplacementPlugin());
-  plugins.push(new webpack.NoErrorsPlugin());
-  plugins.push(new webpack.OldWatchingPlugin());
+  plugins.push(new webpack.NoEmitOnErrorsPlugin());
 }
 
 /**
@@ -44,10 +39,9 @@ if (!isProduction) {
  * when running production mode
  */
 if (isProduction) {
-  plugins.push(new webpack.optimize.DedupePlugin());
   plugins.push(new OutputHashAsModulePlugin({ file: 'bundle-hash.js' }));
 	if (!process.env.DISABLE_JS_UGLIFY) {
-		plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
+		plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false, }, sourceMap: true, }));
   }
 }
 
@@ -114,13 +108,49 @@ module.exports = {
    * using loaders
    */
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
-      loaders: !isProduction ? ['react-hot', 'babel'] : ['babel'],
-      exclude: /node_modules/
+      exclude: /node_modules/,
+      use: !isProduction ? [
+        {
+          loader: 'react-hot-loader',
+        }, {
+          loader: 'babel-loader',
+        },
+      ] : [
+        {
+          loader: 'babel-loader'
+        }
+      ],
     }, {
       test: /\.scss$/,
-      loader: !isProduction ? 'style!css!postcss!sass' : 'css?minimize&-autoprefixer!postcss!sass'
+      use: !isProduction ? [
+        {
+          loader: 'style-loader',
+        }, {
+          loader: 'css-loader',
+          options: {
+            minimize: true,
+            autoprefixer: true,
+          },
+        }, {
+          loader: 'postcss-loader',
+        }, {
+          loader: 'sass-loader'
+        },
+      ] : [
+        {
+          loader: 'css-loader',
+          options: {
+            minimize: true,
+            autoprefixer: false,
+          },
+        }, {
+          loader: 'postcss-loader',
+        }, {
+          loader: 'sass-loader',
+        },
+      ]
     }]
   },
 
@@ -138,15 +168,6 @@ module.exports = {
       'node-sass': 'no-op'
     }
   },
-
-  /**
-   * PostCSS options
-   */
-  postcss: [
-    autoprefixer({
-      browsers: ['last 3 versions']
-    })
-  ],
 
   /**
    * Add node built-ins requires that should
