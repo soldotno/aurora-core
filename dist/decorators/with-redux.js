@@ -1,8 +1,6 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
-                                                                                                                                                                                                                                                                               * Dependencies
-                                                                                                                                                                                                                                                                               */
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; // Dependencies
 
 
 var _react = require('react');
@@ -21,15 +19,16 @@ var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
 var _reduxLogger = require('redux-logger');
 
-var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
-
 var _reactRedux = require('react-redux');
+
+var _getDisplayName = require('../utils/get-display-name');
+
+var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Higher order component factory
- * for adding Aurora data fetching
+ * Higher order component factory for adding Aurora data fetching.
  */
 module.exports = function (_ref) {
   var _ref$reducer = _ref.reducer,
@@ -42,7 +41,8 @@ module.exports = function (_ref) {
   /**
    * Create a logger (and default to pass-through if not browser)
    */
-  var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? (0, _reduxLogger2.default)() : function () {
+  var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? (0, _reduxLogger.createLogger)() : function () {
+
     return function (next) {
       return function (action) {
         return next(action);
@@ -50,43 +50,26 @@ module.exports = function (_ref) {
     };
   };
 
-  /**
-   * Create developer tools middleware
-   */
+  // Create developer tools middleware
   var devTools = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : function (f) {
     return f;
   };
 
-  /**
-   * Compose a store creator function with middleware
-   */
+  // Compose a store creator function with middleware
   var finalCreateStore = (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, logger), devTools)(_redux.createStore);
 
-  /**
-   * Create a Redux store
-   */
+  // Create a Redux store
   var makeStore = finalCreateStore.bind(null, reducer, initialState);
 
-  /**
-   * Return a function that extends
-   * a component with redux state handling
-   */
+  // Return a function that extends a component with redux state handling
   return function (Component) {
-    /**
-     * Create a component that wraps
-     * our input component in a Redux <Provider>
-     */
+    // Create a component that wraps our input component in a Redux <Provider>
     var withRedux = _react2.default.createClass({
-      /**
-       * Add a specific display name
-       */
-      displayName: 'withRedux',
+      // Add a specific display name
+      displayName: (0, _getDisplayName2.default)(Component) + 'WithRedux',
 
-      /**
-       * Create a new Redux store for
-       * each component instance,
-       * to avoid sharing state between instances
-       */
+      // Create a new Redux store for each component instance.
+      // This avoids sharing state between instances
       getInitialState: function getInitialState() {
         return {
           store: makeStore()
@@ -94,12 +77,8 @@ module.exports = function (_ref) {
       },
 
 
-      /**
-       * Render the component wrapped
-       * in a Redux <Provider> to expose
-       * the store and give children the
-       * ability to connect()
-       */
+      // Render the component wrapped in a Redux <Provider>.
+      // This exposes the store and gives children the ability to connect()
       render: function render() {
         return _react2.default.createElement(
           _reactRedux.Provider,
@@ -109,11 +88,7 @@ module.exports = function (_ref) {
       }
     });
 
-    /**
-     * Return a decorated component
-     * with all the existing static
-     * methods hoisted
-     */
+    // Return a decorated component with all the existing static methods hoisted
     return (0, _hoistNonReactStatics2.default)(withRedux, Component);
   };
 };

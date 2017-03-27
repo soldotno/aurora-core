@@ -1,36 +1,24 @@
-/**
- * Dependencies
- */
-const React = require('react');
-const hoistStatics = require('hoist-non-react-statics');
+// Dependencies
+import React from 'react';
+import hoistStatics from 'hoist-non-react-statics';
 
-/**
- * Aurora mixins
- */
-const ScriptInjectMixin = require('../mixins/script-inject-mixin');
+// Aurora mixins
+import ScriptInjectMixin from '../mixins/script-inject-mixin';
+import getDisplayName from '../utils/get-display-name';
 
-/**
- * Higher order component factory
- * for adding Aurora script injection
- */
+// Higher order component factory for adding Aurora script injection
 module.exports = function({ scripts }) {
   return function(Component) {
     const withScripts = React.createClass({
-      /**
-       * Add a specific display name
-       */
-      displayName: 'withScripts',
+      // Add a specific display name
+      displayName: `${getDisplayName(Component)}WithScripts`,
 
-      /**
-       * Mixins
-       */
+      // Mixins
       mixins: [
         ScriptInjectMixin(scripts),
       ],
 
-      /**
-       * Render the component
-       */
+      // Render the component
       render() {
         return (
           <Component {...this.props} />
@@ -38,11 +26,7 @@ module.exports = function({ scripts }) {
       }
     });
 
-    /**
-     * Return a decorated component
-     * with all the existing static
-     * methods hoisted
-     */
+     // Return a decorated component with all the existing static methods hoisted
     return hoistStatics(withScripts, Component);
   };
 };
