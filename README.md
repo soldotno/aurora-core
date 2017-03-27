@@ -886,4 +886,5 @@ This factory function requires the following functions to be passed as propertie
 Changelog
 ---------
 
+**2.0.0** - Migrate to webpack 2
 **1.5.0** - Remove built files from source control
