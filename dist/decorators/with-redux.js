@@ -38,11 +38,8 @@ module.exports = function (_ref) {
       _ref$initialState = _ref.initialState,
       initialState = _ref$initialState === undefined ? {} : _ref$initialState;
 
-  /**
-   * Create a logger (and default to pass-through if not browser)
-   */
+  // Create a logger (and default to pass-through if not browser)
   var logger = (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' ? (0, _reduxLogger.createLogger)() : function () {
-
     return function (next) {
       return function (action) {
         return next(action);
