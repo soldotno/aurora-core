@@ -77,7 +77,7 @@ var configureKarma = function(webpackConfig) {
       }
     });
   };
-}
+};
 
 /**
  * Export the regular Karma config
