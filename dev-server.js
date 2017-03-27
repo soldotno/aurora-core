@@ -18,7 +18,9 @@ module.exports = function(options) {
    */
   var webpackConfig = options.webpackConfig || webpackConfigDefault;
   var port = options.port || 3000;
-  var onListen = options.onListen || function () { console.log('development server started') };
+  var onListen = options.onListen || function () {
+ console.log('development server started'); 
+};
 
   /**
    * When we run in development mode
@@ -34,4 +36,4 @@ module.exports = function(options) {
       colors: true
     }
   }).listen(port, 'localhost', onListen);
-}
+};
