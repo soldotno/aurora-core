@@ -12,87 +12,6 @@ Aurora Core (development)
 
 ![aurora](http://s21.postimg.org/obm72lwuv/aurora.png)
 
-Demo implementations
---------------------
-
-- [aurora-demo-frontend](https://github.com/soldotno/aurora-demo-frontend)
-- [aurora-demo-api](https://github.com/soldotno/aurora-demo-api)
-
-Notes
------
-
- * To read more about the process of resolving a configuration - see [resolving.md](https://github.com/soldotno/aurora-core/blob/master/resolving.md)
- * The application is filled with comments/annotations throughout. Keep these in sync - and always state your intentions (they might be clear to you - but not to the next person looking at your code)
-
-Writing tests
--------------
-
-#### In this application we have these 3 different cases:
-
- * functionality that runs both on __server (node.js) and client (browser)__
- * functionality that runs ONLY on the __client__ _(i.e - needs browser only features like `window`)_
- * functionality that runs ONLY on the __server__ _(i.e - needs node.js only features like `fs`)_
-
-__NOTE:__ That means we have to specify which environment to run tests in.
-
-#### The following then applies
-
- * Tests that run both on __server and client__ can be suffixed with either `*.test.client.js` or `*.test.server.js`
-  * For React component tests default to `*.test.client.js` (better to test those in the browser with a DOM)
-  * For non-React tests default to `*.test.server.js` (it's a lot faster and less hassle)
- * Tests that run ONLY on the __client__ should be suffixed with `*.test.client.js`
- * Tests that run ONLY on the __server__ should be suffixed with `*.test.server.js`
-
-#### You can place tests pretty much anywhere you want:
-
- * As a neighbor to the file/unit/functionality you are testing - Example: `reducer.js` and `reducer.test.client.js`
- * In a folder somewhere - Example: `./src/reducers/tests/**.test.client.js`
- * __NOTE:__ Only files/folders under `./src` are searched for tests (not the root `./` - as that would include all tests from `node_modules/**` as well)
-
-#### Notes about the testing setup/process
-
- * Client-side tests are run with Karma using the Mocha framework. The whole process is kicked of with the `npm run test:client` script and bootstraped with the `karma.tests.js` file.
- * Server-side tests are run with Mocha, and the process is kicked off with the `npm run test:server` script.
-
-#### Notes about mocking:
-
- * For __client__ and __universal (client and server)__ tests we use webpack with [inject-loader](https://github.com/plasticine/inject-loader) for mocking
- * For __server__ tests we use [mockery](https://github.com/mfncooper/mockery) and/or [sinon](https://github.com/sinonjs/sinon)
- * Look at existing tests for examples of usage, and also take a look at [react-karma-boilerplate](https://github.com/eiriklv/react-karma-boilerplate) for examples of testing React components
-
-Running test
------------------
-
- * All tests - `npm test`
- * Client only - `npm run test:client` or with watching - `npm run watch:test`
- * Server only - `npm run test:server`
-
-Install dependencies:
----------------------
-
- * [Install node.js (5.x)](https://nodejs.org/)
- * `npm install`
- * If you get the yet to be explained "esprima error" ([see issue](https://github.com/soldotno/aurora-frontend/issues/45)) - do another `npm install`
-
-Publishing / committing:
----------------------
-
-There is a build step (babel, so you'll have to do the following before committing/publishing
-
- * `npm run build`
-
-Utilities:
-----------
-
-There's also some utilities built specifically for Aurora:
-
- - [aurora-sass-loader](https://github.com/soldotno/aurora-sass-loader) - for handling the server-side loading of styles in the modules.
- - [aurora-deep-slice-merge](https://github.com/soldotno/aurora-deep-slice-merge) - for handling the slicing, merging and appending of Aurora configuration objects
- - [match-when-es5](https://github.com/soldotno/match-when) - for doing pattern matching
-
-Using Aurora
-=============
-
 __NOTE:__ This is still in the experimental stage (!)
 
 Aurora is a application assembly framework, where you can compose pages using configurations (in JSON). You as the consumer can define your own building blocks and let the framework assemble them together dynamically on the fly.
@@ -108,6 +27,38 @@ The framework consists of the following parts:
 - A development server (based on webpack-dev-server)
 - React component decorators (for various functionality and convenience)
 - React component mixins (for various functionality and convenience)
+
+
+Demo implementations
+--------------------
+
+- [aurora-demo-frontend](https://github.com/soldotno/aurora-demo-frontend)
+- [aurora-demo-api](https://github.com/soldotno/aurora-demo-api)
+
+Notes
+-----
+
+ * To read more about the process of resolving a configuration - see [resolving.md](https://github.com/soldotno/aurora-core/blob/master/resolving.md)
+ * The application is filled with comments/annotations throughout. Keep these in sync - and always state your intentions (they might be clear to you - but not to the next person looking at your code)
+
+Install dependencies:
+---------------------
+
+ * [Install node.js (7.x)](https://nodejs.org/)
+ * `npm install`
+ * If you get the yet to be explained "esprima error" ([see issue](https://github.com/soldotno/aurora-frontend/issues/45)) - do another `npm install`
+
+Utilities:
+----------
+
+There's also some utilities built specifically for Aurora:
+
+ - [aurora-sass-loader](https://github.com/soldotno/aurora-sass-loader) - for handling the server-side loading of styles in the modules.
+ - [aurora-deep-slice-merge](https://github.com/soldotno/aurora-deep-slice-merge) - for handling the slicing, merging and appending of Aurora configuration objects
+ - [match-when-es5](https://github.com/soldotno/match-when) - for doing pattern matching
+
+Using Aurora
+=============
 
 Default webpack config
 ----------------------
@@ -883,8 +834,52 @@ This factory function requires the following functions to be passed as propertie
 
 (See server route handler documentation for info)
 
+Writing tests
+-------------
+
+#### In this application we have these 3 different cases:
+
+ * functionality that runs both on __server (node.js) and client (browser)__
+ * functionality that runs ONLY on the __client__ _(i.e - needs browser only features like `window`)_
+ * functionality that runs ONLY on the __server__ _(i.e - needs node.js only features like `fs`)_
+
+__NOTE:__ That means we have to specify which environment to run tests in.
+
+#### The following then applies
+
+ * Tests that run both on __server and client__ can be suffixed with either `*.test.client.js` or `*.test.server.js`
+  * For React component tests default to `*.test.client.js` (better to test those in the browser with a DOM)
+  * For non-React tests default to `*.test.server.js` (it's a lot faster and less hassle)
+ * Tests that run ONLY on the __client__ should be suffixed with `*.test.client.js`
+ * Tests that run ONLY on the __server__ should be suffixed with `*.test.server.js`
+
+#### You can place tests pretty much anywhere you want:
+
+ * As a neighbor to the file/unit/functionality you are testing - Example: `reducer.js` and `reducer.test.client.js`
+ * In a folder somewhere - Example: `./src/reducers/tests/**.test.client.js`
+ * __NOTE:__ Only files/folders under `./src` are searched for tests (not the root `./` - as that would include all tests from `node_modules/**` as well)
+
+#### Notes about the testing setup/process
+
+ * Client-side tests are run with Karma using the Mocha framework. The whole process is kicked of with the `npm run test:client` script and bootstraped with the `karma.tests.js` file.
+ * Server-side tests are run with Mocha, and the process is kicked off with the `npm run test:server` script.
+
+#### Notes about mocking:
+
+ * For __client__ and __universal (client and server)__ tests we use webpack with [inject-loader](https://github.com/plasticine/inject-loader) for mocking
+ * For __server__ tests we use [mockery](https://github.com/mfncooper/mockery) and/or [sinon](https://github.com/sinonjs/sinon)
+ * Look at existing tests for examples of usage, and also take a look at [react-karma-boilerplate](https://github.com/eiriklv/react-karma-boilerplate) for examples of testing React components
+
+Running tests
+-----------------
+
+ * All tests - `npm test`
+ * Client only - `npm run test:client` or with watching - `npm run watch:test`
+ * Server only - `npm run test:server`
+
 Changelog
 ---------
 
+- **2.0.1** - Update dependencies and tests
 - **2.0.0** - Migrate to webpack 2
 - **1.5.0** - Remove built files from source control
