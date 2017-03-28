@@ -880,6 +880,7 @@ Running tests
 Changelog
 ---------
 
+- **2.0.2** - Update dependencies and documentation
 - **2.0.1** - Update dependencies and tests
 - **2.0.0** - Migrate to webpack 2
 - **1.5.0** - Remove built files from source control
