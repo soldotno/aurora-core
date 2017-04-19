@@ -34,6 +34,7 @@ module.exports = function ({
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
   getModule = () => console.warn('No getModule() method supplied to constructor'),
   isVisible = () => console.warn('No isVisible() method supplied to constructor'),
+  settings = window.__settings,
 } = {}) {
   // Import and instantiate the necessary resolvers
   const resolveModules = require('../utils/resolve-modules')(getModule);
@@ -79,7 +80,7 @@ module.exports = function ({
     error: null,
     version: query.version || window.__version || '',
     config: { ...window.__config },
-    settings: { ...window.__settings },
+    settings,
     pagination: {
       page: 0,
       perPage: 10,
