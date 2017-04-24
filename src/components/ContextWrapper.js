@@ -11,35 +11,35 @@ class ContextWrapper extends React.Component {
  /**
   * Declare the proptypes we accept
   */
- static propTypes = {
-   actions: PropTypes.object.isRequired,
-   settings: PropTypes.object.isRequired,
-   children: PropTypes.element.isRequired
- };
+  static propTypes = {
+    actions: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
+    children: PropTypes.element.isRequired,
+  };
 
  /**
   * Declare the context types we accept being set
   */
- static childContextTypes = {
-   actions: PropTypes.object.isRequired,
-   settings: PropTypes.object.isRequired,
- };
+  static childContextTypes = {
+    actions: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
+  };
 
  /**
   * Set the context using props
   */
- getChildContext() {
-   const { children, ...props } = this.props;
-   return { ...props };
- }
+  getChildContext() {
+    const { children, ...props } = this.props;
+    return { ...props };
+  }
 
  /**
   * Render the children (which in our case will be the App)
   */
- render() {
-   const { children } = this.props;
-   return children;
- }
+  render() {
+    const { children } = this.props;
+    return children;
+  }
 }
 
 /**

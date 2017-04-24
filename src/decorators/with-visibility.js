@@ -9,7 +9,7 @@ import serialize from 'serialize-javascript';
 import getDisplayName from '../utils/get-display-name';
 
 // Export a decorator that handles conditional visibility in the Aurora frontend
-module.exports = function(Component) {
+module.exports = function (Component) {
   class withVisibility extends React.Component {
     // Add a specific display name
     static displayName = `${getDisplayName(Component)}WithVisibility`;
@@ -18,19 +18,19 @@ module.exports = function(Component) {
     // This signals that they should be left alone by anything else
     static propTypes = {
       _hideOnServer: PropTypes.bool,
-      _hideOnClient: PropTypes.bool
+      _hideOnClient: PropTypes.bool,
     };
 
     // Set appropriate defaults
     static defaultProps = {
       _hideOnServer: true,
-      _hideOnClient: false
+      _hideOnClient: false,
     };
 
     // Set the initial state of visibility to what we got from the server config
     // All modules that have a visibility flag in the config will have 'hideOnServer' = false
     state = {
-      isVisible: !this.props._hideOnServer
+      isVisible: !this.props._hideOnServer,
     };
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -44,7 +44,7 @@ module.exports = function(Component) {
     // Handle updates with new props
     componentWillReceiveProps(nextProps) {
       this.setState({
-        isVisible: !nextProps._hideOnClient
+        isVisible: !nextProps._hideOnClient,
       });
     }
 
@@ -53,7 +53,7 @@ module.exports = function(Component) {
       // Update the state to the visibility for this specific platform
       // (already resolved before injecting the config)
       this.setState({
-        isVisible: !this.props._hideOnClient
+        isVisible: !this.props._hideOnClient,
       });
     };
 
