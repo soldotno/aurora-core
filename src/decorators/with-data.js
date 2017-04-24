@@ -1,24 +1,26 @@
+/* eslint-disable no-underscore-dangle */
 // Dependencies
-const React = require('react');
-const hoistStatics = require('hoist-non-react-statics');
+import React from 'react';
+import createReactClass from 'create-react-class';
+import hoistStatics from 'hoist-non-react-statics';
 
 // Aurora mixins
-const DataMixin = require('../mixins/data-mixin');
+import DataMixin from '../mixins/data-mixin';
 import getDisplayName from '../utils/get-display-name';
 
 /**
  * Higher order component factory
  * for adding Aurora data fetching
  */
-module.exports = function({
+module.exports = function getWithDataDecorator({
   fetchData = (() => Promise.resolve()),
   dataProp = 'data',
   loadingProp = 'isLoading',
   errorProp = 'error',
   disableServerLoading = false,
 }) {
-  return function(Component) {
-    const withData = React.createClass({
+  return function withDataDecorator(Component) {
+    const withData = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithData`,
 
@@ -44,7 +46,7 @@ module.exports = function({
         const data = {
           [dataProp]: this.state.__data,
           [loadingProp]: !this.state.__data,
-          [errorProp]: this.state.__error
+          [errorProp]: this.state.__error,
         };
 
         return (
@@ -54,7 +56,7 @@ module.exports = function({
             reloadFunction={this._handleData}
           />
         );
-      }
+      },
     });
 
     // Return a decorated component with all the existing static methods hoisted

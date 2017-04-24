@@ -4,7 +4,7 @@
 const debug = require('debug')('aurora-core:server-render');
 const util = require('util');
 const React = require('react'); // eslint-disable-line no-unused-vars
-const ReactDOMServer = require('react-dom/server');
+const ReactDOMServer = require('react-dom/server'); // eslint-disable-line import/no-unresolved
 const delay = require('delay');
 const url = require('url');
 
@@ -29,7 +29,7 @@ const hash = require('../../bundle-hash');
  * Render the application
  * on the server
  */
-module.exports = function ({
+module.exports = function renderServer({
   cacheHTML = {
     get: Promise.reject('No cacheHTML.get method supplied to constructor'),
     set: console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
@@ -56,9 +56,8 @@ module.exports = function ({
    * Return an express route handler to render the server
    */
   return function renderServer(req, res, next) {
-
     const settings = {
-      ...getUserSettings(req, res)
+      ...getUserSettings(req, res),
     };
 
     const paginationQuery = removeFalsyKeysFromObject({
@@ -80,8 +79,6 @@ module.exports = function ({
   };
 
   function renderServerInternal(req, res, next) {
-
-
     /**
      * Extract the pagination data from the query
      */
@@ -106,9 +103,9 @@ module.exports = function ({
      * of the config for the requested route available
      */
     const latestVersion = getRoute({
-      path: (url.parse(req.originalUrl) || {}).pathname,
+      path: (url.parse(req.originalUrl) || {}).pathname,
       limit: 0,
-      settings,
+      settings, // eslint-disable-line no-use-before-define
     })
     .then(({ meta: { version } = {} } = {}) => version);
 
@@ -136,7 +133,7 @@ module.exports = function ({
      * Get user defined settings
      */
     const settings = {
-      ...getUserSettings(req, res)
+      ...getUserSettings(req, res),
     };
 
     /**
@@ -144,13 +141,13 @@ module.exports = function ({
      * from the supplied getRoute method
      */
     const config = getRoute({
-      path: (url.parse(req.originalUrl) || {}).pathname,
+      path: (url.parse(req.originalUrl) || {}).pathname,
       query: req.query,
       limit: hasPaginationQuery ? 0 : (pagination.page * pagination.perPage) + pagination.initialLimit,
       page: hasPaginationQuery ? 0 : pagination.page,
       version: requestedVersion,
       settings,
-      configStatusCode
+      configStatusCode, // eslint-disable-line no-use-before-define
     });
 
     /**
@@ -182,7 +179,7 @@ module.exports = function ({
      * short circuit this step
      */
     const configWithDataResolved = enableHtmlServerRender ? (
-      configWithVisibilityResolved.then((config) => Promise.race([
+      configWithVisibilityResolved.then(config => Promise.race([
         delay(2000).then(() => config),
         resolveData(settings, config),
       ]))
@@ -213,10 +210,9 @@ module.exports = function ({
       { version, flags } = {},
       config,
       { app, app: { options = {}, type: App } } = {},
-      statusCode
-    ]) => {
-
-      if(statusCode === 404) {
+      statusCode,
+    ]) => { // eslint-disable-line consistent-return
+      if (statusCode === 404) {
         return next();
       }
 
@@ -271,7 +267,7 @@ module.exports = function ({
     /**
      * Catch any errors
      */
-    .catch((err) => {
+    .catch((err) => { // eslint-disable-line consistent-return
       /**
        * Log the error output
        */

@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 /**
  * Dependencies
  */
@@ -9,10 +10,10 @@ const React = require('react');
  * to easily render nested modules
  * in a higher order module
  */
-module.exports = function() {
+module.exports = function renderChildrenMixin() {
   return {
     propTypes: {
-      modules: React.PropTypes.array,
+      modules: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     },
 
     getDefaultProps() {
@@ -27,7 +28,7 @@ module.exports = function() {
      * nested modules
      */
     renderChildren() {
-      let {
+      const {
         modules,
       } = this.props;
 
@@ -35,8 +36,8 @@ module.exports = function() {
        * This is the higher order part
        * (just copy/paste this basically)
        */
-      let children = modules.map((module, i) => {
-        let Module = module ? module.type : false;
+      const children = modules.map((module, i) => {
+        const Module = module ? module.type : false;
 
         return Module ?
           (
@@ -49,6 +50,6 @@ module.exports = function() {
       });
 
       return children;
-    }
+    },
   };
 };

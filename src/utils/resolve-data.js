@@ -1,13 +1,10 @@
-/**
- * Dependencies
- */
+/* eslint-disable no-underscore-dangle */
+// Dependencies
 const set = require('lodash.set');
 const asyncEach = require('async-each');
 const clone = require('stringify-clone');
 
-/**
- * Utilities
- */
+// Utilities
 const generateResolvers = require('./generate-resolvers');
 
 /**
@@ -15,10 +12,10 @@ const generateResolvers = require('./generate-resolvers');
  * needs of a config (server-side rendering).
  * Takes a config object to be resolved
  */
-module.exports = function(
+module.exports = function resolveData(
   getModule = () => console.warn('No getModule() method supplied to constructor')
 ) {
-  return function(
+  return function resolveData(
     settings = {},
     config = {}
   ) {
@@ -34,8 +31,8 @@ module.exports = function(
       path,
       module: {
         type = '',
-        options = {}
-      }
+        options = {},
+      },
     }) => {
       return {
         path: `${path}.options._data`,
@@ -44,7 +41,7 @@ module.exports = function(
           .then(({ getData = () => Promise.resolve() }) => {
             return getData(Object.assign({}, { __settings: settings }, options._dataOptions));
           });
-        })
+        }),
       };
     });
 
@@ -56,7 +53,7 @@ module.exports = function(
     return new Promise((resolve, reject) => {
       asyncEach(resolvers, ({
         path,
-        getData = () => Promise.resolve()
+        getData = () => Promise.resolve(),
       }, cb) => {
         getData()
         .then((_data) => {

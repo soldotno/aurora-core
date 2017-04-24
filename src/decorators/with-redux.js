@@ -3,7 +3,7 @@ import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { Provider } from 'react-redux';
 
 import getDisplayName from '../utils/get-display-name';
@@ -11,7 +11,7 @@ import getDisplayName from '../utils/get-display-name';
 /**
  * Higher order component factory for adding Aurora data fetching.
  */
-module.exports = function({
+module.exports = function getWithReduxDecorator({
   reducer = () => console.log('No reducer supplied'),
   initialState = {},
 }) {
@@ -29,7 +29,7 @@ module.exports = function({
   ) ? (
     window.devToolsExtension()
   ) : (
-    (f) => f
+    f => f
   );
 
   // Compose a store creator function with middleware
@@ -42,20 +42,17 @@ module.exports = function({
   const makeStore = finalCreateStore.bind(null, reducer, initialState);
 
   // Return a function that extends a component with redux state handling
-  return function(Component) {
+  return function withReduxDecorator(Component) {
     // Create a component that wraps our input component in a Redux <Provider>
-    const withRedux = React.createClass({
+    class withRedux extends React.Component {
       // Add a specific display name
-      displayName: `${getDisplayName(Component)}WithRedux`,
-
+      static displayName = `${getDisplayName(Component)}WithRedux`;
 
       // Create a new Redux store for each component instance.
       // This avoids sharing state between instances
-      getInitialState() {
-        return {
-          store: makeStore()
-        };
-      },
+      state = {
+        store: makeStore(),
+      };
 
       // Render the component wrapped in a Redux <Provider>.
       // This exposes the store and gives children the ability to connect()
@@ -66,7 +63,7 @@ module.exports = function({
           </Provider>
         );
       }
-    });
+    }
 
     // Return a decorated component with all the existing static methods hoisted
     return hoistStatics(withRedux, Component);

@@ -1,41 +1,51 @@
 {
+  "extends": "airbnb",
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "node": true,
-    "es6": true
+    "node": true
   },
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
-      "experimentalObjectRestSpread": true
-    },
+  "settings": {
+    "ecmascript": 6,
+    "jsx": true
   },
   "plugins": [
     "react"
   ],
+  "globals": {
+    "before": true,
+    "assert": true,
+    "path": true
+  },
   "rules": {
-    "comma-dangle": [0],
-    "no-dupe-args": [2],
-    "no-dupe-keys": [2],
-    "no-duplicate-case": [2],
-    "no-extra-semi": [2],
-    "no-irregular-whitespace": [0],
-    "no-undef": [2],
-    "valid-typeof": [2],
-    "curly": [0],
-    "dot-notation": [1],
-    "eqeqeq": [2],
-    "semi": [2, "always"],
-    "quotes": [1, "single"],
-    "no-unused-vars": [1],
-    "array-bracket-spacing": [2, "never"],
-    "brace-style": [2],
-    "comma-spacing": [2],
-    "comma-style": [2],
-    "one-var": [2, "never"],
-    "no-shadow": 0,
-    "arrow-body-style": 0,
-    "react/jsx-max-props-per-line": [2, {"maximum": 5}]
+    "jsx-a11y/img-uses-alt": 0,
+    "jsx-a11y/redundant-alt": 0,
+    "jsx-a11y/valid-aria-role": 0,
+    "arrow-body-style": [0],
+    "comma-dangle": [2, "always-multiline"],
+    "import/extensions": [2, "never"],
+    "func-names": 2,
+    "global-require": 1,
+    "max-len": [1, 120, 2, {"ignoreComments": true}],
+    "new-cap": [1, { "capIsNew": false }],
+    "no-unused-expressions": 0,
+    "no-cond-assign": [2, "except-parens"],
+    "no-extra-strict": 0,
+    "no-mixed-operators": ["error", {"allowSamePrecedence": true}],
+    "no-multi-spaces": 0,
+    "no-param-reassign": 0,
+    "no-shadow": [0],
+    "no-unneeded-ternary": [2, {"defaultAssignment": true}],
+    "no-unused-vars": [1, {"vars": "local", "args": "none"}],
+    "no-use-before-define": ["error", { "functions": false, "classes": true }],
+    "quote-props": [1, "consistent-as-needed"],
+    "radix": 0,
+    "react/jsx-indent": [2, 2],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/no-array-index-key": 0,
+    "react/no-unused-prop-types": 1,
+    "react/prefer-es6-class": 0,
+    "react/require-extension": [0, { "extensions": [".jsx"] }],
+    "space-infix-ops": 0
   }
 }

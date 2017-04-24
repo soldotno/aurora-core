@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 /**
  * Dependencies
  */
@@ -9,15 +10,15 @@ const isBrowser = require('is-client')();
  * the injection of external scripts
  * in an Aurora module
  */
-module.exports = function(injectScripts) {
+module.exports = function scriptInjectMixin(injectScripts) {
   return {
     /**
      * Pull out the settings from context
      */
     contextTypes: {
-      actions: React.PropTypes.object,
-      settings: React.PropTypes.object,
-      experiments: React.PropTypes.object,
+      actions: PropTypes.object,
+      settings: PropTypes.object,
+      experiments: PropTypes.object,
     },
 
     /**
