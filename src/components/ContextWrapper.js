@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 /**
  * Dependencies
  */
@@ -11,17 +12,17 @@ const ContextWrapper = React.createClass({
    * Declare the proptypes we accept
    */
   propTypes: {
-    actions: React.PropTypes.object.isRequired,
-    settings: React.PropTypes.object.isRequired,
-    children: React.PropTypes.element.isRequired
+    actions: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
+    children: PropTypes.element.isRequired
   },
 
   /**
    * Declare the context types we accept being set
    */
   childContextTypes: {
-    actions: React.PropTypes.object.isRequired,
-    settings: React.PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
   },
 
   /**

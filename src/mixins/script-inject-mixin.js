@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 /**
  * Dependencies
  */
@@ -15,9 +16,9 @@ module.exports = function(injectScripts) {
      * Pull out the settings from context
      */
     contextTypes: {
-      actions: React.PropTypes.object,
-      settings: React.PropTypes.object,
-      experiments: React.PropTypes.object,
+      actions: PropTypes.object,
+      settings: PropTypes.object,
+      experiments: PropTypes.object,
     },
 
     /**

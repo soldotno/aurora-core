@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 // Dependencies
 import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
@@ -16,8 +17,8 @@ module.exports = function(Component) {
     // Our component will make use of some internal props, which we prefix with _
     // This signals that they should be left alone by anything else
     propTypes: {
-      _hideOnServer: React.PropTypes.bool,
-      _hideOnClient: React.PropTypes.bool
+      _hideOnServer: PropTypes.bool,
+      _hideOnClient: PropTypes.bool
     },
 
     // Set appropriate defaults

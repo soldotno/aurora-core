@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 /**
  * Dependencies
  */
@@ -16,8 +17,8 @@ module.exports = function(stateName, errorName) {
      * by the config
      */
     propTypes: {
-      _dataOptions: React.PropTypes.object,
-      _data: React.PropTypes.object
+      _dataOptions: PropTypes.object,
+      _data: PropTypes.object
     },
 
     /**
@@ -26,7 +27,7 @@ module.exports = function(stateName, errorName) {
      * the top renderer
      */
     contextTypes: {
-      settings: React.PropTypes.object,
+      settings: PropTypes.object,
     },
 
     /**

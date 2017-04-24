@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 /**
  * Dependencies
  */
@@ -12,7 +13,7 @@ const React = require('react');
 module.exports = function() {
   return {
     propTypes: {
-      modules: React.PropTypes.array,
+      modules: PropTypes.array,
     },
 
     getDefaultProps() {
