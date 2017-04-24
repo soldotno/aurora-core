@@ -10,32 +10,28 @@ import getDisplayName from '../utils/get-display-name';
 
 // Export a decorator that handles conditional visibility in the Aurora frontend
 module.exports = function(Component) {
-  const withVisibility = React.createClass({
+  class withVisibility extends React.Component {
     // Add a specific display name
-    displayName: `${getDisplayName(Component)}WithVisibility`,
+    static displayName = `${getDisplayName(Component)}WithVisibility`;
 
     // Our component will make use of some internal props, which we prefix with _
     // This signals that they should be left alone by anything else
-    propTypes: {
+    static propTypes = {
       _hideOnServer: PropTypes.bool,
       _hideOnClient: PropTypes.bool
-    },
+    };
 
     // Set appropriate defaults
-    getDefaultProps() {
-      return {
-        _hideOnServer: true,
-        _hideOnClient: false
-      };
-    },
+    static defaultProps = {
+      _hideOnServer: true,
+      _hideOnClient: false
+    };
 
     // Set the initial state of visibility to what we got from the server config
     // All modules that have a visibility flag in the config will have 'hideOnServer' = false
-    getInitialState() {
-      return {
-        isVisible: !this.props._hideOnServer
-      };
-    },
+    state = {
+      isVisible: !this.props._hideOnServer
+    };
 
     shouldComponentUpdate(nextProps, nextState) {
       // const nextPropsAdjusted =  serialize(sortedObject(nextProps));
@@ -43,28 +39,28 @@ module.exports = function(Component) {
       const nextStateAdjusted =  serialize(sortedObject(nextState));
       const thisStateAdjusted = serialize(sortedObject(this.state));
       return !(nextStateAdjusted === thisStateAdjusted && serialize(sortedObject(nextProps)) ===  serialize(sortedObject(this.props)));
-    },
+    }
 
     // Handle updates with new props
     componentWillReceiveProps(nextProps) {
       this.setState({
         isVisible: !nextProps._hideOnClient
       });
-    },
+    }
 
     // A method for handling the visibility on the client (in the browser)
-    _handleVisibility() {
+    _handleVisibility = () => {
       // Update the state to the visibility for this specific platform
       // (already resolved before injecting the config)
       this.setState({
         isVisible: !this.props._hideOnClient
       });
-    },
+    };
 
     componentDidMount() {
       // Handle the visibility filtering when mounted
       this._handleVisibility();
-    },
+    }
 
     render() {
       // Handle conditional visibility
@@ -73,7 +69,7 @@ module.exports = function(Component) {
       // Render either the component that is wrapped or nothing
       return isVisible ? <Component {...this.props} /> : null;
     }
-  });
+  }
 
   // Return a decorated component with all the existing static methods hoisted
   return hoistStatics(withVisibility, Component);

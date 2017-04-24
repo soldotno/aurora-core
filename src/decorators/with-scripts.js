@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import createReactClass from 'create-react-class';
 import hoistStatics from 'hoist-non-react-statics';
 
 // Aurora mixins
@@ -9,7 +10,7 @@ import getDisplayName from '../utils/get-display-name';
 // Higher order component factory for adding Aurora script injection
 module.exports = function({ scripts }) {
   return function(Component) {
-    const withScripts = React.createClass({
+    const withScripts = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithScripts`,
 

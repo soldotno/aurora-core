@@ -1,5 +1,6 @@
 // Dependencies
 const React = require('react');
+const createReactClass = require('create-react-class');
 const hoistStatics = require('hoist-non-react-statics');
 
 // Aurora mixins
@@ -18,7 +19,7 @@ module.exports = function({
   disableServerLoading = false,
 }) {
   return function(Component) {
-    const withData = React.createClass({
+    const withData = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithData`,
 

@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import createReactClass from 'create-react-class';
 import sassLoader from 'aurora-sass-loader';
 import hoistStatics from 'hoist-non-react-statics';
 
@@ -15,7 +16,7 @@ module.exports = function({ serverPath, clientStyles }) {
 
   // Return a function that produces a higher order component that includes styling
   return function(Component) {
-    const withStyles = React.createClass({
+    const withStyles = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithStyles`,
 
