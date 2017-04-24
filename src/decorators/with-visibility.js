@@ -10,7 +10,7 @@ import serialize from 'serialize-javascript';
 import getDisplayName from '../utils/get-display-name';
 
 // Export a decorator that handles conditional visibility in the Aurora frontend
-module.exports = function withVisibility(Component) {
+module.exports = function withVisibilityDecorator(Component) {
   class withVisibility extends React.Component {
     // Add a specific display name
     static displayName = `${getDisplayName(Component)}WithVisibility`;

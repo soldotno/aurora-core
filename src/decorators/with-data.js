@@ -12,14 +12,14 @@ import getDisplayName from '../utils/get-display-name';
  * Higher order component factory
  * for adding Aurora data fetching
  */
-module.exports = function withData({
+module.exports = function withDataDecorator({
   fetchData = (() => Promise.resolve()),
   dataProp = 'data',
   loadingProp = 'isLoading',
   errorProp = 'error',
   disableServerLoading = false,
 }) {
-  return function withData(Component) {
+  return function withDataDecorator(Component) {
     const withData = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithData`,

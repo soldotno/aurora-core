@@ -11,7 +11,7 @@ import getDisplayName from '../utils/get-display-name';
 /**
  * Higher order component factory for adding Aurora data fetching.
  */
-module.exports = function withRedux({
+module.exports = function withReduxDecorator({
   reducer = () => console.log('No reducer supplied'),
   initialState = {},
 }) {
@@ -42,7 +42,7 @@ module.exports = function withRedux({
   const makeStore = finalCreateStore.bind(null, reducer, initialState);
 
   // Return a function that extends a component with redux state handling
-  return function withRedux(Component) {
+  return function withReduxDecorator(Component) {
     // Create a component that wraps our input component in a Redux <Provider>
     class withRedux extends React.Component {
       // Add a specific display name
