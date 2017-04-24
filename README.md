@@ -880,6 +880,8 @@ Running tests
 Changelog
 ---------
 
+- **2.2.0** - Prepare for React 16: Expose util to replace RenderChildrenMixin, use ES6 classes instead of createClass, prop-types package instead of React.PropTypes
+- **2.1.0** - Add settings param in client render for easier development
 - **2.0.2** - Update dependencies and documentation
 - **2.0.1** - Update dependencies and tests
 - **2.0.0** - Migrate to webpack 2
