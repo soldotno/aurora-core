@@ -10,7 +10,7 @@ import getDisplayName from '../utils/get-display-name';
 
 
 // Export a decorator that handles style injection and extraction in the Aurora frontend
-module.exports = function withStylesDecorator({ serverPath, clientStyles }) {
+module.exports = function getWithStylesDecorator({ serverPath, clientStyles }) {
   // /Load the styles for server rendering with the Aurora Sass loader
   const serverStyles = sassLoader(serverPath);
 

@@ -12,7 +12,7 @@ import getDisplayName from '../utils/get-display-name';
  * Higher order component factory
  * for adding Aurora data fetching
  */
-module.exports = function withDataDecorator({
+module.exports = function getWithDataDecorator({
   fetchData = (() => Promise.resolve()),
   dataProp = 'data',
   loadingProp = 'isLoading',

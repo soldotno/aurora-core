@@ -11,7 +11,7 @@ import getDisplayName from '../utils/get-display-name';
 /**
  * Higher order component factory for adding Aurora data fetching.
  */
-module.exports = function withReduxDecorator({
+module.exports = function getWithReduxDecorator({
   reducer = () => console.log('No reducer supplied'),
   initialState = {},
 }) {
