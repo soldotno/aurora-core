@@ -30,7 +30,7 @@ export default function configureStore(initialState) {
   ) ? (
     window.devToolsExtension()
   ) : (
-    (f) => f
+    f => f
   );
 
   /**

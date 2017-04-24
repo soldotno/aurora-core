@@ -10,7 +10,7 @@ const injectStyles = require('style-loader/addStyles');
  * Export a mixin that handles
  * the injection of styles in an Aurora module
  */
-module.exports = function(clientStyles) {
+module.exports = function (clientStyles) {
   return {
     /**
      * This is the code used for

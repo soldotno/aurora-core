@@ -12,7 +12,7 @@ const generateResolvers = require('./generate-resolvers');
 /**
  * Export tool for resolving visibility
  */
-module.exports = function(
+module.exports = function (
   isVisible = () => console.warn('No isVisible() method supplied to constructor')
 ) {
   return {
@@ -42,7 +42,7 @@ module.exports = function(
       } = {}) => {
         return {
           path: `${path}.options._hideOnClient`,
-          value: !!module.visibility && !isVisible(settings, query, module.visibility)
+          value: !!module.visibility && !isVisible(settings, query, module.visibility),
         };
       });
 
@@ -81,7 +81,7 @@ module.exports = function(
       } = {}) => {
         return {
           path: `${path}.options._hideOnServer`,
-          value: !!module.visibility
+          value: !!module.visibility,
         };
       });
 
@@ -97,6 +97,6 @@ module.exports = function(
 
         resolve(configCopy);
       });
-    }
+    },
   };
 };

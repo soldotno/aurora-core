@@ -56,9 +56,8 @@ module.exports = function ({
    * Return an express route handler to render the server
    */
   return function renderServer(req, res, next) {
-
     const settings = {
-      ...getUserSettings(req, res)
+      ...getUserSettings(req, res),
     };
 
     const paginationQuery = removeFalsyKeysFromObject({
@@ -80,8 +79,6 @@ module.exports = function ({
   };
 
   function renderServerInternal(req, res, next) {
-
-
     /**
      * Extract the pagination data from the query
      */
@@ -136,7 +133,7 @@ module.exports = function ({
      * Get user defined settings
      */
     const settings = {
-      ...getUserSettings(req, res)
+      ...getUserSettings(req, res),
     };
 
     /**
@@ -150,7 +147,7 @@ module.exports = function ({
       page: hasPaginationQuery ? 0 : pagination.page,
       version: requestedVersion,
       settings,
-      configStatusCode
+      configStatusCode,
     });
 
     /**
@@ -182,7 +179,7 @@ module.exports = function ({
      * short circuit this step
      */
     const configWithDataResolved = enableHtmlServerRender ? (
-      configWithVisibilityResolved.then((config) => Promise.race([
+      configWithVisibilityResolved.then(config => Promise.race([
         delay(2000).then(() => config),
         resolveData(settings, config),
       ]))
@@ -213,10 +210,9 @@ module.exports = function ({
       { version, flags } = {},
       config,
       { app, app: { options = {}, type: App } } = {},
-      statusCode
+      statusCode,
     ]) => {
-
-      if(statusCode === 404) {
+      if (statusCode === 404) {
         return next();
       }
 

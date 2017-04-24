@@ -10,7 +10,7 @@ const isBrowser = require('is-client')();
  * the injection of external scripts
  * in an Aurora module
  */
-module.exports = function(injectScripts) {
+module.exports = function (injectScripts) {
   return {
     /**
      * Pull out the settings from context

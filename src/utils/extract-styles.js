@@ -21,13 +21,13 @@ const cache = lru({ max: 500 });
  * Function for extracting all critical
  * styles from an Aurora config
  */
-module.exports = function(
+module.exports = function (
   app = { options: { modules: [] } }
 ) {
   /**
    * Create an initial array to hold all the styles
    */
-  let criticalStyles = [];
+  const criticalStyles = [];
 
   /**
    * Create a function that recurses
@@ -36,7 +36,7 @@ module.exports = function(
    */
   function extractStylesRecursively({
     type: { getStyles = () => '' },
-    options: { modules = [] }
+    options: { modules = [] },
   }) {
     criticalStyles.push(getStyles());
     modules.forEach(extractStylesRecursively);

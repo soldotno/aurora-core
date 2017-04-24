@@ -14,7 +14,7 @@ export const POPULATE_NEXT_PAGE_ERROR = 'POPULATE_NEXT_PAGE_ERROR';
  * Export a constructor function for the actions
  * (Since we need to inject dependencies)
  */
-export default function(
+export default function (
   getRoute = () => console.warn('No getRoute() method supplied to constructor')
 ) {
   /**
@@ -23,7 +23,7 @@ export default function(
    */
   function refreshConfigPending() {
     return {
-      type: REFRESH_CONFIG_PENDING
+      type: REFRESH_CONFIG_PENDING,
     };
   }
 
@@ -35,7 +35,7 @@ export default function(
     return {
       type: REFRESH_CONFIG_SUCCESS,
       meta,
-      data
+      data,
     };
   }
 
@@ -46,7 +46,7 @@ export default function(
   function refreshConfigError(error) {
     return {
       type: REFRESH_CONFIG_ERROR,
-      error
+      error,
     };
   }
 
@@ -57,7 +57,7 @@ export default function(
    */
   function populateNextPagePending() {
     return {
-      type: POPULATE_NEXT_PAGE_PENDING
+      type: POPULATE_NEXT_PAGE_PENDING,
     };
   }
 
@@ -70,7 +70,7 @@ export default function(
     return {
       type: POPULATE_NEXT_PAGE_SUCCESS,
       meta,
-      data
+      data,
     };
   }
 
@@ -82,7 +82,7 @@ export default function(
   function populateNextPageError(error) {
     return {
       type: POPULATE_NEXT_PAGE_ERROR,
-      error
+      error,
     };
   }
 
@@ -93,7 +93,7 @@ export default function(
      */
     refreshConfig({
       path = '/',
-      query = {}
+      query = {},
     } = {}) {
       return (dispatch, getState) => {
         const {
@@ -148,7 +148,7 @@ export default function(
      */
     populateNextPage({
       path = '/',
-      query = {}
+      query = {},
     } = {}) {
       return (dispatch, getState) => {
         const {
@@ -205,6 +205,6 @@ export default function(
         type: REPLACE_STATE,
         state,
       };
-    }
+    },
   };
 }

@@ -14,7 +14,7 @@ const AURORA_PREVIOUS_LOCATION = 'AURORA_PREVIOUS_LOCATION';
  * Helper function for adding
  * a browser resize event listener
  */
-module.exports = function(currentLocation = '') {
+module.exports = function (currentLocation = '') {
   /**
    * Abort if not in a browser
    */

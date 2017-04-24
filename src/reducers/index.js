@@ -29,8 +29,8 @@ export default function rootReducer(state, action) {
     case REFRESH_CONFIG_PENDING:
       return Object.assign({}, state, {
         pagination: Object.assign({}, state.pagination, {
-          isLoading: true
-        })
+          isLoading: true,
+        }),
       });
 
     case REFRESH_CONFIG_SUCCESS:
@@ -46,14 +46,14 @@ export default function rootReducer(state, action) {
 
     case REFRESH_CONFIG_ERROR:
       return Object.assign({}, state, {
-        error: action.error
+        error: action.error,
       });
 
     case POPULATE_NEXT_PAGE_PENDING:
       return Object.assign({}, state, {
         pagination: Object.assign({}, state.pagination, {
           isLoading: true,
-        })
+        }),
       });
 
     case POPULATE_NEXT_PAGE_SUCCESS:
@@ -66,14 +66,14 @@ export default function rootReducer(state, action) {
         pagination: Object.assign({}, state.pagination, {
           isLoading: false,
           hasMore: (action.meta.pagination || {}).hasMore,
-          page: state.pagination.page + 1
+          page: state.pagination.page + 1,
         }),
         version: action.meta.version,
       });
 
     case POPULATE_NEXT_PAGE_ERROR:
       return Object.assign({}, state, {
-        error: action.error
+        error: action.error,
       });
 
     default:

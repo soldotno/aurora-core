@@ -13,7 +13,7 @@ const removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-objec
 const updateQueryString = require('../utils/update-query-string');
 const debug = require('debug')('aurora-core:render/client.js');
 
-var sortedObject = require('sorted-object');
+const sortedObject = require('sorted-object');
 
 // Components
 const ContextWrapper = require('../components/ContextWrapper');
@@ -24,7 +24,7 @@ const configureStore = require('../store/configure-store').default;
 // Create an instance of infinite scroll
 const infiniteScroll = require('everscroll')({
   distance: 4500,
-  disableCallback: true
+  disableCallback: true,
 });
 
 /**
@@ -130,7 +130,7 @@ module.exports = function ({
 
     const newAppConf = JSON.stringify(sortedObject(config.app || {}));
     const newPaginationConf = JSON.stringify(sortedObject(pagination || {}));
-    if(appConfig === newAppConf && paginationConf === newPaginationConf) {
+    if (appConfig === newAppConf && paginationConf === newPaginationConf) {
       // TODO: Now we assume that only changes on app and pagination is a reason to rerender!
       // will this be true in the future?
       return;
@@ -153,20 +153,20 @@ module.exports = function ({
     // see React docs)
     .then(({ app: {
       type: App,
-      options = {}
+      options = {},
     } }) => {
       // Create a new Promise of rendering the application
       return new Promise((resolve) => {
         ReactDOM.render(
           <ContextWrapper
-          actions={{}}
-          settings={settings}
+            actions={{}}
+            settings={settings}
           >
-          <App
-          newVersionAvailable={latestVersion !== version}
-          pagination={pagination}
-          {...options}
-          />
+            <App
+              newVersionAvailable={latestVersion !== version}
+              pagination={pagination}
+              {...options}
+            />
           </ContextWrapper>,
           document.querySelector('#app'),
 
@@ -180,7 +180,7 @@ module.exports = function ({
     })
 
     // Make sure errors are thrown
-    .catch((err) => setImmediate(() => {
+    .catch(err => setImmediate(() => {
       throw err;
     }));
   };

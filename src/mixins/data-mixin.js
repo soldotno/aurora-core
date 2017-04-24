@@ -9,7 +9,7 @@ const React = require('react');
  * data fetching on both the client
  * and server for Aurora modules
  */
-module.exports = function(stateName, errorName) {
+module.exports = function (stateName, errorName) {
   return {
     /**
      * These are the props
@@ -18,7 +18,7 @@ module.exports = function(stateName, errorName) {
      */
     propTypes: {
       _dataOptions: PropTypes.object,
-      _data: PropTypes.object
+      _data: PropTypes.object,
     },
 
     /**
@@ -37,7 +37,7 @@ module.exports = function(stateName, errorName) {
     getDefaultProps() {
       return {
         _dataOptions: {},
-        _data: null
+        _data: null,
       };
     },
 
@@ -58,11 +58,11 @@ module.exports = function(stateName, errorName) {
      */
     componentWillReceiveProps(nextProps) {
       const {
-        _hideOnClient = false
+        _hideOnClient = false,
       } = this.props;
 
       !this.state[stateName] && this.setState({
-        [stateName]: nextProps._data
+        [stateName]: nextProps._data,
       }, () => {
         !_hideOnClient && this._handleData();
       });
@@ -94,7 +94,7 @@ module.exports = function(stateName, errorName) {
        * data fetching must implement
        */
       const {
-        getData = (() => Promise.resolve({ crap: 5 }))
+        getData = (() => Promise.resolve({ crap: 5 })),
       } = this.constructor;
 
       /**
@@ -107,8 +107,8 @@ module.exports = function(stateName, errorName) {
        */
       if (!_data) {
         getData(Object.assign({}, { __settings: settings }, _dataOptions))
-        .then((_data) => this.setState({ [stateName]: _data }))
-        .catch((_data) => this.setState({ [errorName]: _data }));
+        .then(_data => this.setState({ [stateName]: _data }))
+        .catch(_data => this.setState({ [errorName]: _data }));
       }
     },
 
@@ -119,7 +119,7 @@ module.exports = function(stateName, errorName) {
        * we'll default to performing the handling
        */
       const {
-        _hideOnClient = false
+        _hideOnClient = false,
       } = this.props;
 
       /**
@@ -131,6 +131,6 @@ module.exports = function(stateName, errorName) {
        * we'll default to performing the handling
        */
       !_hideOnClient && this._handleData();
-    }
+    },
   };
 };
