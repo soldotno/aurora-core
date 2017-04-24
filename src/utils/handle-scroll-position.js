@@ -1,8 +1,8 @@
 /**
  * Import utilities
  */
-import onScroll from './on-scroll';
 import throttle from 'lodash.throttle';
+import onScroll from './on-scroll';
 
 /**
  * Create a constant for the state
@@ -14,7 +14,7 @@ const AURORA_PREVIOUS_LOCATION = 'AURORA_PREVIOUS_LOCATION';
  * Helper function for adding
  * a browser resize event listener
  */
-module.exports = function (currentLocation = '') {
+module.exports = function handleScrollPosition(currentLocation = '') {
   /**
    * Abort if not in a browser
    */

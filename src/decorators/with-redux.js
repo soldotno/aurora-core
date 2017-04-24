@@ -3,7 +3,7 @@ import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { Provider } from 'react-redux';
 
 import getDisplayName from '../utils/get-display-name';
@@ -11,7 +11,7 @@ import getDisplayName from '../utils/get-display-name';
 /**
  * Higher order component factory for adding Aurora data fetching.
  */
-module.exports = function ({
+module.exports = function withRedux({
   reducer = () => console.log('No reducer supplied'),
   initialState = {},
 }) {
@@ -42,7 +42,7 @@ module.exports = function ({
   const makeStore = finalCreateStore.bind(null, reducer, initialState);
 
   // Return a function that extends a component with redux state handling
-  return function (Component) {
+  return function withRedux(Component) {
     // Create a component that wraps our input component in a Redux <Provider>
     class withRedux extends React.Component {
       // Add a specific display name

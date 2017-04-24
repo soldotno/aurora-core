@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import PropTypes from 'prop-types';
 // Dependencies
 import React from 'react';
@@ -9,7 +10,7 @@ import serialize from 'serialize-javascript';
 import getDisplayName from '../utils/get-display-name';
 
 // Export a decorator that handles conditional visibility in the Aurora frontend
-module.exports = function (Component) {
+module.exports = function withVisibility(Component) {
   class withVisibility extends React.Component {
     // Add a specific display name
     static displayName = `${getDisplayName(Component)}WithVisibility`;
@@ -33,12 +34,9 @@ module.exports = function (Component) {
       isVisible: !this.props._hideOnServer,
     };
 
-    shouldComponentUpdate(nextProps, nextState) {
-      // const nextPropsAdjusted =  serialize(sortedObject(nextProps));
-      // const thisPropsAdjusted = serialize(sortedObject(this.props));
-      const nextStateAdjusted =  serialize(sortedObject(nextState));
-      const thisStateAdjusted = serialize(sortedObject(this.state));
-      return !(nextStateAdjusted === thisStateAdjusted && serialize(sortedObject(nextProps)) ===  serialize(sortedObject(this.props)));
+    componentDidMount() {
+      // Handle the visibility filtering when mounted
+      this._handleVisibility();
     }
 
     // Handle updates with new props
@@ -46,6 +44,17 @@ module.exports = function (Component) {
       this.setState({
         isVisible: !nextProps._hideOnClient,
       });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      // const nextPropsAdjusted =  serialize(sortedObject(nextProps));
+      // const thisPropsAdjusted = serialize(sortedObject(this.props));
+      const nextStateAdjusted =  serialize(sortedObject(nextState));
+      const thisStateAdjusted = serialize(sortedObject(this.state));
+      return !(
+        nextStateAdjusted === thisStateAdjusted &&
+        serialize(sortedObject(nextProps)) === serialize(sortedObject(this.props))
+      );
     }
 
     // A method for handling the visibility on the client (in the browser)
@@ -56,11 +65,6 @@ module.exports = function (Component) {
         isVisible: !this.props._hideOnClient,
       });
     };
-
-    componentDidMount() {
-      // Handle the visibility filtering when mounted
-      this._handleVisibility();
-    }
 
     render() {
       // Handle conditional visibility

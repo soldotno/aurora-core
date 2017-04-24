@@ -12,8 +12,8 @@ class ContextWrapper extends React.Component {
   * Declare the proptypes we accept
   */
   static propTypes = {
-    actions: PropTypes.object.isRequired,
-    settings: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    settings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     children: PropTypes.element.isRequired,
   };
 

@@ -10,12 +10,12 @@ import getDisplayName from '../utils/get-display-name';
 
 
 // Export a decorator that handles style injection and extraction in the Aurora frontend
-module.exports = function ({ serverPath, clientStyles }) {
+module.exports = function withStyles({ serverPath, clientStyles }) {
   // /Load the styles for server rendering with the Aurora Sass loader
   const serverStyles = sassLoader(serverPath);
 
   // Return a function that produces a higher order component that includes styling
-  return function (Component) {
+  return function withStyles(Component) {
     const withStyles = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithStyles`,

@@ -10,10 +10,10 @@ const React = require('react');
  * to easily render nested modules
  * in a higher order module
  */
-module.exports = function () {
+module.exports = function renderChildrenMixin() {
   return {
     propTypes: {
-      modules: PropTypes.array,
+      modules: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     },
 
     getDefaultProps() {

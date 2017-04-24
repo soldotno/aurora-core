@@ -21,7 +21,7 @@ const cache = lru({ max: 500 });
  * Function for extracting all critical
  * styles from an Aurora config
  */
-module.exports = function (
+module.exports = function extractStyles(
   app = { options: { modules: [] } }
 ) {
   /**

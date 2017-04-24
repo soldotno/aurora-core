@@ -8,8 +8,8 @@ import ScriptInjectMixin from '../mixins/script-inject-mixin';
 import getDisplayName from '../utils/get-display-name';
 
 // Higher order component factory for adding Aurora script injection
-module.exports = function ({ scripts }) {
-  return function (Component) {
+module.exports = function withScripts({ scripts }) {
+  return function withScripts(Component) {
     const withScripts = createReactClass({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithScripts`,

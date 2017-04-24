@@ -12,7 +12,7 @@ const generateResolvers = require('./generate-resolvers');
 /**
  * Export tool for resolving visibility
  */
-module.exports = function (
+module.exports = function resolveVisibility(
   isVisible = () => console.warn('No isVisible() method supplied to constructor')
 ) {
   return {

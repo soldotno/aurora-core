@@ -12,7 +12,7 @@ const history = require('./history-api');
  * Export a function that takes
  * an object to update the query string
  */
-module.exports = function (queryUpdate = {}) {
+module.exports = function updateQueryString(queryUpdate = {}) {
   /**
    * Abort if not browser
    */

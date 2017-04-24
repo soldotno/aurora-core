@@ -1,6 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 // Dependencies
 const React = require('react'); // eslint-disable-line no-unused-vars
-const ReactDOM = require('react-dom');
+const ReactDOM = require('react-dom'); // eslint-disable-line import/no-unresolved
 const qs = require('qs');
 const pick = require('lodash.pick');
 
@@ -30,7 +31,7 @@ const infiniteScroll = require('everscroll')({
 /**
 * Export function to be used as client renderer (extendable)
 */
-module.exports = function ({
+module.exports = function renderClient({
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
   getModule = () => console.warn('No getModule() method supplied to constructor'),
   isVisible = () => console.warn('No isVisible() method supplied to constructor'),
@@ -48,7 +49,7 @@ module.exports = function ({
   } = require('../actions').default(getRoute);
 
   // Parse the query string
-  const query = qs.parse((location.search || '').slice(1));
+  const query = qs.parse((location.search || '').slice(1));
 
   // Get the original location
   const originalLocation = window.location.pathname + window.location.search;
@@ -139,7 +140,7 @@ module.exports = function ({
     paginationConf = newPaginationConf;
 
     // Resolve config
-    return Promise.resolve(config)
+    return Promise.resolve(config) // eslint-disable-line consistent-return
     .then(resolveVisibility.onClient.bind(null, settings, query))
 
     // Resolve modules (React components) in the config
@@ -248,7 +249,7 @@ module.exports = function ({
   // Handle rendering stuff from cache (Back button memory)
   .then(() => {
     // Pull out history state
-    const cacheState = history.state || {};
+    const cacheState = history.state || {};
 
     // Pull out the modules list of the current config from redux state
     const { config: {

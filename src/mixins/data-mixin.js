@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const PropTypes = require('prop-types');
 /**
  * Dependencies
@@ -9,7 +10,7 @@ const React = require('react');
  * data fetching on both the client
  * and server for Aurora modules
  */
-module.exports = function (stateName, errorName) {
+module.exports = function dataMixin(stateName, errorName) {
   return {
     /**
      * These are the props
@@ -17,8 +18,8 @@ module.exports = function (stateName, errorName) {
      * by the config
      */
     propTypes: {
-      _dataOptions: PropTypes.object,
-      _data: PropTypes.object,
+      _dataOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+      _data: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     },
 
     /**
