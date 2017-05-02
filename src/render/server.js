@@ -1,10 +1,12 @@
 // Dependencies
-import createDebug from 'debug';
-import util from 'util';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
+import { ServerStyleSheet } from 'styled-components';
+
+import createDebug from 'debug';
 import delay from 'delay';
 import url from 'url';
+import util from 'util';
 
 // Utilities
 import removeFalsyKeysFromObject from '../utils/remove-falsy-keys-from-object';
@@ -183,8 +185,7 @@ module.exports = function renderServer({
         if (statusCode === 404) {
           return next();
         }
-
-        const appMarkup = ReactDOMServer.renderToString(
+        const assembledApp = (
           <ContextWrapper
             actions={{}}
             settings={settings}
@@ -197,7 +198,12 @@ module.exports = function renderServer({
           </ContextWrapper>
         );
 
-        // Pull out all critical styles
+        // Render app to string, and collect styled-components styles
+        const sheet = new ServerStyleSheet();
+        const appMarkup = renderToString(sheet.collectStyles(assembledApp));
+        const styledComponentsStyleTags = sheet.getStyleElement();
+
+        // Old aurora styles-loader
         const criticalStyles = enableCssServerRender ? extractStyles(app) : '';
 
         // Create the actual HTML that we'll serve
@@ -211,6 +217,7 @@ module.exports = function renderServer({
           flags,
           hash,
           criticalStyles,
+          styledComponentsStyleTags,
         });
 
         // Set HTML cache.
