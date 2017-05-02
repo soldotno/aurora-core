@@ -1,34 +1,32 @@
-/**
- * Dependencies
- */
-const debug = require('debug')('aurora-core:server-render');
-const util = require('util');
-const React = require('react'); // eslint-disable-line no-unused-vars
-const ReactDOMServer = require('react-dom/server'); // eslint-disable-line import/no-unresolved
-const delay = require('delay');
-const url = require('url');
+// Dependencies
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { ServerStyleSheet } from 'styled-components';
 
-/**
- * Utilities
- */
-const removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
-const isUndefined = require('../utils/is-undefined');
+import createDebug from 'debug';
+import delay from 'delay';
+import url from 'url';
+import util from 'util';
 
-/**
- * Components
- */
-const ContextWrapper = require('../components/ContextWrapper');
+// Utilities
+import removeFalsyKeysFromObject from '../utils/remove-falsy-keys-from-object';
+import isUndefined from '../utils/is-undefined';
+import extractStyles from '../utils/extract-styles';
+import createResolveModules from '../utils/resolve-modules';
+import createResolveData from '../utils/resolve-data';
+import createResolveVisibility from '../utils/resolve-visibility';
 
-/**
- * Import webpack bundle hash (generated on build)
- * (see webpack.config.js and webpack-output-hash-as-module-plugin.js)
- */
-const hash = require('../../bundle-hash');
+// Components
+import ContextWrapper from '../components/ContextWrapper';
 
-/**
- * Render the application
- * on the server
- */
+// Import webpack bundle hash (generated on build)
+// (see webpack.config.js and webpack-output-hash-as-module-plugin.js)
+import hash from '../../bundle-hash';
+
+// Initialisations
+const debug = createDebug('aurora-core:server-render');
+
+// Render the application on the server
 module.exports = function renderServer({
   cacheHTML = {
     get: Promise.reject('No cacheHTML.get method supplied to constructor'),
@@ -44,22 +42,18 @@ module.exports = function renderServer({
   enableHtmlServerRender = false,
   enableCssServerRender = false,
 }) {
-  /**
-   * Utilities
-   */
-  const extractStyles = require('../utils/extract-styles');
-  const resolveModules = require('../utils/resolve-modules')(getModule);
-  const resolveData = require('../utils/resolve-data')(getModule);
-  const resolveVisibility = require('../utils/resolve-visibility')(isVisible);
+  // Initialise utilities with modules from application
+  const resolveModules = createResolveModules(getModule);
+  const resolveData = createResolveData(getModule);
+  const resolveVisibility = createResolveVisibility(isVisible);
 
-  /**
-   * Return an express route handler to render the server
-   */
+  // Return an express route handler to render the server
   return function renderServer(req, res, next) {
     const settings = {
       ...getUserSettings(req, res),
     };
 
+    // @TODO These don't seem to be in use. Figure out the intention! ~misund, 2017-05-02
     const paginationQuery = removeFalsyKeysFromObject({
       page: !isUndefined(req.query.page) ? +req.query.page : null,
       perPage: !isUndefined(req.query.perPage) ? +req.query.perPage : null,
@@ -74,14 +68,12 @@ module.exports = function renderServer({
     req.aurora.settings = settings;
 
     return cacheHTML.get(req)
-          .then(html => res.send(html))
-          .catch(err => renderServerInternal(req, res, next));
+      .then(html => res.send(html))
+      .catch(err => renderServerInternal(req, res, next));
   };
 
   function renderServerInternal(req, res, next) {
-    /**
-     * Extract the pagination data from the query
-     */
+    // Extract the pagination data from the query
     const paginationQuery = removeFalsyKeysFromObject({
       page: !isUndefined(req.query.page) ? +req.query.page : null,
       perPage: !isUndefined(req.query.perPage) ? +req.query.perPage : null,
@@ -89,35 +81,28 @@ module.exports = function renderServer({
       hasMore: !isUndefined(req.query.hasMore) ? +req.query.hasMore : null,
     });
 
-    /**
-     * Extract the version requested from the query
-     */
+    // Extract the version requested from the query
     const requestedVersion = req.query.version || '';
 
-    /**
-     * Fetch the latest config version number for the requested route
-     *
-     * NOTE: We're going to use this to compare the latest
-     * version to the version requested, so that we can supply
-     * a flag that tells the client if there is a newer version
-     * of the config for the requested route available
-     */
+    // Fetch the latest config version number for the requested route
+    //
+    // NOTE: We're going to use this to compare the latest
+    // version to the version requested, so that we can supply
+    // a flag that tells the client if there is a newer version
+    // of the config for the requested route available
     const latestVersion = getRoute({
       path: (url.parse(req.originalUrl) || {}).pathname,
       limit: 0,
       settings, // eslint-disable-line no-use-before-define
     })
-    .then(({ meta: { version } = {} } = {}) => version);
+      .then(({ meta: { version } = {} } = {}) => version)
+    ;
 
-    /**
-     * Create a flag telling you if the request has a pagination query
-     */
+    // Create a flag telling you if the request has a pagination query
     const hasPaginationQuery = !!Object.keys(paginationQuery).length;
 
-    /**
-     * Create initial pagination settings
-     * (set the initial amount of modules to load on the server)
-     */
+    // Create initial pagination settings
+    // (set the initial amount of modules to load on the server)
     const pagination = {
       page: 0,
       hasMore: true,
@@ -129,17 +114,12 @@ module.exports = function renderServer({
       ...paginationQuery,
     };
 
-    /**
-     * Get user defined settings
-     */
+    // Get user defined settings
     const settings = {
       ...getUserSettings(req, res),
     };
 
-    /**
-     * Fetch the initial route config
-     * from the supplied getRoute method
-     */
+    // Fetch the initial route config from the supplied getRoute method
     const config = getRoute({
       path: (url.parse(req.originalUrl) || {}).pathname,
       query: req.query,
@@ -150,34 +130,28 @@ module.exports = function renderServer({
       configStatusCode, // eslint-disable-line no-use-before-define
     });
 
-    /**
-     * Pull out the config meta-data
-     *
-     * Contains things like:
-     * - version (for this config/route)
-     * - flags (for this config/route)
-     * - etc..
-     */
+    // Pull out the config meta-data
+    //
+    // Contains things like:
+    // - version (for this config/route)
+    // - flags (for this config/route)
+    // - etc..
     const configMeta = config
     .then(({ meta }) => meta);
 
     const configStatusCode = config
     .then(({ status }) => status);
 
-    /**
-     * Create a config with the visibility resolved
-     */
+    // Create a config with the visibility resolved
     const configWithVisibilityResolved = config
-    .then(({ data: { config } }) => config)
-    .then(resolveVisibility.onServer);
+      .then(({ data: { config } }) => config)
+      .then(resolveVisibility.onServer)
+    ;
 
-    /**
-     * Create a config with the data resolved.
-     *
-     * NOTE: We only do this if server rendering
-     * and data loading is enabled - if not we just
-     * short circuit this step
-     */
+    // Create a config with the data resolved.
+    //
+    // NOTE: We only do this if server rendering and data
+    // loading is enabled - if not we just short circuit this step
     const configWithDataResolved = enableHtmlServerRender ? (
       configWithVisibilityResolved.then(config => Promise.race([
         delay(2000).then(() => config),
@@ -187,17 +161,13 @@ module.exports = function renderServer({
       configWithVisibilityResolved
     );
 
-    /**
-     * Create a config with the modules / React components resolved
-     */
+    // Create a config with the modules / React components resolved
     const configWithModulesResolved = configWithDataResolved
-    .then(resolveModules);
+      .then(resolveModules)
+    ;
 
-    /**
-     * Collect and pass all of our data
-     * to the function that creates
-     * the initial markup and serves it to the client
-     */
+    // Collect and pass all of our data to the function that creates
+    // the initial markup and serves it to the client
     Promise.all([
       latestVersion,
       configMeta,
@@ -205,88 +175,77 @@ module.exports = function renderServer({
       configWithModulesResolved,
       configStatusCode,
     ])
-    .then(([
-      latestVersion,
-      { version, flags } = {},
-      config,
-      { app, app: { options = {}, type: App } } = {},
-      statusCode,
-    ]) => { // eslint-disable-line consistent-return
-      if (statusCode === 404) {
-        return next();
-      }
-
-      const appMarkup = ReactDOMServer.renderToString(
-        <ContextWrapper
-          actions={{}}
-          settings={settings}
-        >
-          <App
-            newVersionAvailable={latestVersion !== version}
-            pagination={pagination}
-            {...options}
-          />
-        </ContextWrapper>
-      );
-
-      /**
-       * Pull out all critical styles
-       */
-      const criticalStyles = enableCssServerRender ? extractStyles(app) : '';
-
-      /**
-       * Create the actual HTML
-       * that we'll return to
-       * the client
-       */
-      let markup = createHTML({
-        appMarkup,
-        config,
-        pagination,
-        settings,
-        version,
+      .then(([
         latestVersion,
-        flags,
-        hash,
-        criticalStyles,
-      });
+        { version, flags } = {},
+        config,
+        { app, app: { options = {}, type: App } } = {},
+        statusCode,
+      ]) => { // eslint-disable-line consistent-return
+        if (statusCode === 404) {
+          return next();
+        }
+        const assembledApp = (
+          <ContextWrapper
+            actions={{}}
+            settings={settings}
+          >
+            <App
+              newVersionAvailable={latestVersion !== version}
+              pagination={pagination}
+              {...options}
+            />
+          </ContextWrapper>
+        );
 
-      // Set HTML cache.
-      cacheHTML.set(req, markup);
+        // Render app to string, and collect styled-components styles
+        const sheet = new ServerStyleSheet();
+        const appMarkup = renderToString(sheet.collectStyles(assembledApp));
+        const styledComponentsStyleTags = sheet.getStyleTags();
 
-      // Add non-cachable HTML if provided.
-      if (typeof cacheHTML.addNonCachableHTML === 'function') {
-        markup = cacheHTML.addNonCachableHTML(markup, settings);
-      }
+        // Old aurora styles-loader
+        const criticalStyles = enableCssServerRender ? extractStyles(app) : '';
 
-      /**
-       * Return the created markup
-       */
-      res.send(markup);
-    })
-    /**
-     * Catch any errors
-     */
-    .catch((err) => { // eslint-disable-line consistent-return
-      /**
-       * Log the error output
-       */
-      debug(util.inspect(err, { colors: true }));
-      debug(err.stack);
+        // Create the actual HTML that we'll serve
+        let markup = createHTML({
+          appMarkup,
+          config,
+          pagination,
+          settings,
+          version,
+          latestVersion,
+          flags,
+          hash,
+          criticalStyles,
+          styledComponentsStyleTags,
+        });
 
-      /**
-       * If no config was found (404)
-       * skip to the next route handler
-       */
-      if (err.status === 404) {
-        return next();
-      }
+        // Set HTML cache.
+        cacheHTML.set(req, markup);
 
-      /**
-       * Return the error message
-       * as a response otherwise
-       */
-      res.status(500).send(err.message);
-    });
+        // Add non-cachable HTML if provided.
+        if (typeof cacheHTML.addNonCachableHTML === 'function') {
+          markup = cacheHTML.addNonCachableHTML(markup, settings);
+        }
+
+        // Return the created markup
+        res.send(markup);
+      })
+
+      // Catch any errors
+      .catch((err) => { // eslint-disable-line consistent-return
+        // Log the error output
+        debug(util.inspect(err, { colors: true }));
+        debug(err.stack);
+
+        // If no config was found (404), skip to the next route handler
+        if (err.status === 404) {
+          return next();
+        }
+
+        // Return the error message as a response otherwise
+        res.status(500).send(err.message);
+      })
+    ;
   }
 };
