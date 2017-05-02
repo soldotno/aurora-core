@@ -201,7 +201,7 @@ module.exports = function renderServer({
         // Render app to string, and collect styled-components styles
         const sheet = new ServerStyleSheet();
         const appMarkup = renderToString(sheet.collectStyles(assembledApp));
-        const styledComponentsStyleTags = renderToString(sheet.getStyleElement());
+        const styledComponentsStyleTags = sheet.getStyleTags();
 
         // Old aurora styles-loader
         const criticalStyles = enableCssServerRender ? extractStyles(app) : '';
