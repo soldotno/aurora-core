@@ -8,7 +8,6 @@ import hoistStatics from 'hoist-non-react-statics';
 import StyleInjectMixin from '../mixins/style-inject-mixin';
 import getDisplayName from '../utils/get-display-name';
 
-
 // Export a decorator that handles style injection and extraction in the Aurora frontend
 module.exports = function getWithStylesDecorator({ serverPath, clientStyles }) {
   // /Load the styles for server rendering with the Aurora Sass loader
@@ -20,17 +19,17 @@ module.exports = function getWithStylesDecorator({ serverPath, clientStyles }) {
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithStyles`,
 
+      // Mixins
+      mixins: [
+        StyleInjectMixin(clientStyles),
+      ],
+
       // Add static methods needed
       statics: {
         getStyles() {
           return serverStyles;
         },
       },
-
-      // Mixins
-      mixins: [
-        StyleInjectMixin(clientStyles),
-      ],
 
       // Render the component
       render() {

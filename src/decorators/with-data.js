@@ -24,6 +24,11 @@ module.exports = function getWithDataDecorator({
       // Add a specific display name
       displayName: `${getDisplayName(Component)}WithData`,
 
+      // Add applicable mixins
+      mixins: [
+        DataMixin('__data', '__error'),
+      ],
+
       // Add static methods needed
       statics: {
         getData(options) {
@@ -35,11 +40,6 @@ module.exports = function getWithDataDecorator({
           return fetchData(options);
         },
       },
-
-      // Add applicable mixins
-      mixins: [
-        DataMixin('__data', '__error'),
-      ],
 
       // Render the component
       render() {
