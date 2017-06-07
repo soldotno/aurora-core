@@ -48,7 +48,6 @@
     "glob": "7.1.1",
     "hoist-non-react-statics": "1.2.0",
     "is-client": "0.0.2",
-    "lodash.compose": "2.4.1",
     "lodash.pick": "4.4.0",
     "lodash.set": "4.3.2",
     "lodash.throttle": "4.1.1",
