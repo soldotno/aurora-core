@@ -100,7 +100,7 @@
   },
   "peerDependencies": {
     "autoprefixer": ">=6.5.1",
-    "babel-loader": ">=7.0.0",
+    "babel-loader": ">=7.1.0",
     "postcss-loader": ">=2.0.5",
     "react": ">=15.3.2",
     "react-dom": ">=15.3.2",
