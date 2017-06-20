@@ -96,7 +96,7 @@
     "style-loader": "^0.13.1",
     "styled-components": ">=2.0.0-17",
     "webpack": "2.5.1",
-    "webpack-dev-server": "2.4.5"
+    "webpack-dev-server": "2.5.0"
   },
   "peerDependencies": {
     "autoprefixer": ">=6.5.1",
