@@ -1,8 +1,6 @@
-const PropTypes = require('prop-types');
-/**
- * Dependencies
- */
-const React = require('react');
+// Dependencies
+import PropTypes from 'prop-types';
+import React from 'react';
 
 /**
  * Export a helper mixin that
@@ -10,7 +8,7 @@ const React = require('react');
  * to easily render nested modules
  * in a higher order module
  */
-module.exports = function renderChildrenMixin() {
+export default function renderChildrenMixin() {
   return {
     propTypes: {
       modules: PropTypes.array, // eslint-disable-line react/forbid-prop-types
@@ -52,4 +50,4 @@ module.exports = function renderChildrenMixin() {
       return children;
     },
   };
-};
+}

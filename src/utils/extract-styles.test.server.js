@@ -84,7 +84,7 @@ describe('extractStyles()', () => {
     /**
      * Import the unit we want to test
      */
-    const extractStyles = require('./extract-styles');
+    const extractStyles = require('./extract-styles').default;
 
     /**
      * Extract the styles

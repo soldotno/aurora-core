@@ -85,7 +85,7 @@ describe('resolveVisibility (include)', () => {
       /**
        * Import the unit we want to test
        */
-      const resolveVisibility = require('./resolve-visibility')(isVisibleMockSmall);
+      const resolveVisibility = require('./resolve-visibility').default(isVisibleMockSmall);
 
       /**
        * Create a dummy config to extract styles from
@@ -204,7 +204,7 @@ describe('resolveVisibility (include)', () => {
       /**
        * Import the unit we want to test
        */
-      const resolveVisibility = require('./resolve-visibility')(isVisibleMockSmall);
+      const resolveVisibility = require('./resolve-visibility').default(isVisibleMockSmall);
 
       /**
        * Create a dummy config to extract styles from
@@ -338,7 +338,7 @@ describe('resolveVisibility (exclude)', () => {
       /**
        * Import the unit we want to test
        */
-      const resolveVisibility = require('./resolve-visibility')(isVisibleMockSmall);
+      const resolveVisibility = require('./resolve-visibility').default(isVisibleMockSmall);
 
       /**
        * Create a dummy config to extract styles from
@@ -457,7 +457,7 @@ describe('resolveVisibility (exclude)', () => {
       /**
        * Import the unit we want to test
        */
-      const resolveVisibility = require('./resolve-visibility')(isVisibleMockSmall);
+      const resolveVisibility = require('./resolve-visibility').default(isVisibleMockSmall);
 
       /**
        * Create a dummy config to extract styles from
@@ -591,7 +591,7 @@ describe('resolveVisibility (exclude 2)', () => {
       /**
        * Import the unit we want to test
        */
-      const resolveVisibility = require('./resolve-visibility')(isVisibleMockLarge);
+      const resolveVisibility = require('./resolve-visibility').default(isVisibleMockLarge);
 
       /**
        * Create a dummy config to extract styles from
@@ -710,7 +710,7 @@ describe('resolveVisibility (exclude 2)', () => {
       /**
        * Import the unit we want to test
        */
-      const resolveVisibility = require('./resolve-visibility')(isVisibleMockLarge);
+      const resolveVisibility = require('./resolve-visibility').default(isVisibleMockLarge);
 
       /**
        * Create a dummy config to extract styles from

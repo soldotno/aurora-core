@@ -1,20 +1,16 @@
-const PropTypes = require('prop-types');
-/**
- * Dependencies
- */
-const React = require('react');
-const isBrowser = require('is-client')();
+// Dependencies
+import PropTypes from 'prop-types';
+import isClient from 'is-client';
+
+const isBrowser = isClient();
 
 /**
- * Export a mixin that handles
- * the injection of external scripts
+ * Export a mixin that handles the injection of external scripts
  * in an Aurora module
  */
-module.exports = function scriptInjectMixin(injectScripts) {
+export default function scriptInjectMixin(injectScripts) {
   return {
-    /**
-     * Pull out the settings from context
-     */
+    // Pull out the settings from context
     contextTypes: {
       actions: PropTypes.object,
       settings: PropTypes.object,
@@ -33,4 +29,4 @@ module.exports = function scriptInjectMixin(injectScripts) {
       }
     },
   };
-};
+}

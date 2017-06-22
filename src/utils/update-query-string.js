@@ -1,18 +1,11 @@
-/**
- * Import dependencies
- */
-const qs = require('qs');
+// Dependencies
+import qs from 'qs';
 
-/**
- * Import utilities
- */
-const history = require('./history-api');
+// Utilities
+import history from './history-api';
 
-/**
- * Export a function that takes
- * an object to update the query string
- */
-module.exports = function updateQueryString(queryUpdate = {}) {
+// Export a function that takes an object to update the query string
+export default function updateQueryString(queryUpdate = {}) {
   /**
    * Abort if not browser
    */
@@ -59,4 +52,4 @@ module.exports = function updateQueryString(queryUpdate = {}) {
    * the previous page visited
    */
   history.replaceState({ ...history.state }, null, queryString);
-};
+}
