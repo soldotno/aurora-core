@@ -330,4 +330,4 @@ export default function renderClient({
   .then(() => {
     infiniteScroll(loadMore);
   });
-};
+}
