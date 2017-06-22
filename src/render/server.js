@@ -27,11 +27,11 @@ import hash from '../../bundle-hash';
 const debug = createDebug('aurora-core:server-render');
 
 // Render the application on the server
-module.exports = function renderServer({
+export default function renderServer({
   cacheHTML = {
-    get: Promise.reject('No cacheHTML.get method supplied to constructor'),
-    set: console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
-    addNonCachableHTML: console.warn('No cacheHTML.addNonCachableHTML supplied to constructor, no non-cached html will be appened.'),
+    get: () => Promise.reject('No cacheHTML.get method supplied to constructor'),
+    set: () => console.warn('No cacheHTML.set method supplied to constructor, skipping cache creation'),
+    addNonCachableHTML: () => console.warn('No cacheHTML.addNonCachableHTML supplied to constructor, no non-cached html will be appened.'),
   },
   createHTML = () => console.warn('No createHtml() method supplied to constructor'),
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),

@@ -31,7 +31,7 @@ const infiniteScroll = require('everscroll')({
 /**
 * Export function to be used as client renderer (extendable)
 */
-module.exports = function renderClient({
+export default function renderClient({
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
   getModule = () => console.warn('No getModule() method supplied to constructor'),
   isVisible = () => console.warn('No isVisible() method supplied to constructor'),
