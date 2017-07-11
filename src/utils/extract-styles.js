@@ -1,14 +1,11 @@
-/**
- * Dependencies
- */
-const debug = require('debug')('aurora-frontend:extract-styles');
-const CleanCSS = require('clean-css');
-const lru = require('lru-cache');
-const md5 = require('md5');
+// Dependencies
+import createDebug from 'debug';
+import CleanCSS from 'clean-css';
+import lru from 'lru-cache';
+import md5 from 'md5';
 
-/**
- * Create an instance of the css minifier
- */
+// Instantiate
+const debug = createDebug('aurora-frontend:extract-styles');
 const cleanCSS = new CleanCSS();
 
 /**
@@ -21,7 +18,7 @@ const cache = lru({ max: 500 });
  * Function for extracting all critical
  * styles from an Aurora config
  */
-module.exports = function extractStyles(
+export default function extractStyles(
   app = { options: { modules: [] } }
 ) {
   /**
@@ -76,4 +73,4 @@ module.exports = function extractStyles(
    * Return the minified styles from the cache
    */
   return cache.get(hash);
-};
+}

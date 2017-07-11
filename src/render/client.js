@@ -1,52 +1,59 @@
 /* eslint-disable no-underscore-dangle */
 // Dependencies
-const React = require('react'); // eslint-disable-line no-unused-vars
-const ReactDOM = require('react-dom'); // eslint-disable-line import/no-unresolved
-const qs = require('qs');
-const pick = require('lodash.pick');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import qs from 'qs';
+import pick from 'lodash.pick';
+import createDebug from 'debug';
+import sortedObject from 'sorted-object';
+import everscroll from 'everscroll';
 
 // Utilities
-const isUndefined = require('../utils/is-undefined');
-const onResize = require('../utils/on-resize');
-const history = require('../utils/history-api');
-const handleScrollPosition = require('../utils/handle-scroll-position');
-const removeFalsyKeysFromObject = require('../utils/remove-falsy-keys-from-object');
-const updateQueryString = require('../utils/update-query-string');
-const debug = require('debug')('aurora-core:render/client.js');
+import isUndefined from '../utils/is-undefined';
+import onResize from '../utils/on-resize';
+import history from '../utils/history-api';
+import handleScrollPosition from '../utils/handle-scroll-position';
+import removeFalsyKeysFromObject from '../utils/remove-falsy-keys-from-object';
+import updateQueryString from '../utils/update-query-string';
+import createResolveModules from '../utils/resolve-modules';
+import createResolveVisibility from '../utils/resolve-visibility';
 
-const sortedObject = require('sorted-object');
+// Actions
+import createActions from '../actions';
 
 // Components
-const ContextWrapper = require('../components/ContextWrapper');
+import ContextWrapper from '../components/ContextWrapper';
 
 // Import our store configuration function
-const configureStore = require('../store/configure-store').default;
+import configureStore from '../store/configure-store';
 
 // Create an instance of infinite scroll
-const infiniteScroll = require('everscroll')({
+const infiniteScroll = everscroll({
   distance: 4500,
   disableCallback: true,
 });
 
+const debug = createDebug('aurora-core:render/client.js');
+
 /**
 * Export function to be used as client renderer (extendable)
 */
-module.exports = function renderClient({
+export default function renderClient({
   getRoute = () => console.warn('No getRoute() method supplied to constructor'),
   getModule = () => console.warn('No getModule() method supplied to constructor'),
   isVisible = () => console.warn('No isVisible() method supplied to constructor'),
   settings = window.__settings,
 } = {}) {
-  // Import and instantiate the necessary resolvers
-  const resolveModules = require('../utils/resolve-modules')(getModule);
-  const resolveVisibility = require('../utils/resolve-visibility')(isVisible);
+  // Instantiate the necessary resolvers
+  const resolveModules = createResolveModules(getModule);
+  const resolveVisibility = createResolveVisibility(isVisible);
 
   // Import and instantiate action creators
   const {
     replaceState,
     refreshConfig,
     populateNextPage,
-  } = require('../actions').default(getRoute);
+  } = createActions(getRoute);
 
   // Parse the query string
   const query = qs.parse((location.search || '').slice(1));
@@ -330,4 +337,4 @@ module.exports = function renderClient({
   .then(() => {
     infiniteScroll(loadMore);
   });
-};
+}

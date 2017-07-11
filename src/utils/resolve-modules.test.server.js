@@ -1,6 +1,4 @@
-/**
- * Dependencies
- */
+// Dependencies
 import expect from 'expect';
 import mockery from 'mockery';
 
@@ -45,7 +43,7 @@ describe('resolveModules()', () => {
     /**
      * Import the unit we want to test
      */
-    const resolveModules = require('./resolve-modules')(getModuleMock);
+    const resolveModules = require('./resolve-modules').default(getModuleMock);
 
     /**
      * Create a dummy config to extract styles from

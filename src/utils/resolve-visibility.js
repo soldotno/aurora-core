@@ -1,18 +1,12 @@
-/**
- * Dependencies
- */
-const set = require('lodash.set');
-const clone = require('stringify-clone');
+// Dependencies
+import set from 'lodash.set';
+import clone from 'stringify-clone';
 
-/**
- * Utilities
- */
-const generateResolvers = require('./generate-resolvers');
+// Utilities
+import generateResolvers from './generate-resolvers';
 
-/**
- * Export tool for resolving visibility
- */
-module.exports = function resolveVisibility(
+// Export tool for resolving visibility
+export default function resolveVisibility(
   isVisible = () => console.warn('No isVisible() method supplied to constructor')
 ) {
   return {
@@ -99,4 +93,4 @@ module.exports = function resolveVisibility(
       });
     },
   };
-};
+}

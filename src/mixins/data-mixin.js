@@ -1,39 +1,26 @@
 /* eslint-disable no-underscore-dangle */
-const PropTypes = require('prop-types');
-/**
- * Dependencies
- */
-const React = require('react');
+// Dependencies
+import PropTypes from 'prop-types';
 
 /**
- * Export a mixin that handles
- * data fetching on both the client
- * and server for Aurora modules
+ * Export a mixin that handles data fetching on both the client and server for
+ * Aurora modules
  */
-module.exports = function dataMixin(stateName, errorName) {
+export default function dataMixin(stateName, errorName) {
   return {
-    /**
-     * These are the props
-     * that will be supplied
-     * by the config
-     */
+    // These are the props that will be supplied by the config
     propTypes: {
       _dataOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
       _data: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     },
 
-    /**
-     * These are the context
-     * that will be supplied by
-     * the top renderer
-     */
+    // These are the context that will be supplied by the top renderer
     contextTypes: {
       settings: PropTypes.object,
     },
 
     /**
-     * Set some appropriate
-     * default props
+     * Set some appropriate default props
      */
     getDefaultProps() {
       return {
@@ -43,9 +30,9 @@ module.exports = function dataMixin(stateName, errorName) {
     },
 
     /**
-     * Set the initial data
-     * state to what we got from
-     * props (might have been loaded server-side)
+     * Set the initial data state to what we got from props.
+     *
+     * (might have been loaded server-side)
      */
     getInitialState() {
       return {
@@ -70,30 +57,22 @@ module.exports = function dataMixin(stateName, errorName) {
     },
 
     /**
-     * General instance method
-     * for handling data loading
+     * General instance method for handling data loading
      */
     _handleData() {
-      /**
-       * Pull out what we need from props
-       */
+      // Pull out what we need from props
       const {
         _data,
         _dataOptions = {},
       } = this.props;
 
-      /**
-       * Pull out what we need from context
-       */
+      // Pull out what we need from context
       const {
         settings = {},
       } = this.context;
 
-      /**
-       * Pull the 'getData' method
-       * that all modules which need
-       * data fetching must implement
-       */
+      // Pull the 'getData' method that all modules which need data fetching
+      // must implement
       const {
         getData = (() => Promise.resolve({ crap: 5 })),
       } = this.constructor;
@@ -114,11 +93,8 @@ module.exports = function dataMixin(stateName, errorName) {
     },
 
     componentDidMount() {
-      /**
-       * We'll assume the component is using
-       * aurora-visibility-mixin, if not
-       * we'll default to performing the handling
-       */
+      // We'll assume the component is using aurora-visibility-mixin,
+      //  if not we'll default to performing the handling
       const {
         _hideOnClient = false,
       } = this.props;
@@ -134,4 +110,4 @@ module.exports = function dataMixin(stateName, errorName) {
       !_hideOnClient && this._handleData();
     },
   };
-};
+}

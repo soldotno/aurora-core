@@ -49,7 +49,7 @@ describe('resolveData()', () => {
     /**
      * Import the unit we want to test
      */
-    const resolveData = require('./resolve-data')(getModuleMock);
+    const resolveData = require('./resolve-data').default(getModuleMock);
 
     /**
      * Create a dummy config to extract styles from

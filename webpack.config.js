@@ -116,10 +116,52 @@ module.exports = {
           loader: 'react-hot-loader',
         }, {
           loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            presets: [
+              // ['es2015', {modules: false}],
+              'es2015',
+              'stage-0',
+              'react',
+            ],
+            plugins: [
+              // All these plugins transform dynamic import with async/await
+              'syntax-async-functions',
+              'syntax-dynamic-import',
+              'transform-async-to-generator',
+              'transform-regenerator',
+              'transform-runtime',
+
+              // Now for some other plugins
+              'transform-flow-strip-types',
+              'styled-components',
+            ],
+          }
         },
       ] : [
         {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            presets: [
+              //['es2015', {modules: false}],
+              'es2015',
+              'stage-0',
+              'react',
+            ],
+            plugins: [
+              // All these plugins transform dynamic import with async/await
+              'syntax-async-functions',
+              'syntax-dynamic-import',
+              'transform-async-to-generator',
+              'transform-regenerator',
+              'transform-runtime',
+
+              // Now for some other plugins
+              'transform-flow-strip-types',
+              'styled-components',
+            ],
+          }
         }
       ],
     }, {

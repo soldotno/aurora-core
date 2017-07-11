@@ -1,18 +1,18 @@
 /* eslint-disable no-underscore-dangle */
 // Dependencies
-const set = require('lodash.set');
-const asyncEach = require('async-each');
-const clone = require('stringify-clone');
+import set from 'lodash.set';
+import asyncEach from 'async-each';
+import clone from 'stringify-clone';
 
 // Utilities
-const generateResolvers = require('./generate-resolvers');
+import generateResolvers from './generate-resolvers';
 
 /**
  * A method for actually resolving the data
  * needs of a config (server-side rendering).
  * Takes a config object to be resolved
  */
-module.exports = function resolveData(
+export default function resolveData(
   getModule = () => console.warn('No getModule() method supplied to constructor')
 ) {
   return function resolveData(
@@ -66,4 +66,4 @@ module.exports = function resolveData(
       });
     });
   };
-};
+}

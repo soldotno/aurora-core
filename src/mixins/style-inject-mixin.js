@@ -1,16 +1,16 @@
 /* global __DEVELOPMENT__ */
 
-/**
- * Dependencies
- */
-const isBrowser = require('is-client')();
-const injectStyles = require('style-loader/addStyles');
+// Dependencies
+import isClient from 'is-client';
+import injectStyles from 'style-loader/addStyles';
+
+const isBrowser = isClient();
 
 /**
- * Export a mixin that handles
- * the injection of styles in an Aurora module
+ * Export a mixin that handles the injection of styles
+ * in an Aurora module
  */
-module.exports = function styleInjectMixin(clientStyles) {
+export default function styleInjectMixin(clientStyles) {
   return {
     /**
      * This is the code used for
@@ -28,4 +28,4 @@ module.exports = function styleInjectMixin(clientStyles) {
       }
     },
   };
-};
+}
