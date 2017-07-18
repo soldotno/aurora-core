@@ -1,10 +1,10 @@
 {
   "name": "aurora-core",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Aurora Application Assembler Core",
   "main": "index.js",
   "engines": {
-    "node": "7.7.4"
+    "node": "8.1.4"
   },
   "scripts": {
     "test": "npm run test:server && npm run test:client",
@@ -35,7 +35,7 @@
     "aurora-sass-loader": "soldotno/aurora-sass-loader.git#master",
     "babel-eslint": "7.2.3",
     "babel-polyfill": "6.23.0",
-    "clean-css": "4.1.6",
+    "clean-css": "4.1.7",
     "create-react-class": "15.6.0",
     "css-loader": "0.28.4",
     "debug": "2.6.8",
@@ -46,7 +46,7 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "everscroll": "misund/everscroll#27245b5dac4",
     "glob": "7.1.2",
-    "hoist-non-react-statics": "2.1.0",
+    "hoist-non-react-statics": "2.2.0",
     "is-client": "0.0.2",
     "lodash.pick": "4.4.0",
     "lodash.set": "4.3.2",
@@ -57,7 +57,7 @@
     "no-op": "1.0.3",
     "prop-types": "15.5.10",
     "qs": "6.5.0",
-    "serialize-javascript": "1.3.0",
+    "serialize-javascript": "1.4.0",
     "sorted-object": "2.0.1",
     "stringify-clone": "2.0.0",
     "url": "0.11.0"
@@ -90,7 +90,7 @@
     "pre-commit": "1.2.2",
     "react-dom": "15.6.1",
     "react-redux": "5.0.5",
-    "redux": "3.7.1",
+    "redux": "3.7.2",
     "redux-logger": "3.0.6",
     "redux-thunk": "2.2.0",
     "rimraf": "2.6.1",
@@ -98,7 +98,7 @@
     "source-map-support": "0.4.15",
     "style-loader": "0.17.0",
     "styled-components": "2.1.1",
-    "webpack": "3.2.0",
+    "webpack": "3.3.0",
     "webpack-dev-server": "2.5.1"
   },
   "peerDependencies": {
