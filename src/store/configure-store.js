@@ -28,10 +28,10 @@ export default function configureStore(initialState) {
     typeof window === 'object' &&
     typeof window.devToolsExtension !== 'undefined'
   ) ? (
-    window.devToolsExtension()
-  ) : (
-    f => f
-  );
+      window.devToolsExtension()
+    ) : (
+      f => f
+    );
 
   /**
    * Compose a store creator function with middleware

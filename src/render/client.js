@@ -148,10 +148,10 @@ export default function renderClient({
 
     // Resolve config
     return Promise.resolve(config) // eslint-disable-line consistent-return
-    .then(resolveVisibility.onClient.bind(null, settings, query))
+      .then(resolveVisibility.onClient.bind(null, settings, query))
 
     // Resolve modules (React components) in the config
-    .then(resolveModules)
+      .then(resolveModules)
 
     // Render React app
     //
@@ -159,38 +159,38 @@ export default function renderClient({
     // and other actions that needs to be available to every component in the
     // tree we pass them down via context (available as this.context -
     // see React docs)
-    .then(({ app: {
-      type: App,
-      options = {},
-    } }) => {
+      .then(({ app: {
+        type: App,
+        options = {},
+      } }) => {
       // Create a new Promise of rendering the application
-      return new Promise((resolve) => {
-        ReactDOM.render(
-          <ContextWrapper
-            actions={{}}
-            settings={settings}
-          >
-            <App
-              newVersionAvailable={latestVersion !== version}
-              pagination={pagination}
-              {...options}
-            />
-          </ContextWrapper>,
-          document.querySelector('#app'),
+        return new Promise((resolve) => {
+          ReactDOM.render(
+            <ContextWrapper
+              actions={{}}
+              settings={settings}
+            >
+              <App
+                newVersionAvailable={latestVersion !== version}
+                pagination={pagination}
+                {...options}
+              />
+            </ContextWrapper>,
+            document.querySelector('#app'),
 
-          /*
+            /*
           NOTE: We're using the callback available for ReactDOM.render
           to be able to know when the rendering is done (async).
           */
-          () => resolve()
-        );
-      });
-    })
+            () => resolve()
+          );
+        });
+      })
 
     // Make sure errors are thrown
-    .catch(err => setImmediate(() => {
-      throw err;
-    }));
+      .catch(err => setImmediate(() => {
+        throw err;
+      }));
   };
 
   // Listen to store changes and re-render app if anything has changed
@@ -234,54 +234,54 @@ export default function renderClient({
     // Could be things like:
     // - Dynamic pagination
     // - Scroll position memory
-    .then(() => {
+      .then(() => {
       // Get the entire redux state
-      const currentState = store.getState();
+        const currentState = store.getState();
 
-      // Handle features that are behind flags, such as
-      // - Back position memory
-      // - State caching
-      // - Versioning
-      featureFlags.enablePagination && updatePaginationQuery();
-      featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
-      featureFlags.enableVersioning && updateVersionQuery();
-    });
+        // Handle features that are behind flags, such as
+        // - Back position memory
+        // - State caching
+        // - Versioning
+        featureFlags.enablePagination && updatePaginationQuery();
+        featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
+        featureFlags.enableVersioning && updateVersionQuery();
+      });
   };
 
   // Handle the rendering flow
   Promise.resolve()
   // Perform the initial rendering (Will resolve when the actual rendering is done)
-  .then(() => renderApp())
+    .then(() => renderApp())
 
   // Handle rendering stuff from cache (Back button memory)
-  .then(() => {
+    .then(() => {
     // Pull out history state
-    const cacheState = history.state || {};
+      const cacheState = history.state || {};
 
-    // Pull out the modules list of the current config from redux state
-    const { config: {
-      app: {
-        options: {
-          modules = [],
+      // Pull out the modules list of the current config from redux state
+      const { config: {
+        app: {
+          options: {
+            modules = [],
+          } = {},
         } = {},
-      } = {},
-    } = {} } = store.getState() || {};
+      } = {} } = store.getState() || {};
 
-    // Check if the current config has any modules
-    const currentConfigHasModules = !!modules.length;
+      // Check if the current config has any modules
+      const currentConfigHasModules = !!modules.length;
 
-    // Figure out if you should replace the config
-    // - If there is a pagination query
-    // - (and) If there is no modules in the current config
-    const shouldReplaceState = hasPaginationQuery && !currentConfigHasModules;
+      // Figure out if you should replace the config
+      // - If there is a pagination query
+      // - (and) If there is no modules in the current config
+      const shouldReplaceState = hasPaginationQuery && !currentConfigHasModules;
 
-    // Dispatch an action that replaces the current config with the one in cache
-    return shouldReplaceState ? (
-      store.dispatch(replaceState(cacheState))
-    ) : (
-      Promise.resolve()
-    );
-  })
+      // Dispatch an action that replaces the current config with the one in cache
+      return shouldReplaceState ? (
+        store.dispatch(replaceState(cacheState))
+      ) : (
+        Promise.resolve()
+      );
+    })
   /*
   TODO:
   Q:  Det er en promisechain hvor du skriver at du kaller `renderApp()` for å være sikker på at den er rendret 1 gang. Men hele promise chainen starer med nettopp et kall til ????`renderApp()`. Er dette bevist?
@@ -298,43 +298,43 @@ export default function renderClient({
   //
   // Could be things like:
   // - Scroll position memory
-  .then(() => {
+    .then(() => {
     // Scroll to the previous location if returning from an outbound visit (back-button)
-    featureFlags.enableScrollPositionMemory && handleScrollPosition(originalLocation);
-  })
+      featureFlags.enableScrollPositionMemory && handleScrollPosition(originalLocation);
+    })
 
   // Handle edge cases where we have no config
   // available after loading the page
-  .then(() => {
+    .then(() => {
     // Pull out the modules list of the current config from redux state
-    const { config: {
-      app: {
-        options: {
-          modules = [],
+      const { config: {
+        app: {
+          options: {
+            modules = [],
+          } = {},
         } = {},
-      } = {},
-    } = {} } = store.getState() || {};
+      } = {} } = store.getState() || {};
 
-    // Check if the current config has any modules
-    const currentConfigHasModules = !!modules.length;
+      // Check if the current config has any modules
+      const currentConfigHasModules = !!modules.length;
 
-    /*
+      /*
     If we have no config to render - populate one
     (this happens if you render on client only - like in development)
 
     If we have a config but no modules to render - populate the next page
     (this happens when you render dynamic configs with geolocation - since that is a client only feature)
     */
-    if (!currentConfigHasModules) {
-      store.dispatch(refreshConfig({
-        path: location.pathname,
-        query: qs.parse(location.search.slice(1)),
-      }));
-    }
-  })
+      if (!currentConfigHasModules) {
+        store.dispatch(refreshConfig({
+          path: location.pathname,
+          query: qs.parse(location.search.slice(1)),
+        }));
+      }
+    })
 
   // Handle infinite scroll / pagination
-  .then(() => {
-    infiniteScroll(loadMore);
-  });
+    .then(() => {
+      infiniteScroll(loadMore);
+    });
 }

@@ -87,8 +87,8 @@ export default function dataMixin(stateName, errorName) {
        */
       if (!_data) {
         getData(Object.assign({}, { __settings: settings }, _dataOptions))
-        .then(_data => this.setState({ [stateName]: _data }))
-        .catch(_data => this.setState({ [errorName]: _data }));
+          .then(_data => this.setState({ [stateName]: _data }))
+          .catch(_data => this.setState({ [errorName]: _data }));
       }
     },
 

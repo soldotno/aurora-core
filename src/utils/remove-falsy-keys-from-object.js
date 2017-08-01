@@ -9,8 +9,8 @@ module.exports = function removeFalsyKeysFromObject(obj = {}) {
       obj[key] !== 0 &&
       obj[key] !== ''
     ) ? {
-      ...result,
-      [key]: obj[key],
-    } : result;
+        ...result,
+        [key]: obj[key],
+      } : result;
   }, {});
 };

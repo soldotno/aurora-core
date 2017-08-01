@@ -27,10 +27,10 @@ module.exports = function getWithReduxDecorator({
     typeof window === 'object' &&
     typeof window.devToolsExtension !== 'undefined'
   ) ? (
-    window.devToolsExtension()
-  ) : (
-    f => f
-  );
+      window.devToolsExtension()
+    ) : (
+      f => f
+    );
 
   // Compose a store creator function with middleware
   const finalCreateStore = compose(

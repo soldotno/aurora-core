@@ -44,7 +44,7 @@ export default function getWithScriptsDecorator({ scripts }) {
       },
     });
 
-     // Return a decorated component with all the existing static methods hoisted
+    // Return a decorated component with all the existing static methods hoisted
     return hoistStatics(withScripts, Component);
   };
 }
