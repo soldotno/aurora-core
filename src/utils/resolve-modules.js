@@ -48,21 +48,21 @@ export default function resolveModules(
           resolvedModuleCache[item.type] = 'adding';
           resolvingModules.push(
             getModule(item.type)
-            .then(module => resolvedModuleCache[item.type] = module) // eslint-disable-line no-return-assign
+              .then(module => resolvedModuleCache[item.type] = module) // eslint-disable-line no-return-assign
           );
         }
       });
 
       // When all new modules are resolved, add them to the configCopy object we are resolving to..
       Promise.all(resolvingModules)
-      .then(() => {
-        resolvers.forEach((resolver) => {
-          const component = resolvedModuleCache[resolver.type];
-          set(configCopy, resolver.path, component);
-        });
-        resolve(configCopy);
-      })
-      .catch(err => reject(err));
+        .then(() => {
+          resolvers.forEach((resolver) => {
+            const component = resolvedModuleCache[resolver.type];
+            set(configCopy, resolver.path, component);
+          });
+          resolve(configCopy);
+        })
+        .catch(err => reject(err));
     });
   };
 }

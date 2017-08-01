@@ -9,13 +9,13 @@ function renderChildren(modules) {
     const Module = module ? module.type : false;
 
     return Module ?
-    (
-      <Module
-        key={i}
-        {...module.options}
-      />
-    ) :
-    null;
+      (
+        <Module
+          key={i}
+          {...module.options}
+        />
+      ) :
+      null;
   });
 
   return children;

@@ -137,10 +137,10 @@ export default function renderServer({
     // - flags (for this config/route)
     // - etc..
     const configMeta = config
-    .then(({ meta }) => meta);
+      .then(({ meta }) => meta);
 
     const configStatusCode = config
-    .then(({ status }) => status);
+      .then(({ status }) => status);
 
     // Create a config with the visibility resolved
     const configWithVisibilityResolved = config

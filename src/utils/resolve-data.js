@@ -38,9 +38,9 @@ export default function resolveData(
         path: `${path}.options._data`,
         getData: (() => {
           return getModule(type)
-          .then(({ getData = () => Promise.resolve() }) => {
-            return getData(Object.assign({}, { __settings: settings }, options._dataOptions));
-          });
+            .then(({ getData = () => Promise.resolve() }) => {
+              return getData(Object.assign({}, { __settings: settings }, options._dataOptions));
+            });
         }),
       };
     });
@@ -56,11 +56,11 @@ export default function resolveData(
         getData = () => Promise.resolve(),
       }, cb) => {
         getData()
-        .then((_data) => {
-          set(configCopy, path, _data);
-          cb();
-        })
-        .catch(cb);
+          .then((_data) => {
+            set(configCopy, path, _data);
+            cb();
+          })
+          .catch(cb);
       }, (err) => {
         return err ? reject(err) : resolve(configCopy);
       });

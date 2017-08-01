@@ -182,22 +182,22 @@ export default function (
           page,
           version,
         })
-        .then((result) => {
+          .then((result) => {
           /**
            * Dispatch the success action of retrieving
            * the config when everything succeeds,
            * with the config as payload
            */
-          return dispatch(populateNextPageSuccess(result));
-        })
-        .catch((err) => {
+            return dispatch(populateNextPageSuccess(result));
+          })
+          .catch((err) => {
           /**
            * Dispatch the error action of retrieving
            * the config when something fails,
            * with the error as payload
            */
-          return dispatch(populateNextPageError(err));
-        });
+            return dispatch(populateNextPageError(err));
+          });
       };
     },
     replaceState(state) {
