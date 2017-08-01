@@ -41,7 +41,7 @@
     "debug": "2.6.8",
     "deep-equal": "1.0.1",
     "delay": "2.0.0",
-    "eslint-config-airbnb": "15.0.2",
+    "eslint-config-airbnb": "15.1.0",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "everscroll": "misund/everscroll#27245b5dac4",
@@ -72,7 +72,7 @@
     "babel-preset-stage-0": "6.24.1",
     "babel-runtime": "6.23.0",
     "babel-template": "6.25.0",
-    "eslint": "3.19.0",
+    "eslint": "4.3.0",
     "eslint-plugin-react": "7.1.0",
     "expect": "1.20.2",
     "expect-jsx": "3.0.0",
@@ -99,7 +99,7 @@
     "style-loader": "0.17.0",
     "styled-components": "2.1.1",
     "webpack": "3.4.1",
-    "webpack-dev-server": "2.5.1"
+    "webpack-dev-server": "2.6.1"
   },
   "peerDependencies": {
     "autoprefixer": ">=6.5.1",
