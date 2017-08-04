@@ -1,45 +1,47 @@
+/* global __DEVELOPMENT__ */
+
 // Dependencies
 import React from 'react';
-import createReactClass from 'create-react-class';
 import sassLoader from 'aurora-sass-loader';
 import hoistStatics from 'hoist-non-react-statics';
+import isClient from 'is-client';
+import injectStyles from 'style-loader/addStyles';
 
-// Aurora mixins
-import StyleInjectMixin from '../mixins/style-inject-mixin';
 import getDisplayName from '../utils/get-display-name';
 
+const isBrowser = isClient();
+
 // Export a decorator that handles style injection and extraction in the Aurora frontend
-module.exports = function getWithStylesDecorator({ serverPath, clientStyles }) {
-  // /Load the styles for server rendering with the Aurora Sass loader
+export default function getWithStylesDecorator({ serverPath, clientStyles }) {
+  // Load the styles for server rendering with the Aurora Sass loader
   const serverStyles = sassLoader(serverPath);
 
   // Return a function that produces a higher order component that includes styling
   return function withStylesDecorator(Component) {
-    const withStyles = createReactClass({
+    class WithStyles extends React.Component {
       // Add a specific display name
-      displayName: `${getDisplayName(Component)}WithStyles`,
-
-      // Mixins
-      mixins: [
-        StyleInjectMixin(clientStyles),
-      ],
+      static displayName = `${getDisplayName(Component)}WithStyles`;
 
       // Add static methods needed
-      statics: {
-        getStyles() {
-          return serverStyles;
-        },
-      },
+      static getStyles() {
+        return serverStyles;
+      }
+
+      componentWillMount() {
+        if (isBrowser && !__DEVELOPMENT__) {
+          injectStyles(clientStyles);
+        }
+      }
 
       // Render the component
       render() {
         return (
           <Component {...this.props} />
         );
-      },
-    });
+      }
+    }
 
     // Return a decorated component with all the existing static methods hoisted
-    return hoistStatics(withStyles, Component);
+    return hoistStatics(WithStyles, Component);
   };
-};
+}
