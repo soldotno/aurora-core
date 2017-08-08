@@ -43,11 +43,6 @@ export default function getWithDataDecorator({
         _hideOnClient: false,
       };
 
-      // Add applicable mixins
-      // mixins: [
-      //   DataMixin('__data', '__error'),
-      // ],
-
       // Add static methods needed
       static getData(options) {
         // The options object will have user defined settings (from getUserSettings) available as options.__settings
