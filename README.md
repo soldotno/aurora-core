@@ -879,7 +879,28 @@ Running tests
 
 Changelog
 ---------
-
+- **4.0.0** Get ready for React 16
+  - BREAKING CHANGE: Remove mixins
+  - Refactor remaining mixins to their corresponding decorators
+  - Upgrade dependencies
+- **3.1.0**
+  - Upgrade linter and linter config
+  - Lint according to new rules
+  - Add new dependency watchpack; needed for karma
+  - Upgrade dependencies
+- **3.0.1** - Upgrade dependencies
+- **3.0.0**
+  - BREAKING CHANGE: Use ES6 modules
+  - BREAKING CHANGE: Upgrade to Webpack 3.0.0
+  - Upgrade loads of dependencies
+- **2.5.0**
+  - Upgrade dependencies
+  - Remove outdated dependencies
+  - Lint codebase to updated linter config
+- **2.4.1** - Upgrade dependencies
+- **2.4.0**
+  - Feature: Build styled-components support into the framework
+  - Upgrade dependencies
 - **2.2.0** - Prepare for React 16: Expose util to replace RenderChildrenMixin, use ES6 classes instead of createClass, prop-types package instead of React.PropTypes
 - **2.1.0** - Add settings param in client render for easier development
 - **2.0.2** - Update dependencies and documentation
