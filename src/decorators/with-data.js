@@ -53,8 +53,8 @@ export default function getWithDataDecorator({
         return fetchData(options);
       }
 
-      constructor() {
-        super();
+      constructor(props) {
+        super(props);
 
         /**
          * Set the initial data state to what we got from props.
