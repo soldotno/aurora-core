@@ -879,6 +879,7 @@ Running tests
 
 Changelog
 ---------
+- **4.0.1** - Make this.props available to withData decorator constructor
 - **4.0.0** Get ready for React 16
   - BREAKING CHANGE: Remove mixins
   - Refactor remaining mixins to their corresponding decorators
