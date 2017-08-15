@@ -30,6 +30,9 @@ export default function rootReducer(state, action) {
       return Object.assign({}, state, {
         pagination: Object.assign({}, state.pagination, {
           isLoading: true,
+
+          // Account for shell configs
+          originalPath: window.location.pathname,
         }),
       });
 
