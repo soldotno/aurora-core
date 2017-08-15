@@ -72,6 +72,7 @@ describe('rootReducer()', () => {
           initialLimit: 3,
           hasMore: true,
           isLoading: true,
+          originalPath: '/context.html',
         },
       });
     });

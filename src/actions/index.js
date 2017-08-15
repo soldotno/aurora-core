@@ -103,7 +103,7 @@ export default function (
           settings = {},
         } = getState();
 
-        // Account for that we might have a shell config
+        // Account for shell configs
         settings.route = path;
 
         /**
