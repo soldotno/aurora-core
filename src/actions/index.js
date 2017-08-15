@@ -103,6 +103,9 @@ export default function (
           settings = {},
         } = getState();
 
+        // Account for that we might have a shell config
+        settings.route = path;
+
         /**
          * Dispatch the pending action for
          * refreshing the config to signal
