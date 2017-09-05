@@ -879,6 +879,7 @@ Running tests
 
 Changelog
 ---------
+- **4.0.3** - Upgrade dependencies
 - **4.0.2** - Fixes pagination bug when loading page from a shell configuration
 - **4.0.1** - Make this.props available to withData decorator constructor
 - **4.0.0** Get ready for React 16
