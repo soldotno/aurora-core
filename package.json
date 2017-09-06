@@ -98,7 +98,7 @@
     "style-loader": "0.17.0",
     "styled-components": "2.1.2",
     "watchpack": "1.4.0",
-    "webpack": "3.5.5",
+    "webpack": "3.5.6",
     "webpack-dev-server": "2.7.1"
   },
   "peerDependencies": {
