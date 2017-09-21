@@ -1,6 +1,6 @@
 {
   "name": "aurora-core",
-  "version": "4.1.0-0",
+  "version": "4.1.0-1",
   "description": "Aurora Application Assembler Core",
   "main": "index.js",
   "engines": {
