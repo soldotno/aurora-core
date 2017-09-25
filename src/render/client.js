@@ -140,7 +140,7 @@ export default function renderClient({
 
     const newAppConf = JSON.stringify(sortedObject(config.app || {}));
     const newPaginationConf = JSON.stringify(sortedObject(pagination || {}));
-    const newErrorConf = JSON.stringify(sortedObject(error || null));
+    const newErrorConf = JSON.stringify(sortedObject(error || {}));
 
     if (
       appConfig === newAppConf
