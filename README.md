@@ -882,6 +882,7 @@ Changelog
 - **5.0.0**
   - Upgrade dependencies
   - BREAKING CHANGE: React 16
+- **4.1.1** Send errors to the client app
 - **4.0.3** - Upgrade dependencies
 - **4.0.2** - Fixes pagination bug when loading page from a shell configuration
 - **4.0.1** - Make this.props available to withData decorator constructor
