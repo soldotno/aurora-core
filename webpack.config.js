@@ -56,6 +56,7 @@ var entry = ['./src/client-bootstrap'];
  * and webpack-dev-server
  */
 if (!isProduction) {
+  entry.unshift('react-hot-loader/patch');
   entry.unshift('webpack/hot/only-dev-server');
   entry.unshift('webpack-dev-server/client?http://localhost:' + port);
 }
@@ -113,8 +114,6 @@ module.exports = {
       exclude: /node_modules/,
       use: !isProduction ? [
         {
-          loader: 'react-hot-loader',
-        }, {
           loader: 'babel-loader',
           options: {
             babelrc: false,
