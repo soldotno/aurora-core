@@ -43,7 +43,7 @@
     "eslint-config-airbnb": "15.1.0",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
-    "everscroll": "misund/everscroll#27245b5dac4",
+    "everscroll": "1.4.0",
     "glob": "7.1.2",
     "hoist-non-react-statics": "2.3.1",
     "is-client": "0.0.2",
