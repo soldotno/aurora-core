@@ -6,7 +6,7 @@
 *.exe
 *.o
 *.so
-# dist
+dist
 out
 
 # Packages #
@@ -55,7 +55,3 @@ eslintrc.json-ci-runner
 #########
 .idea
 *.iml
-
-# Built files #
-###############
-dist/

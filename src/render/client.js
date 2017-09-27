@@ -125,6 +125,7 @@ export default function renderClient({
 
   let appConfig = '{}';
   let paginationConf = '{}';
+  let errorConf = 'null';
 
   // Create a function that renders the application
   const renderApp = () => {
@@ -134,17 +135,25 @@ export default function renderClient({
       config = {},
       settings = {},
       pagination = {},
+      error = null,
     } = store.getState();
 
     const newAppConf = JSON.stringify(sortedObject(config.app || {}));
     const newPaginationConf = JSON.stringify(sortedObject(pagination || {}));
-    if (appConfig === newAppConf && paginationConf === newPaginationConf) {
+    const newErrorConf = JSON.stringify(sortedObject(error || {}));
+
+    if (
+      appConfig === newAppConf
+      && paginationConf === newPaginationConf
+      && errorConf === newErrorConf
+    ) {
       // TODO: Now we assume that only changes on app and pagination is a reason to rerender!
       // will this be true in the future?
       return;
     }
     appConfig = newAppConf;
     paginationConf = newPaginationConf;
+    errorConf = newErrorConf;
 
     // Resolve config
     return Promise.resolve(config) // eslint-disable-line consistent-return
@@ -173,6 +182,7 @@ export default function renderClient({
               <App
                 newVersionAvailable={latestVersion !== version}
                 pagination={pagination}
+                error={error}
                 {...options}
               />
             </ContextWrapper>,
