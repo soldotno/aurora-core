@@ -207,8 +207,9 @@ module.exports = {
    */
   resolve: {
     alias: {
-      'node-sass': 'no-op'
-    }
+      'node-sass': 'no-op',
+    },
+    symlinks: false
   },
 
   /**
