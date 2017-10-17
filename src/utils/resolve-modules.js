@@ -14,7 +14,7 @@ const resolvedModuleCache = [];
  * function above (generatePaths)
  */
 export default function resolveModules(
-  getModule = () => console.warn('No getModule() method supplied to constructor')
+  getModule = moduleString => console.warn('No getModule() method supplied to constructor')
 ) {
   return function resolveModules(config) {
     /**
@@ -41,23 +41,40 @@ export default function resolveModules(
      */
     return new Promise((resolve, reject) => {
       const resolvingModules = [];
+      const resolvingModulesKeys = {};
 
       // Pick modules from cache or add them to queue to be resolved
-      resolvers.map((item) => { // eslint-disable-line array-callback-return
-        if (!resolvedModuleCache[item.type]) {
-          resolvedModuleCache[item.type] = 'adding';
-          resolvingModules.push(
+      const keys = Object.keys(resolvers);
+      /* eslint-disable guard-for-in, no-restricted-syntax  */
+      for (const itemKey in keys) {
+        const item = resolvers[itemKey];
+        if (!resolvingModulesKeys[item.type]) {
+          resolvingModulesKeys[item.type] = true;
+
+          const modulePromise = new Promise((resolve, reject) =>  {
             getModule(item.type)
-              .then(module => resolvedModuleCache[item.type] = module) // eslint-disable-line no-return-assign
-          );
+              .then(moduleRes => resolve({
+                module: moduleRes,
+                type: item.type,
+              })
+              );
+          });
+          resolvingModules.push(modulePromise);
         }
-      });
+      }
+      /* eslint-enabled guard-for-in, no-restricted-syntax  */
 
       // When all new modules are resolved, add them to the configCopy object we are resolving to..
       Promise.all(resolvingModules)
-        .then(() => {
+        .then((modulesResolved) => {
           resolvers.forEach((resolver) => {
-            const component = resolvedModuleCache[resolver.type];
+            const moduleObjs = modulesResolved.filter(moduleObj => moduleObj.type === resolver.type);
+            if (!moduleObjs || moduleObjs.length > 1) {
+              // TODO: how should we handle a moduleString that we can not map?
+              throw new Error(`Uknown module: ${JSON.stringify(moduleObjs)}`);
+            }
+            const moduleObj = moduleObjs[0];
+            const component = moduleObj.module;
             set(configCopy, resolver.path, component);
           });
           resolve(configCopy);
