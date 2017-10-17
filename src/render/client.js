@@ -255,6 +255,7 @@ export default function renderClient({
         featureFlags.enablePagination && updatePaginationQuery();
         featureFlags.enableScrollPositionMemory && history.replaceState(currentState, null);
         featureFlags.enableVersioning && updateVersionQuery();
+        return null;
       });
   };
 
@@ -311,6 +312,7 @@ export default function renderClient({
     .then(() => {
     // Scroll to the previous location if returning from an outbound visit (back-button)
       featureFlags.enableScrollPositionMemory && handleScrollPosition(originalLocation);
+      return null;
     })
 
   // Handle edge cases where we have no config
@@ -341,10 +343,13 @@ export default function renderClient({
           query: qs.parse(location.search.slice(1)),
         }));
       }
+      return null;
     })
 
   // Handle infinite scroll / pagination
     .then(() => {
       infiniteScroll(loadMore);
+      return null;
     });
+  return null;
 }
