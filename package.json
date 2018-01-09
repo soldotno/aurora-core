@@ -33,7 +33,7 @@
     "async-each": "1.0.1",
     "aurora-deep-slice-merge": "soldotno/aurora-deep-slice-merge.git#master",
     "aurora-sass-loader": "soldotno/aurora-sass-loader.git#master",
-    "babel-eslint": "8.0.1",
+    "babel-eslint": "8.2.1",
     "babel-polyfill": "6.26.0",
     "clean-css": "4.1.9",
     "css-loader": "0.28.7",
