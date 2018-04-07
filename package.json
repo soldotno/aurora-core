@@ -75,7 +75,7 @@
     "eslint-plugin-react": "7.4.0",
     "expect": "21.2.0",
     "expect-jsx": "4.0.0",
-    "inject-loader": "3.0.1",
+    "inject-loader": "4.0.0",
     "karma": "1.7.1",
     "karma-chrome-launcher": "2.2.0",
     "karma-firefox-launcher": "1.1.0",
