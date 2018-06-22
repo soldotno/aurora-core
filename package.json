@@ -40,7 +40,7 @@
     "debug": "3.1.0",
     "deep-equal": "1.0.1",
     "delay": "2.0.0",
-    "eslint-config-airbnb": "15.1.0",
+    "eslint-config-airbnb": "16.0.0",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "everscroll": "misund/everscroll#27245b5dac4",
