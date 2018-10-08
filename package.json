@@ -37,7 +37,7 @@
     "babel-polyfill": "6.26.0",
     "clean-css": "4.1.9",
     "css-loader": "0.28.7",
-    "debug": "3.1.0",
+    "debug": "4.1.0",
     "deep-equal": "1.0.1",
     "delay": "2.0.0",
     "eslint-config-airbnb": "15.1.0",
