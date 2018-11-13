@@ -87,7 +87,7 @@
     "mockery": "2.1.0",
     "postcss-loader": "2.0.6",
     "pre-commit": "1.2.2",
-    "react-dom": "16.2.0",
+    "react-dom": "16.6.3",
     "react-redux": "5.0.6",
     "redux": "3.7.2",
     "redux-logger": "3.0.6",
