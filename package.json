@@ -83,7 +83,7 @@
     "karma-mocha-reporter": "2.2.4",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.4",
-    "mocha": "3.5.3",
+    "mocha": "6.1.4",
     "mockery": "2.1.0",
     "postcss-loader": "2.0.6",
     "pre-commit": "1.2.2",
