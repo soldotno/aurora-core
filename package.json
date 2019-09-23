@@ -55,7 +55,7 @@
     "md5": "2.2.1",
     "no-op": "1.0.3",
     "prop-types": "15.6.0",
-    "qs": "6.5.1",
+    "qs": "6.9.0",
     "serialize-javascript": "1.4.0",
     "sorted-object": "2.0.1",
     "stringify-clone": "2.0.0",
